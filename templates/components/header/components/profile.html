@@ -1,0 +1,4 @@
+<details class="profile-menu" data-disclosure>
+  <summary><span class="profile-initial" aria-hidden="true">{{ request.user.username|slice:':1'|upper }}</span><span class="profile-name">{{ request.user.get_short_name|default:request.user.username }}</span><svg class="profile-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg><span class="sr-only">Opciones de cuenta</span></summary>
+  <div class="profile-popover"><p>{{ request.user.username }}</p><a href="{% url 'Profile' %}">Mi perfil</a><a href="{% url 'account_change_password' %}">Cambiar contraseña</a><a href="{% url 'account_logout' %}">Cerrar sesión</a></div>
+</details>

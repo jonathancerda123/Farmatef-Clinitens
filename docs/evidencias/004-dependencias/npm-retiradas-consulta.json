@@ -1,0 +1,56 @@
+{
+  "@tailwindcss/aspect-ratio": {
+    "version": "0.4.2",
+    "engines": null,
+    "source": "https://registry.npmjs.org/%40tailwindcss%2Faspect-ratio",
+    "published": "2022-09-02T11:31:31.571Z"
+  },
+  "cross-env": {
+    "version": "10.1.0",
+    "engines": {
+      "node": ">=20"
+    },
+    "source": "https://registry.npmjs.org/cross-env",
+    "published": "2025-09-29T17:34:12.232Z"
+  },
+  "postcss": {
+    "version": "8.5.29",
+    "engines": {
+      "node": "^10 || ^12 || >=14"
+    },
+    "source": "https://registry.npmjs.org/postcss",
+    "published": "2026-10-05T09:28:55.780Z"
+  },
+  "postcss-import": {
+    "version": "17.0.0",
+    "engines": {
+      "node": ">=22.0.0"
+    },
+    "source": "https://registry.npmjs.org/postcss-import",
+    "published": "2026-08-14T19:11:28.703Z"
+  },
+  "postcss-nested": {
+    "version": "8.0.1",
+    "engines": {
+      "node": "^22.0.0 || ^24.0.0 || >= 26.0.0"
+    },
+    "source": "https://registry.npmjs.org/postcss-nested",
+    "published": "2026-08-02T19:17:04.521Z"
+  },
+  "postcss-simple-vars": {
+    "version": "7.0.1",
+    "engines": {
+      "node": ">=14.0"
+    },
+    "source": "https://registry.npmjs.org/postcss-simple-vars",
+    "published": "2022-11-10T18:58:42.152Z"
+  },
+  "rimraf": {
+    "version": "6.1.3",
+    "engines": {
+      "node": "20 || >=22"
+    },
+    "source": "https://registry.npmjs.org/rimraf",
+    "published": "2026-02-16T00:59:39.538Z"
+  }
+}

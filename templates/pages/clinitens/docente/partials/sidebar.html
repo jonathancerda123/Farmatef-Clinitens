@@ -1,0 +1,10 @@
+<nav aria-label="Gestión docente" class="nav-group">
+{% url 'clinitensdocente:dashboard' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Panel docente' icon='course' exact=True %}
+{% url 'clinitensdocente:casos' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Casos clínicos' icon='case' %}
+{% url 'clinitensdocente:codigos' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Códigos de actividad' icon='code' %}
+{% url 'clinitensdocente:pacientes' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Pacientes' icon='patient' %}
+{% url 'clinitensdocente:apoyo_diagnostico' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Apoyo diagnóstico' icon='result' %}
+{% url 'clinitensdocente:cursos' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Cursos' icon='course' %}
+{% url 'clinitensdocente:estudiantes' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Estudiantes' icon='users' %}
+{% url 'clinitensdocente:en_vivo' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Seguimiento en vivo' icon='live' %}
+</nav>

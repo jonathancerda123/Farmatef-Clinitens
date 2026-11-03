@@ -1,0 +1,13 @@
+<svg class="ui-icon {{ icon_class }}" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+{% if icon == 'home' %}<path d="m3 10 9-7 9 7v10H3zM9 20v-7h6v7"/>
+{% elif icon == 'case' %}<path d="M4 4h6l2 3 2-3h6v16h-6l-2 2-2-2H4zM12 7v15"/>
+{% elif icon == 'users' %}<circle cx="9" cy="7" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M17 4a3 3 0 0 1 0 6M19 21v-3a6 6 0 0 0-3-5"/>
+{% elif icon == 'course' %}<path d="m2 8 10-5 10 5-10 5zM5 10v7c5 3 9 3 14 0v-7M22 8v8"/>
+{% elif icon == 'live' %}<circle cx="12" cy="12" r="2"/><path d="M6 6a9 9 0 0 0 0 12M18 6a9 9 0 0 1 0 12M3 3a13 13 0 0 0 0 18M21 3a13 13 0 0 1 0 18"/>
+{% elif icon == 'code' %}<path d="m7 6-5 6 5 6m10-12 5 6-5 6M14 4l-4 16"/>
+{% elif icon == 'patient' %}<circle cx="9" cy="7" r="3"/><path d="M2 21v-3a7 7 0 0 1 14 0v3M19 8v6m-3-3h6"/>
+{% elif icon == 'result' %}<path d="M4 3h16v18H4zM8 7h8M8 12h2l2-3 2 6 2-3"/>
+{% elif icon == 'lock' %}<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V6a4 4 0 0 1 8 0v4M12 14v3"/>
+{% elif icon == 'arrow' %}<path d="M4 12h16m-6-6 6 6-6 6"/>
+{% else %}<rect x="5" y="4" width="14" height="18" rx="2"/><path d="M9 2h6v4H9zM9 11h6M9 15h6M9 19h3"/>{% endif %}
+</svg>

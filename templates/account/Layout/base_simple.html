@@ -1,0 +1,3 @@
+{% extends 'components/Layout/base.html' %}
+{% load allauth i18n %}
+{% block content %}<main class="auth-layout" id="contenido-principal"><section class="auth-story">{% include 'components/design/brand.html' %}<h1>Tu acceso al aprendizaje.</h1><p>Gestiona el acceso a tu cuenta y continúa con tus actividades clínicas.</p></section><div class="auth-main"><section class="auth-panel">{% block content_account %}{% endblock content_account %}</section></div></main>{% include 'components/mensajes.html' %}{% endblock content %}

@@ -1,0 +1,21 @@
+{
+  "database": ".test-artifacts\\revision-004-upgrade.sqlite3",
+  "plan": [
+    "account.0006_emailaddress_lower",
+    "account.0007_emailaddress_idx_email",
+    "account.0008_emailaddress_unique_primary_email_fixup",
+    "account.0009_emailaddress_unique_primary_email",
+    "axes.0009_add_session_hash",
+    "axes.0010_accessattemptexpiration",
+    "mfa.0003_authenticator_type_uniq"
+  ],
+  "before": {
+    "users": 5,
+    "fichas": 2
+  },
+  "after": {
+    "users": 5,
+    "fichas": 2
+  },
+  "passed": true
+}

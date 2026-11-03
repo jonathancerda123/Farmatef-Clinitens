@@ -1,0 +1,8 @@
+{% extends 'components/Layout/app_shell.html' %}
+{% load static %}
+{% block head_title %}CliniTENS | Docente{% endblock head_title %}
+{% block workspace_name %}Área docente{% endblock workspace_name %}
+{% block page_title %}Panel docente{% endblock page_title %}
+{% block workspace_navigation %}{% include 'pages/clinitens/docente/partials/sidebar.html' %}{% endblock workspace_navigation %}
+{% block javascript %}{{ block.super }}<script defer src="{% static 'js/validaciones.js' %}"></script>{% endblock javascript %}
+{% block workspace_content %}{% block docente_content %}{% endblock docente_content %}{% endblock workspace_content %}

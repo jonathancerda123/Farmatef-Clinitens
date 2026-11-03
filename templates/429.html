@@ -1,0 +1,3 @@
+{% extends 'components/Layout/base.html' %}
+{% block head_title %}Demasiados intentos | CliniTENS{% endblock head_title %}
+{% block content %}<main class="error-page">{% include 'components/design/brand.html' %}<section class="auth-panel"><p class="error-code">429</p><h1 class="text-2xl font-bold">Demasiados intentos</h1><p class="section-description">Espera unos minutos antes de volver a intentar.</p><a class="btn-primary mt-6" href="{% url 'Home' %}">Volver al inicio</a></section></main>{% endblock content %}

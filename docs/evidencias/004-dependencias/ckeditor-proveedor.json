@@ -1,0 +1,215 @@
+{
+  "utc": "2026-10-09T01:58:45.022182+00:00",
+  "provider": "django-ckeditor-5==0.2.20",
+  "provider_tag": "v0.2.20",
+  "source": "https://raw.githubusercontent.com/hvlads/django-ckeditor-5/v0.2.20/django_ckeditor_5/package.json",
+  "manifest": {
+    "name": "django_ckeditor_5",
+    "version": "0.2.20",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "dev": "webpack --mode development",
+      "prod": "webpack --mode production"
+    },
+    "author": "",
+    "license": "BSD-3-Clause",
+    "dependencies": {
+      "@ckeditor/ckeditor5-adapter-ckfinder": "^47.5.0",
+      "@ckeditor/ckeditor5-alignment": "^47.5.0",
+      "@ckeditor/ckeditor5-autoformat": "^47.5.0",
+      "@ckeditor/ckeditor5-autosave": "^47.5.0",
+      "@ckeditor/ckeditor5-basic-styles": "^47.5.0",
+      "@ckeditor/ckeditor5-block-quote": "^47.5.0",
+      "@ckeditor/ckeditor5-code-block": "^47.5.0",
+      "@ckeditor/ckeditor5-editor-classic": "^47.5.0",
+      "@ckeditor/ckeditor5-enter": "^47.5.0",
+      "@ckeditor/ckeditor5-essentials": "^47.5.0",
+      "@ckeditor/ckeditor5-find-and-replace": "^47.5.0",
+      "@ckeditor/ckeditor5-font": "^47.5.0",
+      "@ckeditor/ckeditor5-heading": "^47.5.0",
+      "@ckeditor/ckeditor5-highlight": "^47.5.0",
+      "@ckeditor/ckeditor5-horizontal-line": "^47.5.0",
+      "@ckeditor/ckeditor5-html-embed": "^47.5.0",
+      "@ckeditor/ckeditor5-html-support": "^47.5.0",
+      "@ckeditor/ckeditor5-image": "^47.5.0",
+      "@ckeditor/ckeditor5-indent": "^47.5.0",
+      "@ckeditor/ckeditor5-inspector": "^5.0.0",
+      "@ckeditor/ckeditor5-link": "^47.5.0",
+      "@ckeditor/ckeditor5-list": "^47.5.0",
+      "@ckeditor/ckeditor5-markdown-gfm": "^47.5.0",
+      "@ckeditor/ckeditor5-media-embed": "^47.5.0",
+      "@ckeditor/ckeditor5-mention": "^47.5.0",
+      "@ckeditor/ckeditor5-page-break": "^47.5.0",
+      "@ckeditor/ckeditor5-paragraph": "^47.5.0",
+      "@ckeditor/ckeditor5-paste-from-office": "^47.5.0",
+      "@ckeditor/ckeditor5-remove-format": "^47.5.0",
+      "@ckeditor/ckeditor5-select-all": "^47.5.0",
+      "@ckeditor/ckeditor5-show-blocks": "^47.5.0",
+      "@ckeditor/ckeditor5-source-editing": "^47.5.0",
+      "@ckeditor/ckeditor5-special-characters": "^47.5.0",
+      "@ckeditor/ckeditor5-style": "^47.5.0",
+      "@ckeditor/ckeditor5-table": "^47.5.0",
+      "@ckeditor/ckeditor5-theme-lark": "^47.5.0",
+      "@ckeditor/ckeditor5-ui": "^47.5.0",
+      "@ckeditor/ckeditor5-upload": "^47.5.0",
+      "@ckeditor/ckeditor5-word-count": "^47.5.0"
+    },
+    "devDependencies": {
+      "@ckeditor/ckeditor5-core": "^47.5.0",
+      "@ckeditor/ckeditor5-dev-translations": "^54.3.4",
+      "@ckeditor/ckeditor5-dev-utils": "^54.3.4",
+      "@ckeditor/ckeditor5-theme-lark": "^47.5.0",
+      "css-loader": "^7.1.4",
+      "mini-css-extract-plugin": "^2.10.0",
+      "postcss-loader": "^8.2.1",
+      "raw-loader": "4",
+      "style-loader": "4",
+      "terser-webpack-plugin": "^5.3.16",
+      "webpack": "^5.105.2",
+      "webpack-cli": "6.0.1"
+    }
+  },
+  "bundle_version": "47.5.0",
+  "bundle_sha256": "ee3bc20f2734932e11e8aad9d8bcafe66c6c3bf993f1914d2e4bad7785568f69",
+  "queried_versions": {
+    "@ckeditor/ckeditor5-adapter-ckfinder": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-alignment": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-autoformat": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-autosave": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-basic-styles": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-block-quote": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-code-block": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-editor-classic": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-enter": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-essentials": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-find-and-replace": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-font": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-heading": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-highlight": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-horizontal-line": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-html-embed": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-html-support": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-image": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-indent": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-inspector": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-link": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-list": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-markdown-gfm": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-media-embed": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-mention": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-page-break": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-paragraph": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-paste-from-office": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-remove-format": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-select-all": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-show-blocks": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-source-editing": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-special-characters": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-style": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-table": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-theme-lark": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-ui": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-upload": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-word-count": [
+      "47.5.0"
+    ]
+  },
+  "advisory_service": "npm bulk advisories",
+  "advisories": {
+    "@ckeditor/ckeditor5-html-support": [
+      {
+        "id": 1114938,
+        "url": "https://github.com/advisories/GHSA-jrqm-vmqc-gm93",
+        "title": "CKEditor 5 has Cross-site Scripting (XSS) in the HTML Support package",
+        "severity": "moderate",
+        "vulnerable_versions": ">=29.0.0 <47.6.0",
+        "cwe": [
+          "CWE-79"
+        ],
+        "cvss": {
+          "score": 6.4,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N"
+        }
+      }
+    ]
+  },
+  "limit": "Familia CKEditor por firma com\u00fan del bundle; no demuestra resoluci\u00f3n completa de otras librer\u00edas internas."
+}

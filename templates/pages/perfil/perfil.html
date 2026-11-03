@@ -1,0 +1,41 @@
+{% extends "components/Layout/base_pages.html" %}
+{% load static %}
+{% load tailwind_filters %}
+
+{% block head_title %}
+  Mi perfil
+{% endblock head_title %}
+
+{% block page_title %}Mi perfil{% endblock page_title %}
+{% block content_pages %}
+
+  <h2 class="max-w-2xl font-bold tracking-tight text-gray-900 text-2xl mb-4">Datos de mi perfil</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% include 'components/design/form_errors.html' with form=user_form %}
+    {% include 'components/design/form_errors.html' with form=profile_form %}
+
+    {% include 'components/input_perfil.html' with img=request.user.profile.image.url %}
+
+    {{ user_form|crispy }}
+
+    {% include "components/btn/button.html" with button_text="Guardar cambios" %}
+
+    {% if messages %}
+      {% for message in messages %}
+        {% if "error" in message.tags %}
+          <strong>{{ message }}</strong>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </form>
+
+
+
+{% endblock content_pages %}
+
+{% block javascript %}
+
+  <script defer src="{% static "js/script.js" %}"></script>
+
+{% endblock javascript %}

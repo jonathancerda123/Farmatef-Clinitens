@@ -1,0 +1,7 @@
+interface:
+  display_name: "Revisión de interfaz y accesibilidad"
+  short_description: "Audita HTML, formularios, navegación y estados"
+  default_prompt: "Usa $web-design-guidelines para el alcance indicado, manteniendo el stack y registrando la validación real."
+
+policy:
+  allow_implicit_invocation: false

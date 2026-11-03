@@ -1,0 +1,47 @@
+{
+  "roles": [
+    {
+      "actor": "anonimo",
+      "cuentas": 302,
+      "paciente_propio": 302,
+      "paciente_ajeno": 302
+    },
+    {
+      "actor": "alumno006",
+      "cuentas": 403,
+      "paciente_propio": 403,
+      "paciente_ajeno": 403
+    },
+    {
+      "actor": "docente006",
+      "cuentas": 403,
+      "paciente_propio": 200,
+      "paciente_ajeno": 404
+    },
+    {
+      "actor": "admin006",
+      "cuentas": 200,
+      "paciente_propio": 200,
+      "paciente_ajeno": 200
+    },
+    {
+      "actor": "root006",
+      "cuentas": 200,
+      "paciente_propio": 200,
+      "paciente_ajeno": 200
+    },
+    {
+      "actor": "sinperfil006",
+      "cuentas": 403,
+      "paciente_propio": 403,
+      "paciente_ajeno": 403
+    },
+    {
+      "actor": "inactivo006",
+      "cuentas": 302,
+      "paciente_propio": 302,
+      "paciente_ajeno": 302
+    }
+  ],
+  "post_protegido_propio_csrf_autorizado": "OK; rollback de fixture"
+}

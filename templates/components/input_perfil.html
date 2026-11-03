@@ -1,0 +1,15 @@
+<div class="mb-3">
+  <div class="block text-gray-700 text-sm font-bold mb-2">Foto Perfil</div>
+  <div class="mt-2 flex items-center gap-x-3">
+    <img src="{{ img }}" class="w-20 h-20 rounded-full" alt="Foto de Perfil">
+    <!-- Campo de entrada de archivo oculto -->
+    {{ profile_form.image }}
+    <!-- Botón para abrir el selector de archivos -->
+    <button type="button" id="customImageButton" class="btn-secondary">
+      Cambiar imagen
+    </button>
+  </div>
+  <span id="nameImg" class="overflow-auto block pt-1"></span>
+  {% if profile_form.image.errors %}<div id="{{ profile_form.image.auto_id }}_error" class="field-errors">{{ profile_form.image.errors }}</div>{% endif %}
+</div>
+

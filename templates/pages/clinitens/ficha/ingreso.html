@@ -1,0 +1,11 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block head_title %}Ingresar a una actividad | CliniTENS{% endblock head_title %}
+{% block workspace_name %}Área clínica{% endblock workspace_name %}
+{% block page_title %}Ingresar a una actividad{% endblock page_title %}
+{% block content_main %}
+<div class="home-intro"><div><h2>Tu práctica comienza aquí.</h2><p class="section-description">Selecciona el código de actividad y su docente responsable. Al ingresar podrás consultar el caso y continuar tu ficha clínica.</p><div class="clinical-guide mt-6"><h3>Antes de empezar</h3><p class="section-description">Necesitas un código activo. Si la actividad pertenece a un curso, debes estar matriculado.</p></div></div>
+<section class="panel"><h2 class="text-xl font-bold mb-5">Datos de la actividad</h2><form method="post" class="space-y-5">{% csrf_token %}{% include 'components/design/form_errors.html' %}
+{% for field in form %}{% include 'components/design/field.html' %}{% endfor %}
+<button class="btn-primary w-full" type="submit">Abrir actividad</button><a class="block text-center text-sm underline" href="{% url 'clinitens' %}">Volver al área clínica</a>
+</form></section></div>
+{% endblock content_main %}

@@ -1,0 +1,41 @@
+[
+  {
+    "documentWidth": 375,
+    "h1s": 1,
+    "modal": false,
+    "title": "Tu espacio de aprendizaje",
+    "url": "/",
+    "width": 390
+  },
+  {
+    "documentWidth": 375,
+    "h1s": 1,
+    "modal": false,
+    "title": "Área clínica",
+    "url": "/clinitens/",
+    "width": 390
+  },
+  {
+    "documentWidth": 375,
+    "h1s": 1,
+    "modal": false,
+    "title": "FarmaTEF",
+    "url": "/farmatef/",
+    "width": 390
+  },
+  {
+    "documentWidth": 375,
+    "h1s": 1,
+    "modal": false,
+    "title": "Inventario de farmacia",
+    "url": "/farmatef/inventario/",
+    "width": 390
+  },
+  {
+    "documentWidth": 375,
+    "h1s": 1,
+    "title": "Ingresar a una actividad",
+    "url": "/ficha-clinica/",
+    "width": 390
+  }
+]

@@ -1,0 +1,135 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% load static %}
+
+{% block page_title %}Usuarios{% endblock page_title %}
+{% block content_main %}
+<div class="section-heading"><div><h2>Cuentas de la plataforma</h2><p class="section-description">Consulta los usuarios y gestiona su acceso.</p></div><a href="{% url 'Register' %}" class="btn-primary">Crear cuenta</a></div>
+<form method="get" action="{% url 'User' %}" class="flex flex-wrap items-end gap-3 mb-6"><div class="flex-1 min-w-0"><label for="search-field" class="block text-sm font-semibold">Buscar usuario</label><input id="search-field" class="input" type="search" name="search" value="{{ search_query }}" placeholder="Nombre o usuario"></div>{% if show_inactive %}<input type="hidden" name="inactive" value="1">{% endif %}<button type="submit" class="btn-secondary">Buscar</button></form>
+
+{% if  request.user.is_superuser or request.user.profile.position_FK.permission_code == "ADMIN"  %}
+  <div class="mb-4 flex justify-end">
+    {% if show_inactive %}
+      <a href="{% url 'User' %}"
+        class="rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-500">
+        Ver usuarios activos
+      </a>
+    {% else %}
+      <a href="{% url 'User' %}?inactive=1"
+        class="rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600">
+        Ver usuarios inactivos
+      </a>
+    {% endif %}
+  </div>
+{% endif %}
+
+
+{% if users %}
+    <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+      {% for user, verifition in verification_users %}
+
+        <li class="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow max-w-[450px]">
+          <div class="flex w-full items-center justify-between space-x-6 p-6">
+            <div class="flex-1 truncate">
+              <div class="flex items-center space-x-3">
+                <h3 class="truncate text-sm font-medium text-gray-900">
+                  {{ user.username}}
+                </h3>
+
+                <span class="inline-flex shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                  {{ user.profile.position_FK }}
+                </span>
+              </div>
+              <p class="mt-1 truncate text-sm text-gray-500 flex justify-between">
+                {{ user.first_name }} {{ user.last_name }}
+              </p>
+            </div>
+            <img class="h-10 w-10 shrink-0 rounded-full bg-gray-300" src="{{ user.profile.image.url }}" alt="perfil">
+          </div>
+          <div>
+            <div class="-mt-px flex divide-x divide-gray-200">
+
+              <div class="flex w-0 flex-1">
+                <a href="mailto:{{ user.email }}" class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900 hover:bg-brand-50">
+                  <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
+                    <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
+                  </svg>
+                  Correo
+                </a>
+              </div>
+              {% if  request.user.is_superuser or request.user.profile.position_FK.permission_code == "ADMIN"  %}
+
+                <div class="flex w-0 flex-1">
+
+                  {% if show_inactive and not user.is_superuser %}
+                    <form method="POST" action="{% url 'UserActivate' user.id %}" class="w-full">
+                      {% csrf_token %}
+                      <button type="submit"
+                              class="inline-flex w-full items-center justify-center rounded-br-lg py-4 text-sm font-semibold text-green-700 hover:bg-green-50">
+                        Activar
+                      </button>
+                    </form>
+
+                  {% elif not user.is_superuser %}
+
+                    <button type="button"
+                            onclick="document.getElementById('desactivar-{{ user.pk }}').showModal()"
+                            class="inline-flex w-full items-center justify-center rounded-br-lg py-4 text-sm font-semibold text-red-700 hover:bg-red-50">
+                      Desactivar
+                    </button>
+
+                    <dialog id="desactivar-{{ user.pk }}" class="account-dialog" aria-labelledby="desactivar-titulo-{{ user.pk }}">
+                      <h2 id="desactivar-titulo-{{ user.pk }}" class="text-xl font-semibold">Desactivar cuenta</h2>
+                      <p class="section-description">¿Quieres desactivar la cuenta de {{ user.username }}? Podrás volver a activarla desde la lista de usuarios inactivos.</p>
+                      <div class="flex flex-wrap justify-end gap-3 mt-6"><button type="button" class="btn-secondary" onclick="this.closest('dialog').close()">Cancelar</button><form method="POST" action="{% url 'UserDeactivate' user.id %}">{% csrf_token %}<button type="submit" class="btn-danger">Desactivar cuenta</button></form></div>
+                    </dialog>
+
+                  {% else %}
+
+                    <div class="inline-flex w-full items-center justify-center rounded-br-lg py-4 text-sm font-semibold text-yellow-700 bg-yellow-50">
+                      Superusuario protegido
+                    </div>
+
+                  {% endif %}
+                </div>
+
+              {% endif %}
+            </div>
+          </div>
+        </li>
+
+      {% endfor %}
+
+    </ul>
+
+    {% include 'components/paginador.html' %}
+  {% else %}
+
+    <div class="rounded-lg border border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center">
+      <svg xmlns="http://www.w3.org/2000/svg"
+          class="mx-auto h-9 w-9 text-slate-400"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+        <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+        <path d="M10 9H8"/>
+        <path d="M16 13H8"/>
+        <path d="M16 17H8"/>
+      </svg>
+
+      <strong class="mt-3 block text-sm font-semibold uppercase tracking-wide text-slate-600">
+        No hay registros
+      </strong>
+
+    </div>
+
+  {% endif %}
+
+
+
+{% endblock content_main %}

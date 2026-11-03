@@ -1,0 +1,144 @@
+{% extends 'pages/clinitens/docente/base_docente.html' %}
+{% load clinical %}
+
+{% block page_title %}Previsualizar caso{% endblock page_title %}
+
+{% block docente_content %}
+<div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+  <div>
+    <p class="text-sm text-slate-500">Modo de solo lectura</p>
+    <h2 class="text-xl font-bold text-slate-900">Previsualización del caso clínico</h2>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <a href="{% url 'clinitensdocente:caso_editar' caso.pk %}"
+       class="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 text-sm font-medium text-white transition hover:bg-brand-700">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="h-4 w-4"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+        <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/>
+      </svg>
+      Editar caso
+    </a>
+
+    <a href="{% url 'clinitensdocente:casos' %}"
+       class="inline-flex h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
+      Volver
+    </a>
+  </div>
+</div>
+
+<section class="rounded-xl border border-brand-200 bg-brand-50/50 p-6 shadow-none">
+  <h3 class="flex items-center gap-2 border-b border-brand-200 pb-4 text-xl font-bold text-brand-700">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-5 w-5"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+      <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+      <path d="M10 9H8"/>
+      <path d="M16 13H8"/>
+      <path d="M16 17H8"/>
+    </svg>
+    Multimedia del paciente
+  </h3>
+
+  <p class="mt-4 text-sm text-slate-500">
+    Archivos que estarán disponibles para el estudiante al iniciar el caso.
+  </p>
+
+  <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+    {% for archivo in caso.archivos.all %}
+      {% with nombre=archivo.archivo.name|lower %}
+        <a href="{{ archivo.archivo.url }}"
+           target="_blank"
+           class="group overflow-hidden rounded-lg border border-slate-200 bg-white transition hover:border-brand-300 hover:shadow-none">
+
+          {% if nombre|slice:"-4:" == ".jpg" or nombre|slice:"-5:" == ".jpeg" or nombre|slice:"-4:" == ".png" or nombre|slice:"-5:" == ".webp" %}
+            <div class="relative">
+              <img src="{{ archivo.archivo.url }}"
+                   alt="{{ archivo.archivo.name }}"
+                   class="h-32 w-full object-cover">
+
+              <span class="absolute left-2 top-2 rounded bg-black/65 px-2 py-1 text-[10px] font-medium text-white">
+                Imagen
+              </span>
+            </div>
+
+          {% elif nombre|slice:"-4:" == ".mp4" or nombre|slice:"-4:" == ".mov" or nombre|slice:"-5:" == ".webm" %}
+            <div class="relative bg-slate-900">
+              <video class="h-32 w-full object-cover" muted>
+                <source src="{{ archivo.archivo.url }}">
+              </video>
+
+              <span class="absolute left-2 top-2 rounded bg-black/65 px-2 py-1 text-[10px] font-medium text-white">
+                Video
+              </span>
+            </div>
+
+          {% else %}
+            <div class="flex h-32 items-center justify-center bg-slate-100 text-slate-500">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   class="h-10 w-10"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round">
+                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+                <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+              </svg>
+            </div>
+          {% endif %}
+
+          <p class="truncate px-2 py-2 text-xs text-slate-500">
+            {{ archivo.archivo.name }}
+          </p>
+        </a>
+      {% endwith %}
+    {% empty %}
+      <p class="col-span-full text-sm text-slate-500">
+        Este caso no tiene archivos multimedia adjuntos.
+      </p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="mt-5 rounded-xl border border-slate-200 bg-white p-6 shadow-none">
+  <h3 class="flex items-center gap-2 border-b border-slate-200 pb-4 text-xl font-bold text-brand-700">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-5 w-5"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+      <path d="M12 7v14"/>
+      <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+    </svg>
+    {{ caso.titulo }}
+  </h3>
+
+  <article class="prose prose-slate mt-5 max-w-none leading-relaxed">
+    {{ caso.contenido|clinical_html }}
+  </article>
+
+  <p class="mt-6 border-t border-slate-200 pt-4 text-xs text-slate-500">
+    {{ caso.codigos.count }} código(s) asociado(s) ·
+    {{ caso.archivos.count }} archivo(s) multimedia ·
+    Actualizado: {{ caso.actualizado_en|date:"d-m-Y H:i" }}
+  </p>
+</section>
+{% endblock docente_content %}

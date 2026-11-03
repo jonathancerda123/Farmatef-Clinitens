@@ -1,0 +1,109 @@
+[
+  {
+    "page": "cuentas",
+    "box": {
+      "bottom": 526.5500183105469,
+      "height": 209.1000061035156,
+      "left": 144,
+      "right": 624,
+      "top": 317.45001220703125,
+      "width": 480,
+      "x": 144,
+      "y": 317.45001220703125
+    },
+    "focus": "Cancelar",
+    "scrollWidth": 768,
+    "viewport": {
+      "height": 844,
+      "width": 768
+    }
+  },
+  {
+    "page": "cuentas",
+    "box": {
+      "bottom": 538.4250183105469,
+      "height": 232.8500061035156,
+      "left": 16,
+      "right": 374.3999938964844,
+      "top": 305.57501220703125,
+      "width": 358.3999938964844,
+      "x": 16,
+      "y": 305.57501220703125
+    },
+    "focus": "Cancelar",
+    "scrollWidth": 390,
+    "viewport": {
+      "height": 844,
+      "width": 390
+    }
+  },
+  {
+    "page": "pacientes",
+    "backgroundLocked": "hidden",
+    "box": {
+      "bottom": 813.9874877929688,
+      "height": 783.9874877929688,
+      "left": 336,
+      "right": 1104,
+      "top": 30,
+      "width": 768,
+      "x": 336,
+      "y": 30
+    },
+    "clientHeight": 782,
+    "docWidth": 1440,
+    "focus": "BUTTON",
+    "modal": true,
+    "scrollHeight": 782,
+    "viewport": {
+      "height": 844,
+      "width": 1440
+    }
+  },
+  {
+    "page": "pacientes",
+    "backgroundLocked": "hidden",
+    "box": {
+      "bottom": 813.9874877929688,
+      "height": 783.9874877929688,
+      "left": 16,
+      "right": 752,
+      "top": 30,
+      "width": 736,
+      "x": 16,
+      "y": 30
+    },
+    "clientHeight": 782,
+    "docWidth": 768,
+    "focus": "BUTTON",
+    "modal": true,
+    "scrollHeight": 782,
+    "viewport": {
+      "height": 844,
+      "width": 768
+    }
+  },
+  {
+    "page": "pacientes",
+    "backgroundLocked": "hidden",
+    "box": {
+      "bottom": 828,
+      "height": 812,
+      "left": 16,
+      "right": 374.3999938964844,
+      "top": 16,
+      "width": 358.3999938964844,
+      "x": 16,
+      "y": 16
+    },
+    "clientHeight": 810,
+    "docWidth": 390,
+    "focus": "BUTTON",
+    "modal": true,
+    "scrollHeight": 1282,
+    "viewport": {
+      "height": 844,
+      "width": 390
+    }
+  }
+]

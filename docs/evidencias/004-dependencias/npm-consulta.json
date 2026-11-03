@@ -1,0 +1,26 @@
+{
+  "dompurify": {
+    "latest": "3.4.16",
+    "source": "https://registry.npmjs.org/dompurify"
+  },
+  "tailwindcss": {
+    "latest": "4.3.3",
+    "source": "https://registry.npmjs.org/tailwindcss"
+  },
+  "alpinejs": {
+    "latest": "3.17.4",
+    "source": "https://registry.npmjs.org/alpinejs"
+  },
+  "@tailwindcss/forms": {
+    "latest": "0.5.11",
+    "source": "https://registry.npmjs.org/%40tailwindcss%2Fforms"
+  },
+  "@tailwindcss/typography": {
+    "latest": "0.5.20",
+    "source": "https://registry.npmjs.org/%40tailwindcss%2Ftypography"
+  },
+  "@tailwindcss/cli": {
+    "latest": "4.3.3",
+    "source": "https://registry.npmjs.org/%40tailwindcss%2Fcli"
+  }
+}

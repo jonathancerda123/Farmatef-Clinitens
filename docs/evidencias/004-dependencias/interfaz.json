@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-08 America/Santiago",
+  "server": "127.0.0.1:8765; core.test_settings; revision-004.sqlite3 recién creada con fixtures",
+  "browser": "Codex IAB, pestaña temporal 8",
+  "viewports": [
+    {
+      "width": 1440,
+      "document_width": 1425
+    },
+    {
+      "width": 768,
+      "document_width": 753
+    },
+    {
+      "width": 390,
+      "document_width": 375
+    }
+  ],
+  "flows": [
+    "login docente por formulario",
+    "menú perfil abre y Escape cierra",
+    "SVG transform matrix(-1,0,0,-1,0,0), transición 0.18s",
+    "caso nuevo guardado desde CKEditor y listado/éxito confirmados",
+    "logout GET confirma; POST cierra sesión",
+    "login estudiante",
+    "menú móvil abre/cierra Escape",
+    "ingreso a actividad DEMO-002 con docente responsable",
+    "borrador identidad guardado con datos ficticios; respuesta repuebla campos y confirma éxito"
+  ],
+  "screenshots": [
+    "inicio-escritorio.jpg",
+    "ficha-movil.jpg"
+  ],
+  "limits": [
+    "Un navegador actual; no Safari/Firefox reales",
+    "MFA/seguridad normal en Client aislado, no cambios de credenciales por navegador",
+    "CKEditor con configuración reducida ficticia emitió widget-toolbar-no-items, sin errores; guardado funciona",
+    "No todas las pantallas/acciones de 003 repetidas; evidencia previa reutilizada según informe"
+  ],
+  "cleanup": {
+    "server": "sesión 6232 detenida por Ctrl+C, exit 1 esperado por interrupción",
+    "review_tab": "8 cerrada",
+    "viewport": "reset ejecutado",
+    "failed_tabs": "6/7 temporales de intento sin servidor; política impide leer página de error data:; limpieza automática al cerrar turno"
+  }
+}

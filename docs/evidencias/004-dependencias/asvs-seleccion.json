@@ -1,0 +1,114 @@
+{
+  "version": "5.0.0",
+  "source": "https://raw.githubusercontent.com/OWASP/ASVS/v5.0.0/5.0/docs_en/OWASP_Application_Security_Verification_Standard_5.0.0_en.flat.json",
+  "requirements": [
+    {
+      "chapter_id": "V1",
+      "chapter_name": "Encoding and Sanitization",
+      "section_id": "V1.2",
+      "section_name": "Injection Prevention",
+      "req_id": "V1.2.4",
+      "req_description": "Verify that data selection or database queries (e.g., SQL, HQL, NoSQL, Cypher) use parameterized queries, ORMs, entity frameworks, or are otherwise protected from SQL Injection and other database injection attacks. This is also relevant when writing stored procedures.",
+      "L": "1"
+    },
+    {
+      "chapter_id": "V3",
+      "chapter_name": "Web Frontend Security",
+      "section_id": "V3.3",
+      "section_name": "Cookie Setup",
+      "req_id": "V3.3.2",
+      "req_description": "Verify that each cookie's 'SameSite' attribute value is set according to the purpose of the cookie, to limit exposure to user interface redress attacks and browser-based request forgery attacks, commonly known as cross-site request forgery (CSRF).",
+      "L": "2"
+    },
+    {
+      "chapter_id": "V3",
+      "chapter_name": "Web Frontend Security",
+      "section_id": "V3.3",
+      "section_name": "Cookie Setup",
+      "req_id": "V3.3.4",
+      "req_description": "Verify that if the value of a cookie is not meant to be accessible to client-side scripts (such as a session token), the cookie must have the 'HttpOnly' attribute set and the same value (e. g. session token) must only be transferred to the client via the 'Set-Cookie' header field.",
+      "L": "2"
+    },
+    {
+      "chapter_id": "V3",
+      "chapter_name": "Web Frontend Security",
+      "section_id": "V3.5",
+      "section_name": "Browser Origin Separation",
+      "req_id": "V3.5.1",
+      "req_description": "Verify that, if the application does not rely on the CORS preflight mechanism to prevent disallowed cross-origin requests to use sensitive functionality, these requests are validated to ensure they originate from the application itself. This may be done by using and validating anti-forgery tokens or requiring extra HTTP header fields that are not CORS-safelisted request-header fields. This is to defend against browser-based request forgery attacks, commonly known as cross-site request forgery (CSRF).",
+      "L": "1"
+    },
+    {
+      "chapter_id": "V5",
+      "chapter_name": "File Handling",
+      "section_id": "V5.2",
+      "section_name": "File Upload and Content",
+      "req_id": "V5.2.1",
+      "req_description": "Verify that the application will only accept files of a size which it can process without causing a loss of performance or a denial of service attack.",
+      "L": "1"
+    },
+    {
+      "chapter_id": "V5",
+      "chapter_name": "File Handling",
+      "section_id": "V5.2",
+      "section_name": "File Upload and Content",
+      "req_id": "V5.2.2",
+      "req_description": "Verify that when the application accepts a file, either on its own or within an archive such as a zip file, it checks if the file extension matches an expected file extension and validates that the contents correspond to the type represented by the extension. This includes, but is not limited to, checking the initial 'magic bytes', performing image re-writing, and using specialized libraries for file content validation. For L1, this can focus just on files which are used to make specific business or security decisions. For L2 and up, this must apply to all files being accepted.",
+      "L": "1"
+    },
+    {
+      "chapter_id": "V5",
+      "chapter_name": "File Handling",
+      "section_id": "V5.2",
+      "section_name": "File Upload and Content",
+      "req_id": "V5.2.3",
+      "req_description": "Verify that the application checks compressed files (e.g., zip, gz, docx, odt) against maximum allowed uncompressed size and against maximum number of files before uncompressing the file.",
+      "L": "2"
+    },
+    {
+      "chapter_id": "V8",
+      "chapter_name": "Authorization",
+      "section_id": "V8.2",
+      "section_name": "General Authorization Design",
+      "req_id": "V8.2.1",
+      "req_description": "Verify that the application ensures that function-level access is restricted to consumers with explicit permissions.",
+      "L": "1"
+    },
+    {
+      "chapter_id": "V8",
+      "chapter_name": "Authorization",
+      "section_id": "V8.2",
+      "section_name": "General Authorization Design",
+      "req_id": "V8.2.2",
+      "req_description": "Verify that the application ensures that data-specific access is restricted to consumers with explicit permissions to specific data items to mitigate insecure direct object reference (IDOR) and broken object level authorization (BOLA).",
+      "L": "1"
+    },
+    {
+      "chapter_id": "V11",
+      "chapter_name": "Cryptography",
+      "section_id": "V11.4",
+      "section_name": "Hashing and Hash-based Functions",
+      "req_id": "V11.4.2",
+      "req_description": "Verify that passwords are stored using an approved, computationally intensive, key derivation function (also known as a \"password hashing function\"), with parameter settings configured based on current guidance. The settings should balance security and performance to make brute-force attacks sufficiently challenging for the required level of security.",
+      "L": "2"
+    },
+    {
+      "chapter_id": "V16",
+      "chapter_name": "Security Logging and Error Handling",
+      "section_id": "V16.2",
+      "section_name": "General Logging",
+      "req_id": "V16.2.5",
+      "req_description": "Verify that when logging sensitive data, the application enforces logging based on the data's protection level. For example, it may not be allowed to log certain data, such as credentials or payment details. Other data, such as session tokens, may only be logged by being hashed or masked, either in full or partially.",
+      "L": "2"
+    },
+    {
+      "chapter_id": "V16",
+      "chapter_name": "Security Logging and Error Handling",
+      "section_id": "V16.5",
+      "section_name": "Error Handling",
+      "req_id": "V16.5.3",
+      "req_description": "Verify that the application fails gracefully and securely, including when an exception occurs, preventing fail-open conditions such as processing a transaction despite errors resulting from validation logic.",
+      "L": "2"
+    }
+  ]
+}

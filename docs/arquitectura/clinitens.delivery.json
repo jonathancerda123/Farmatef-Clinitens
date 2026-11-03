@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "4cfaff93-06aa-4e6b-9ac5-34f7a7720bb9",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\jonat\\Desktop\\CliniTENS\\docs\\arquitectura\\candidate.json",
+  "output": "C:\\Users\\jonat\\Desktop\\CliniTENS\\docs\\arquitectura\\clinitens.html",
+  "specification": {
+    "sha256": "51431f0e15acbb7e4f15a08bc1e0011546ff2f7b300a3f41e3e306290dfea6dc",
+    "bytes": 36053
+  },
+  "artifact": {
+    "sha256": "b6550fc38360613a0b5593a961db043da70c35e2bb708a1d07a91e579c0cfb01",
+    "bytes": 771079
+  }
+}

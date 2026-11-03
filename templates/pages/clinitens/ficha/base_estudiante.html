@@ -1,0 +1,8 @@
+{% extends 'components/Layout/app_shell.html' %}
+{% load static %}
+{% block head_title %}CliniTENS | Ficha clínica{% endblock head_title %}
+{% block workspace_name %}Actividad clínica{% endblock workspace_name %}
+{% block page_title %}Ficha clínica{% endblock page_title %}
+{% block workspace_navigation %}{% block sidebar %}{% endblock sidebar %}{% endblock workspace_navigation %}
+{% block javascript %}{{ block.super }}<script defer src="{% static 'js/validaciones.js' %}"></script>{% endblock javascript %}
+{% block workspace_content %}{% block ficha_content %}{% endblock ficha_content %}{% endblock workspace_content %}

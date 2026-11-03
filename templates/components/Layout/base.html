@@ -1,0 +1,27 @@
+{% load static %}
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="es" >
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block head_title %} {% endblock head_title %}</title>
+    <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/clinitens-mark.svg' %}">
+    {% tailwind_css %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mensajes.css' %}">
+    {% block extra_css %} {% endblock extra_css %}
+    <script defer src="{% static 'vendor/alpine.min.js' %}"></script>
+    <script defer src="{% static 'vendor/purify.min.js' %}"  referrerpolicy="no-referrer"></script>
+    <script defer src="{% static "js/mensajes.js" %}"></script>
+    <script defer src="{% static 'js/design-system.js' %}"></script>
+    {% block javascript %} {% endblock javascript %}
+  </head>
+  <body class="app-design">
+
+    {% block content %} {% endblock content %}
+
+  </body>
+</html>

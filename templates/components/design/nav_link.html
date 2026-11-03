@@ -1,0 +1,2 @@
+<a href="{{ href }}" class="nav-link" {% if request.path == href or not exact and href != '/' and href in request.path %}aria-current="page"{% endif %}>
+{% include 'components/design/icon.html' with icon=icon %}<span>{{ label }}</span></a>

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Rediseño de proyectos existentes"
+  short_description: "Mejora interfaces conservando Django y funcionalidad"
+  default_prompt: "Usa $redesign-existing-projects para el alcance indicado, manteniendo el stack y registrando la validación real."
+
+policy:
+  allow_implicit_invocation: false

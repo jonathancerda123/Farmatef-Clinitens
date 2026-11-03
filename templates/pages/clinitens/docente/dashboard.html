@@ -1,0 +1,89 @@
+{% extends 'pages/clinitens/docente/base_docente.html' %}
+
+{% block page_title %}Panel docente{% endblock page_title %}
+
+{% block docente_content %}
+<div class="space-y-6">
+
+  <div class="section-heading"><div><h2>Prepara la próxima práctica</h2><p class="section-description">Organiza el escenario y acompaña a tus estudiantes durante la actividad.</p></div><div class="flex flex-wrap gap-3"><a class="btn-primary" href="{% url 'clinitensdocente:casos' %}">Preparar un caso</a><a class="btn-secondary" href="{% url 'clinitensdocente:en_vivo' %}">Ver seguimiento</a></div></div>
+  <dl class="metric-strip"><div><dt><a href="{% url 'clinitensdocente:casos' %}">Casos clínicos</a></dt><dd>{{ total_casos }}</dd></div><div><dt><a href="{% url 'clinitensdocente:codigos' %}">Códigos activos</a></dt><dd>{{ codigos_activos }}</dd></div><div><dt><a href="{% url 'clinitensdocente:pacientes' %}">Pacientes</a></dt><dd>{{ total_pacientes }}</dd></div><div><dt><a href="{% url 'clinitensdocente:estudiantes' %}">Estudiantes</a></dt><dd>{{ total_estudiantes }}</dd></div><div><dt><a href="{% url 'clinitensdocente:estudiantes' %}">Por evaluar</a></dt><dd>{{ fichas_pendientes }}</dd></div><div><dt><a href="{% url 'clinitensdocente:estudiantes' %}">Calificadas</a></dt><dd>{{ fichas_calificadas }}</dd></div></dl>
+
+  <section class="overflow-hidden rounded-xl border border-slate-200 bg-white p-6 shadow-none">
+    <h2 class="flex items-center gap-2 border-b border-slate-200 pb-4 text-xl font-bold text-brand-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+        <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+        <path d="M10 9H8"/>
+        <path d="M16 13H8"/>
+        <path d="M16 17H8"/>
+      </svg>
+      Fichas recientes
+    </h2>
+
+    <div class="mt-4 overflow-x-auto" role="region" aria-label="Tabla desplazable" tabindex="0">
+      <table class="w-full min-w-[700px] text-left text-sm">
+        <thead class="border-b border-slate-200 bg-brand-50 text-brand-700">
+          <tr>
+            <th scope="col" class="p-4">Estudiante</th>
+            <th scope="col" class="p-4">Código</th>
+            <th scope="col" class="p-4">Caso clínico</th>
+            <th scope="col" class="p-4">Estado</th>
+            <th scope="col" class="p-4">Nota</th>
+            <th scope="col" class="p-4">Fecha</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-slate-200">
+          {% for ficha in fichas_recientes %}
+            <tr class="hover:bg-slate-50">
+              <td class="p-4 font-medium text-slate-800">
+                {{ ficha.estudiante.get_full_name|default:ficha.estudiante.username }}
+              </td>
+
+              <td class="p-4 font-mono text-xs text-slate-600">
+                {{ ficha.codigo_actividad.codigo }}
+              </td>
+
+              <td class="p-4 text-slate-700">
+                {{ ficha.codigo_actividad.caso_clinico.titulo }}
+              </td>
+
+              <td class="p-4">
+                {% if ficha.estado == 'ENVIADA' %}
+                  <span class="inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">
+                    Pendiente
+                  </span>
+                {% else %}
+                  <span class="inline-flex rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700">
+                    Calificado
+                  </span>
+                {% endif %}
+              </td>
+
+              <td class="p-4 font-semibold text-slate-700">
+                {% if ficha.estado == 'CALIFICADA' %}
+                  {{ ficha.calificacion }}
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+
+              <td class="p-4 text-xs text-slate-500">
+                {{ ficha.actualizado_en|date:"d-m-Y H:i" }}
+              </td>
+            </tr>
+
+          {% empty %}
+            <tr>
+              <td colspan="6" class="p-10 text-center text-sm text-slate-500">
+                Aún no hay fichas enviadas por estudiantes.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+{% endblock docente_content %}

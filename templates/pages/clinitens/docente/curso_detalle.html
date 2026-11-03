@@ -1,0 +1,197 @@
+{% extends 'pages/clinitens/docente/base_docente.html' %}
+
+{% block page_title %}{{ curso.nombre }}{% endblock page_title %}
+
+{% block docente_content %}
+<div class="space-y-6">
+
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <a href="{% url 'clinitensdocente:cursos' %}"
+         class="text-sm font-semibold text-brand-700 hover:underline">
+        ← Volver a cursos
+      </a>
+
+      <h2 class="mt-2 text-xl font-bold text-slate-900">{{ curso.nombre }}</h2>
+
+      <p class="mt-1 text-sm text-slate-500">
+        Gestiona los estudiantes inscritos en este curso.
+      </p>
+    </div>
+
+    <span class="rounded-full bg-brand-50 px-3 py-1 text-sm font-semibold text-brand-700">
+      {{ estudiantes_curso|length }} estudiante(s)
+    </span>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-2">
+
+    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-none">
+      <div class="flex flex-wrap items-start justify-between gap-3 border-b border-slate-200 pb-4">
+        <div>
+          <h3 class="font-bold text-brand-700">Importar estudiantes desde Excel</h3>
+          <p class="mt-1 text-sm text-slate-500">
+            Se crean solo las cuentas nuevas. Las existentes se agregan al curso.
+          </p>
+        </div>
+
+        <a href="{% url 'clinitensdocente:curso_plantilla_excel' %}"
+           class="text-sm font-semibold text-brand-700 hover:underline">
+          Descargar plantilla
+        </a>
+      </div>
+
+      <form method="post"
+            action="{% url 'clinitensdocente:curso_importar_excel' curso.pk %}"
+            enctype="multipart/form-data"
+            class="mt-5 space-y-4">
+        {% csrf_token %}
+
+        <div>
+          <label for="{{ form_importacion.archivo.id_for_label }}" class="text-sm font-semibold text-slate-700">
+            Archivo Excel (.xlsx)
+          </label>
+
+          {{ form_importacion.archivo }}
+
+          <p class="mt-2 text-xs text-slate-500">
+            Columnas requeridas: username, email, first_name y last_name.
+          </p>
+        </div>
+
+        <button class="inline-flex h-10 items-center gap-2 rounded-md bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               class="h-4 w-4"
+               viewBox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round">
+            <path d="M12 3v12"/>
+            <path d="m8 7 4-4 4 4"/>
+            <path d="M5 21h14"/>
+          </svg>
+          Importar estudiantes
+        </button>
+      </form>
+    </section>
+
+    <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-none">
+      <h3 class="border-b border-slate-200 pb-4 font-bold text-brand-700">
+        Agregar estudiante registrado
+      </h3>
+
+      <form method="get" class="mt-5 flex gap-2">
+        <input name="buscar"
+               value="{{ termino_busqueda }}"
+               class="block h-10 w-full rounded-md border border-slate-300 bg-slate-50 px-3 text-sm outline-hidden focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+               placeholder="Buscar por nombre, usuario o correo">
+
+        <button class="h-10 rounded-md border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+          Buscar
+        </button>
+      </form>
+
+      <div class="mt-4 max-h-64 divide-y divide-slate-200 overflow-y-auto rounded-lg border border-slate-200">
+        {% for estudiante in estudiantes_disponibles %}
+          <div class="flex items-center justify-between gap-3 p-3">
+            <div class="min-w-0">
+              <p class="truncate text-sm font-semibold text-slate-800">
+                {{ estudiante.get_full_name|default:estudiante.username }}
+              </p>
+
+              <p class="truncate text-xs text-slate-500">
+                {{ estudiante.email }} · @{{ estudiante.username }}
+              </p>
+            </div>
+
+            <form method="post"
+                action="{% url 'clinitensdocente:curso_agregar_estudiante' curso.pk estudiante.pk %}">
+              {% csrf_token %}
+              <button class="rounded-md bg-brand-50 px-3 py-2 text-xs font-bold text-brand-700 transition hover:bg-brand-100">
+                Agregar
+              </button>
+            </form>
+          </div>
+        {% empty %}
+          <p class="p-6 text-center text-sm text-slate-500">
+            No se encontraron estudiantes activos disponibles.
+          </p>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+
+  <section class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-none">
+    <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+      <h3 class="font-bold text-brand-700">Estudiantes inscritos</h3>
+      <span class="text-sm text-slate-500">{{ estudiantes_curso|length }} registro(s)</span>
+    </div>
+
+    <div class="overflow-x-auto" role="region" aria-label="Tabla desplazable" tabindex="0">
+      <table class="w-full min-w-[720px] text-left text-sm">
+        <thead class="bg-brand-50 text-brand-700">
+          <tr>
+            <th scope="col" class="p-4">Nombre</th>
+            <th scope="col" class="p-4">Usuario</th>
+            <th scope="col" class="p-4">Correo</th>
+            <th scope="col" class="p-4 text-right">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-slate-200">
+          {% for estudiante in estudiantes_curso %}
+            <tr>
+              <td class="p-4 font-medium text-slate-800">
+                {{ estudiante.get_full_name|default:estudiante.username }}
+              </td>
+
+              <td class="p-4 font-mono text-xs text-slate-600">
+                {{ estudiante.username }}
+              </td>
+
+              <td class="p-4 text-slate-600">
+                {{ estudiante.email }}
+              </td>
+
+              <td class="p-4 text-right">
+                <form method="post"
+                      class="inline"
+                      action="{% url 'clinitensdocente:curso_quitar_estudiante' curso.pk estudiante.pk %}"
+                      onsubmit="return confirm('¿Quitar a {{ estudiante.get_full_name|default:estudiante.username|escapejs }} de este curso? Su cuenta no será eliminada.');">
+                  {% csrf_token %}
+
+                  <button title="Quitar del curso"
+                          class="inline-flex h-9 w-9 items-center justify-center rounded-md text-red-600 transition hover:bg-red-50">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-4 w-4"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round">
+                      <path d="M3 6h18"/>
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                      <line x1="10" x2="10" y1="11" y2="17"/>
+                      <line x1="14" x2="14" y1="11" y2="17"/>
+                    </svg>
+                  </button>
+                </form>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="4" class="p-10 text-center text-sm text-slate-500">
+                No hay estudiantes inscritos en este curso.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock docente_content %}

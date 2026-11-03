@@ -1,0 +1,159 @@
+{% extends 'pages/clinitens/docente/base_docente.html' %}
+
+{% block page_title %}Estudiantes{% endblock page_title %}
+
+{% block docente_content %}
+<div class="space-y-6">
+  <div>
+    <h2 class="text-xl font-bold text-slate-900">Estudiantes</h2>
+    <p class="mt-1 text-sm text-slate-500">
+      Revisa las fichas clínicas enviadas por los estudiantes.
+    </p>
+  </div>
+
+  <form method="get"
+        class="grid max-w-4xl gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-none md:grid-cols-[260px_minmax(0,1fr)_auto]">
+
+    <div>
+      <label for="id_curso" class="mb-1 block text-xs font-semibold text-slate-600">
+        Ver estudiantes por curso
+      </label>
+
+      <select id="id_curso"
+              name="curso"
+              class="input w-full">
+        <option value="">Todos mis cursos</option>
+
+        {% for curso in cursos %}
+          <option value="{{ curso.pk }}"
+                  {% if curso_seleccionado and curso.pk == curso_seleccionado.pk %}selected{% endif %}>
+            {{ curso.nombre }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="relative">
+      <label for="id_busqueda" class="mb-1 block text-xs font-semibold text-slate-600">
+        Buscar ficha
+      </label>
+
+      <svg xmlns="http://www.w3.org/2000/svg"
+          class="absolute bottom-3 left-3 h-4 w-4 text-slate-400"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.3-4.3"/>
+      </svg>
+
+      <input id="id_busqueda"
+            type="search"
+            name="q"
+            value="{{ busqueda }}"
+            class="input w-full pl-10"
+            placeholder="Código, caso, nombre o correo">
+    </div>
+
+    <div class="flex items-end gap-2">
+      <button type="submit"
+              class="inline-flex h-10 items-center justify-center rounded-md bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700">
+        Buscar
+      </button>
+
+      {% if curso_seleccionado or busqueda %}
+        <a href="{% url 'clinitensdocente:estudiantes' %}"
+          class="inline-flex h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+          Limpiar
+        </a>
+      {% endif %}
+    </div>
+  </form>
+
+  <section class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-none" role="region" aria-label="Tabla desplazable" tabindex="0">
+    <table class="w-full min-w-[950px] text-left text-sm">
+      <thead class="border-b border-slate-200 bg-brand-50 text-brand-700">
+        <tr>
+          <th scope="col" class="p-4">Estudiante</th>
+          <th scope="col" class="p-4">Correo</th>
+          <th scope="col" class="p-4">Código</th>
+          <th scope="col" class="p-4">Caso clínico</th>
+          <th scope="col" class="p-4">Estado</th>
+          <th scope="col" class="p-4">Enviada</th>
+          <th scope="col" class="p-4">Nota</th>
+          <th scope="col" class="p-4 text-center">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-slate-200">
+        {% for ficha in fichas %}
+          <tr class="transition hover:bg-slate-50">
+            <td class="p-4 font-medium text-slate-800">
+              {{ ficha.estudiante.get_full_name|default:ficha.estudiante.username }}
+            </td>
+
+            <td class="p-4 text-slate-500">
+              {{ ficha.estudiante.email }}
+            </td>
+
+            <td class="p-4 font-mono text-xs text-slate-700">
+              {{ ficha.codigo_actividad.codigo }}
+            </td>
+
+            <td class="p-4 text-slate-700">
+              {{ ficha.codigo_actividad.caso_clinico.titulo }}
+            </td>
+
+            <td class="p-4">
+              {% if ficha.estado == 'ENVIADA' %}
+                <span class="inline-flex rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">
+                  Pendiente
+                </span>
+              {% else %}
+                <span class="inline-flex rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700">
+                  Calificada
+                </span>
+              {% endif %}
+            </td>
+
+            <td class="p-4 text-xs text-slate-500">
+              {{ ficha.enviada_en|date:"d-m-Y H:i" }}
+            </td>
+
+            <td class="p-4 font-semibold text-slate-700">
+              {% if ficha.estado == 'CALIFICADA' %}
+                {{ ficha.calificacion }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+
+            <td class="p-4 text-center">
+                <a href="{% url 'clinitensdocente:ficha_revisar' ficha.pk 'identidad' %}?{% if curso_seleccionado %}curso={{ curso_seleccionado.pk }}{% endif %}{% if curso_seleccionado and busqueda %}&{% endif %}{% if busqueda %}q={{ busqueda|urlencode }}{% endif %}"
+                  title="Revisar ficha"
+                  class="inline-flex h-10 items-center justify-center gap-2 rounded-md px-3 text-sm font-medium text-brand-700 transition hover:bg-brand-50">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+                Revisar
+              </a>
+            </td>
+          </tr>
+
+        {% empty %}
+          <tr>
+            <td colspan="8" class="p-10 text-center text-sm text-slate-500">
+              No hay fichas enviadas que coincidan con la búsqueda.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+{% endblock docente_content %}

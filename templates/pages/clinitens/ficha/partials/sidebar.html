@@ -1,0 +1,5 @@
+<nav aria-label="Actividad del estudiante" class="nav-group">
+{% url 'clinitensficha:caso' ficha.pk as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Caso clínico' icon='case' %}
+{% url 'clinitensficha:editor' ficha.pk 'identidad' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Mi ficha clínica' icon='clipboard' %}
+{% url 'clinitensficha:resultado' ficha.pk as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Evaluación' icon='result' %}
+<p class="nav-context">Actividad {{ ficha.codigo_actividad.codigo }}</p></nav>

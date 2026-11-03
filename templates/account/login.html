@@ -1,0 +1,9 @@
+{% extends 'components/Layout/base.html' %}
+{% load static tailwind_filters i18n allauth account %}
+{% block head_title %}Iniciar sesión | CliniTENS{% endblock head_title %}
+{% block content %}
+<main class="auth-layout" id="contenido-principal"><section class="auth-story">{% include 'components/design/brand.html' %}<h1>La práctica también se aprende.</h1><p>Observa un caso, registra los cuidados y aprende con la retroalimentación de tu docente.</p><p>Simulación clínica para Técnicos en Enfermería.</p></section><div class="auth-main"><section class="auth-panel"><h2>Iniciar sesión</h2><p class="section-description mb-6">Accede con tu cuenta de CliniTENS.</p>
+{% if not SOCIALACCOUNT_ONLY %}{% url 'account_login' as login_url %}{% element form form=form method='post' action=login_url tags='entrance,login' %}{% slot body %}{% csrf_token %}{{ form|crispy }}{{ redirect_field }}{% endslot %}{% slot actions %}{% include 'components/btn/button.html' with button_text='Iniciar sesión' button_class='prominent login' %}<a href="{% url 'account_reset_password' %}" class="block mt-5 text-sm underline text-center">¿Olvidaste tu contraseña?</a>{% endslot %}{% endelement %}{% endif %}
+{% if LOGIN_BY_CODE_ENABLED %}<a href="{{ request_login_code_url }}" class="btn-secondary mt-4 w-full">Recibir código de acceso por correo</a>{% endif %}{% if SOCIALACCOUNT_ENABLED %}{% include 'socialaccount/snippets/login.html' with page_layout='entrance' %}{% endif %}
+</section></div></main>{% include 'components/mensajes.html' %}
+{% endblock content %}

@@ -1,0 +1,31 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% load static humanize %}
+{% block head_title %}Inicio | CliniTENS{% endblock head_title %}
+{% block page_title %}Tu espacio de aprendizaje{% endblock page_title %}
+{% block content_main %}
+<section class="home-intro" aria-labelledby="inicio-titulo">
+  <div><h2 id="inicio-titulo">Aprender cuidando.</h2><p class="section-description">Cada caso es una oportunidad para observar, registrar y tomar decisiones. Reúne tu práctica clínica en un mismo espacio.</p>
+    <div class="intro-actions"><a href="{% url 'clinitens' %}" class="btn-primary">Abrir área clínica {% include 'components/design/icon.html' with icon='arrow' %}</a>
+    {% if request.user.is_superuser or request.user.profile.position_FK.permission_code == 'ADMIN' or request.user.profile.position_FK.permission_code == 'MANAGER' %}<a class="btn-secondary" href="{% url 'clinitensdocente:dashboard' %}">Panel docente</a>{% else %}<a class="btn-secondary" href="{% url 'clinitensficha:ingreso' %}">Ingresar a una actividad</a>{% endif %}</div>
+  </div>
+  <div class="clinical-guide"><h3>Del caso a la práctica</h3>
+    <div class="guide-step">{% include 'components/design/icon.html' with icon='case' %}<div><strong>Observa el caso</strong><p>Contexto, paciente y apoyo diagnóstico.</p></div></div>
+    <div class="guide-step">{% include 'components/design/icon.html' with icon='clipboard' %}<div><strong>Completa la ficha</strong><p>13 secciones para ordenar la atención.</p></div></div>
+    <div class="guide-step">{% include 'components/design/icon.html' with icon='result' %}<div><strong>Revisa la evaluación</strong><p>Rúbrica y retroalimentación docente.</p></div></div>
+  </div>
+</section>
+<section aria-labelledby="plataformas-titulo">
+  <div class="section-heading"><div><h2 id="plataformas-titulo">Áreas de formación</h2><p class="section-description">Elige el entorno para tu próxima práctica.</p></div></div>
+  <div class="module-list">
+    <article class="module-entry"><span class="module-symbol">{% include 'components/design/icon.html' with icon='clipboard' %}</span><div><h3>CliniTENS</h3><p>Casos clínicos, registro de atención y evaluación para Técnicos en Enfermería.</p><a href="{% url 'clinitens' %}">Explorar área clínica</a></div></article>
+    <article class="module-entry"><span class="module-symbol">{% include 'components/design/icon.html' with icon='result' %}</span><div><h3>FarmaTEF</h3><p>Inventario docente inicial para prácticas simuladas de Técnico en Farmacia.</p><a href="{% url 'farmatef' %}">Abrir área de farmacia</a></div></article>
+  </div>
+</section>
+<section class="panel mt-8" aria-labelledby="usuarios-recientes">
+  <div class="section-heading"><div><h2 id="usuarios-recientes">Actividad reciente</h2><p class="section-description">Últimas conexiones visibles para tu cuenta.</p></div></div>
+  <div class="table-scroll" role="region" aria-label="Usuarios con actividad reciente" tabindex="0"><table class="table"><thead><tr><th scope="col">Usuario</th><th scope="col">Correo</th><th scope="col">Cargo</th><th scope="col">Última actividad</th></tr></thead><tbody>
+  {% for usuario in object_list %}<tr><td><span class="font-semibold">{{ usuario.get_full_name|default:usuario.username }}</span><p class="muted">{{ usuario.username }}</p></td><td>{{ usuario.email }}</td><td>{% if usuario.is_superuser %}Superusuario{% else %}{{ usuario.profile.position_FK.user_position|default:'Sin cargo' }}{% endif %}</td><td>{% if usuario.id in active_users %}<span class="text-green-800">Activo ahora</span>{% else %}{{ usuario.profile.last_activity|naturaltime }}{% endif %}</td></tr>
+  {% empty %}<tr><td colspan="4" class="py-8">La actividad aparecerá aquí cuando se inicie una sesión.</td></tr>{% endfor %}
+  </tbody></table></div>
+</section>
+{% endblock content_main %}

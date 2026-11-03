@@ -1,0 +1,16 @@
+{
+  "pdf": {
+    "pages": 2,
+    "identification": true,
+    "code": true,
+    "no_aplica": 12,
+    "reader": "pypdf 6.10.0"
+  },
+  "xlsx": {
+    "rows": 2,
+    "columns": 4,
+    "literal_cells": true,
+    "reader": "openpyxl 3.1.5"
+  },
+  "prior_visual_xlsx": "Reutilizada de 002; código de exportación y openpyxl 3.1.5 sin cambios; se genera/inspecciona archivo actual."
+}

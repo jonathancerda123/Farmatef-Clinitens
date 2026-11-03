@@ -1,0 +1,279 @@
+{% extends 'pages/clinitens/docente/base_docente.html' %}
+{% block page_title %}Apoyo Diagnóstico{% endblock page_title %}
+{% block docente_content %}
+
+
+<div x-data="{ mostrarFormulario: {% if form.errors %}true{% else %}false{% endif %} }">
+
+  <div class="mb-6 flex items-start justify-between gap-4">
+    <div>
+      <h2 class="flex items-center gap-2 text-2xl font-bold text-slate-900">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="h-6 w-6 text-brand-600"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+          <path d="M6 18h8"></path>
+          <path d="M3 22h18"></path>
+          <path d="M14 22a7 7 0 1 0 0-14h-1"></path>
+          <path d="M9 14h2"></path>
+          <path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path>
+          <path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path>
+        </svg>
+        Centro de Apoyo Diagnóstico
+      </h2>
+
+      <p class="mt-1 text-sm text-slate-500">
+        Asocie resultados de laboratorio, imágenes, ECG e informes a un paciente
+        y decida cuándo estarán disponibles para el estudiante.
+      </p>
+    </div>
+
+    <button type="button"
+            @click="mostrarFormulario = !mostrarFormulario" :aria-expanded="mostrarFormulario.toString()" aria-controls="formulario-registro"
+            class="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-700 focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="h-4 w-4 transition-transform"
+           :class="{ 'rotate-45': mostrarFormulario }"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="M5 12h14"></path>
+        <path d="M12 5v14"></path>
+      </svg>
+
+      <span x-text="mostrarFormulario ? 'Cerrar formulario' : 'Nuevo resultado'"></span>
+    </button>
+  </div>
+
+  <section x-cloak
+           x-show="mostrarFormulario" id="formulario-registro"
+           x-transition:enter="transition ease-out duration-200"
+           x-transition:enter-start="opacity-0 -translate-y-2"
+           x-transition:enter-end="opacity-100 translate-y-0"
+           x-transition:leave="transition ease-in duration-150"
+           x-transition:leave-start="opacity-100 translate-y-0"
+           x-transition:leave-end="opacity-0 -translate-y-2"
+           class="mb-6 rounded-xl border border-slate-200 bg-white p-6 shadow-none">
+
+    <h3 class="mb-5 flex items-center gap-2 border-b border-slate-200 pb-4 text-xl font-bold text-brand-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"></path>
+        <path d="M12 5v14"></path>
+      </svg>
+      Nuevo resultado
+    </h3>
+
+    <form method="post"
+          enctype="multipart/form-data"
+          class="grid gap-4 md:grid-cols-2">
+      {% csrf_token %}
+      <div class="md:col-span-2">{% include 'components/design/form_errors.html' %}</div>
+
+      {% for field in form %}
+        <div class="{% if field.name == 'nombre_examen' or field.name == 'observaciones' %}md:col-span-2{% endif %}">
+          <label for="{{ field.id_for_label }}" class="text-sm font-medium">
+            {{ field.label }}{% if field.field.required %} *{% endif %}
+          </label>
+
+          {{ field }}
+
+          {% for error in field.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      <div class="flex items-center justify-end gap-3 md:col-span-2">
+        <button type="button"
+                @click="mostrarFormulario = false"
+                class="inline-flex h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
+          Cancelar
+        </button>
+
+        <button type="submit"
+                class="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-700 focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"></path>
+            <path d="M12 5v14"></path>
+          </svg>
+          Asociar resultado
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section x-data="{ busqueda: '' }"
+         class="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-none">
+
+    <h3 class="flex items-center gap-2 border-b border-slate-200 pb-4 text-xl font-bold text-brand-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+        <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+        <path d="M10 9H8"/>
+        <path d="M16 13H8"/>
+        <path d="M16 17H8"/>
+      </svg>
+
+      Resultados cargados ({{ resultados|length }})
+    </h3>
+
+    <div class="mt-5">
+
+      <!-- Buscador -->
+      <div class="relative max-w-sm">
+        <svg xmlns="http://www.w3.org/2000/svg"
+            class="absolute left-3 top-3 h-4 w-4 text-slate-400"
+            viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+
+        <input type="search"
+              x-model="busqueda"
+              placeholder="Buscar por paciente o examen"
+              class="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 outline-hidden transition placeholder:text-slate-400 focus:border-brand-600 focus:ring-2 focus:ring-brand-100">
+      </div>
+
+      <!-- Tarjetas -->
+      <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+
+        {% for resultado in resultados %}
+          <article data-busqueda="{{ resultado.nombre_examen|lower }} {{ resultado.paciente.nombre_completo|lower }} {{ resultado.paciente.rut|lower }}"
+                  x-show="!busqueda || $el.dataset.busqueda.includes(busqueda.toLowerCase())"
+                  x-transition
+                  class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-none transition hover:-translate-y-0.5 hover:shadow-md">
+
+            <div class="h-1.5 bg-violet-600"></div>
+
+            <div class="space-y-3 p-4">
+
+              <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0">
+
+                  <h4 class="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4 shrink-0 text-violet-700"
+                        viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/>
+                      <path d="M8.5 2h7"/>
+                      <path d="M7 16h10"/>
+                    </svg>
+
+                    <span class="truncate">{{ resultado.nombre_examen }}</span>
+                  </h4>
+
+                  <p class="mt-1 text-xs text-slate-500">
+                    Paciente: {{ resultado.paciente.nombre_completo }} · {{ resultado.paciente.rut }}
+                  </p>
+                </div>
+
+                <form method="post"
+                      action="{% url 'clinitensdocente:resultado_eliminar' resultado.pk %}"
+                      onsubmit="return confirm('¿Seguro que deseas eliminar el resultado «{{ resultado.nombre_examen|escapejs }}»?');">
+                  {% csrf_token %}
+
+                  <button type="submit"
+                          title="Eliminar resultado"
+                          class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-red-600 transition hover:bg-red-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"/>
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                      <line x1="10" x2="10" y1="11" y2="17"/>
+                      <line x1="14" x2="14" y1="11" y2="17"/>
+                    </svg>
+                  </button>
+                </form>
+              </div>
+
+              <p class="text-xs text-slate-700">
+                <span class="font-semibold">{{ resultado.get_categoria_display }}</span>
+
+                {% if resultado.observaciones %}
+                  <span class="text-slate-400"> · </span>
+                  <span class="text-slate-500">{{ resultado.observaciones|truncatechars:90 }}</span>
+                {% endif %}
+              </p>
+
+              <div class="flex flex-wrap items-center gap-2 text-[11px]">
+
+                <span class="rounded-full bg-slate-100 px-2.5 py-1 text-slate-600">
+                  {{ resultado.fecha|date:"d-m-Y" }} · {{ resultado.hora|time:"H:i" }}
+                </span>
+
+                {% if resultado.publicacion == "INICIO" %}
+                  <span class="rounded-full bg-amber-100 px-2.5 py-1 text-amber-800">
+                    🟡 {{ resultado.get_publicacion_display }}
+                  </span>
+
+                {% elif resultado.publicacion == "OCULTO" %}
+                  <span class="rounded-full bg-slate-200 px-2.5 py-1 text-slate-600">
+                    🔒 {{ resultado.get_publicacion_display }}
+                  </span>
+
+                {% else %}
+                  <span class="rounded-full bg-brand-100 px-2.5 py-1 text-brand-700">
+                    ⏳ {{ resultado.get_publicacion_display }}
+                  </span>
+                {% endif %}
+
+                {% if resultado.publicacion == "HABILITACION" %}
+                  <form method="post" action="{% url 'clinitensdocente:resultado_habilitar' resultado.pk %}">
+                    {% csrf_token %}<button class="rounded bg-brand-100 px-3 py-1 text-brand-800">
+                      {% if resultado.habilitado %}Ocultar al estudiante{% else %}Habilitar para estudiantes{% endif %}
+                    </button>
+                  </form>
+                {% endif %}
+                {% if resultado.archivo %}
+                  <a href="{{ resultado.archivo.url }}"
+                    target="_blank"
+                    class="rounded-full bg-violet-100 px-2.5 py-1 font-medium text-violet-700 transition hover:bg-violet-200">
+                    Ver archivo
+                  </a>
+                {% endif %}
+              </div>
+
+            </div>
+          </article>
+
+        {% empty %}
+          <div class="md:col-span-2 xl:col-span-3 rounded-lg border border-dashed border-slate-300 py-10 text-center">
+            <p class="text-sm text-slate-500">
+              Aún no hay resultados asociados.
+            </p>
+          </div>
+        {% endfor %}
+
+      </div>
+
+      <!-- Mensaje cuando no hay coincidencias -->
+      <p x-show="busqueda && ![...document.querySelectorAll('[data-busqueda]')].some(card => card.dataset.busqueda.includes(busqueda.toLowerCase()))"
+        class="mt-6 text-center text-sm text-slate-500">
+        No se encontraron resultados para esta búsqueda.
+      </p>
+
+    </div>
+  </section>
+
+</div>
+
+
+{% endblock docente_content %}
+
+

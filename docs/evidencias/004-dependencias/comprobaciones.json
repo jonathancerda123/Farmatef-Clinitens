@@ -1,0 +1,54 @@
+{
+  "utc": "2026-10-09T02:09:32.126534+00:00",
+  "python": "3.12.0 (tags/v3.12.0:0fb18b0, Oct  2 2023, 13:03:39) [MSC v.1935 64 bit (AMD64)]",
+  "commands": [
+    {
+      "name": "check",
+      "command": "C:\\Users\\Fernando\\Desktop\\CliniTENS\\.test-artifacts\\dependencias-004\\target\\Scripts\\python.exe manage.py check --settings=core.test_settings",
+      "exit_code": 0,
+      "stdout": "System check identified no issues (0 silenced).\n",
+      "stderr": ""
+    },
+    {
+      "name": "migrations-dry-run",
+      "command": "C:\\Users\\Fernando\\Desktop\\CliniTENS\\.test-artifacts\\dependencias-004\\target\\Scripts\\python.exe manage.py makemigrations --check --dry-run --settings=core.test_settings",
+      "exit_code": 0,
+      "stdout": "No changes detected\n",
+      "stderr": ""
+    },
+    {
+      "name": "django-tests",
+      "command": "C:\\Users\\Fernando\\Desktop\\CliniTENS\\.test-artifacts\\dependencias-004\\target\\Scripts\\python.exe manage.py test homeApp UsuarioApp CliniTensDocenteApp CliniTensFichaApp --settings=core.test_settings",
+      "exit_code": 0,
+      "stdout": "Found 47 test(s).\nSystem check identified no issues (0 silenced).\n",
+      "stderr": "Creating test database for alias 'default'...\n\n...............................................\n----------------------------------------------------------------------\nRan 47 tests in 0.541s\n\nOK\nDestroying test database for alias 'default'...\n\n"
+    },
+    {
+      "name": "pip-check",
+      "command": "C:\\Users\\Fernando\\Desktop\\CliniTENS\\.test-artifacts\\dependencias-004\\target\\Scripts\\python.exe -m pip check",
+      "exit_code": 0,
+      "stdout": "No broken requirements found.\n",
+      "stderr": ""
+    },
+    {
+      "name": "tailwind-build",
+      "command": "C:\\Users\\Fernando\\Desktop\\CliniTENS\\.test-artifacts\\dependencias-004\\target\\Scripts\\python.exe manage.py tailwind --settings=core.test_settings build",
+      "exit_code": 0,
+      "stdout": "\n> theme@4.0.0 build\n> node build.cjs\n\n",
+      "stderr": "≈ tailwindcss v4.3.3\n\nDone in 131ms\n"
+    },
+    {
+      "name": "javascript-tests",
+      "command": "node.exe --test static/js/mensajes.test.cjs theme/static_src/build.test.cjs",
+      "exit_code": 0,
+      "stdout": "✔ la notificación muestra entradas como texto, sin interpretarlas como HTML (1.227ms)\n✔ una página sin contenedor de notificaciones no falla (0.6207ms)\n✔ un fallo del compilador conserva la hoja CSS anterior (5.1061ms)\n✔ una compilación sin utilidades conserva el CSS anterior aunque el CLI devuelva éxito (3.3605ms)\nℹ tests 4\nℹ suites 0\nℹ pass 4\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 71.3909\n",
+      "stderr": ""
+    }
+  ],
+  "watch": {
+    "command": "npm.cmd run dev",
+    "initial_ms": 346,
+    "rebuild_ms": 48,
+    "change": "utime de fuente CSS; compilación detectada; Ctrl+C al terminar"
+  }
+}

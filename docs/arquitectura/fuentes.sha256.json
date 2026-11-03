@@ -1,0 +1,102 @@
+[
+  {
+    "sha256": "3f2b5e60eb151cdb81ba8a2079a0c4a6b25054c2383898a6cb48b5d26a8ad1ed",
+    "path": "core/settings.py"
+  },
+  {
+    "sha256": "889d9eea0449ccc8d2cdf655a49204eebd77700bbc90a8e4aacd0b8394a6c901",
+    "path": "core/urls.py"
+  },
+  {
+    "sha256": "d068df9be0f8e44616d60ff1e839018bb9786662ffeda62aa6af98b9c11a88fb",
+    "path": "core/permissions.py"
+  },
+  {
+    "sha256": "692814c45fc942a3092f599a6c71bd9865af9dddc69900cb211c9b525dbf8be1",
+    "path": "core/mixins.py"
+  },
+  {
+    "sha256": "93d82e00f578b727d2aead46609d2cbece0d56c4ff1ca58016edb2f4b0cfd55d",
+    "path": "core/media.py"
+  },
+  {
+    "sha256": "10e8bb01a0e7878caaa74e8ed3d0b4933210bf29f55d0011656b9c0154529336",
+    "path": "homeApp/urls.py"
+  },
+  {
+    "sha256": "83d11834627762e297318e08a707608739d363e92cfb6cea8872eb1e1c3b78a8",
+    "path": "homeApp/views.py"
+  },
+  {
+    "sha256": "328d32001bb1b40346bad9468362fecf4941f317428ca8d06d430bb5174b10a8",
+    "path": "UsuarioApp/urls.py"
+  },
+  {
+    "sha256": "d3d74ecbd58189fe51cdb5c4d4dc6315a45cc46012bcaff785f40c45a51c4bd1",
+    "path": "UsuarioApp/models.py"
+  },
+  {
+    "sha256": "09deff971cd14b8d75c5426bdd89714ef282df67c88d94a5ff096491e6603e3e",
+    "path": "UsuarioApp/views.py"
+  },
+  {
+    "sha256": "55f4a332fdaf5727242ad40eeb0e7bddf3a3fcda2c70eed129b0741083c68c90",
+    "path": "UsuarioApp/adapters.py"
+  },
+  {
+    "sha256": "63a87b66ca98d6a70a855b08e0e09744439fea82060d322950bb78e10f4b02c3",
+    "path": "CliniTensDocenteApp/urls.py"
+  },
+  {
+    "sha256": "590e5da0fbe05f0b0cfcb0c5c23bba4c209b087ea79616de754f42a86ce8e2da",
+    "path": "CliniTensDocenteApp/models.py"
+  },
+  {
+    "sha256": "650e4db03281a2b55585aea1ffa79eb88bdc578aadb2b868731a4110b955eec8",
+    "path": "CliniTensDocenteApp/views.py"
+  },
+  {
+    "sha256": "e9e1bf6b50b60da7f8936976e0cd2c1004638eb95c2da28ee21a5ed9b1a869ca",
+    "path": "CliniTensFichaApp/urls.py"
+  },
+  {
+    "sha256": "589c9c5fe562ec9c7ac90af4bcc4e111e9a68cb5953ba93f54cedd09e8c4d983",
+    "path": "CliniTensFichaApp/models.py"
+  },
+  {
+    "sha256": "f4bd41934443526d77e2b5636715d798f46c39253838c658ca63a47b3a354794",
+    "path": "CliniTensFichaApp/views.py"
+  },
+  {
+    "sha256": "a72c4c6483c43e63f84fc57cf7da7f4bb93b84d180af77211c043a16c071d5ca",
+    "path": "FarmaTEFApp/urls.py"
+  },
+  {
+    "sha256": "72d72ca0fc670847f12c48ac7be9ff001381f89dd2e70001ef6b899cd4e4385e",
+    "path": "FarmaTEFApp/models.py"
+  },
+  {
+    "sha256": "3a6d88c784d51b4c83698ab0c21f6febf1c658598e4cc6552f8f85bdcef1dd8c",
+    "path": "FarmaTEFApp/views.py"
+  },
+  {
+    "sha256": "94ff0469e52eeba9f58f8dca35a998e566ba7e71fbd29a7d0b884f754308302f",
+    "path": "requirements.txt"
+  },
+  {
+    "sha256": "c4ffde49fd663bd17e47d6cd416e5ccb61d995655f577dcd519566c7b20d8aa2",
+    "path": "theme/static_src/package.json"
+  },
+  {
+    "sha256": "320969d43f7dea72074f56ad6348cf9b9f9499eb06509fddf146d5f26014effc",
+    "path": "templates/components/Layout/base.html"
+  },
+  {
+    "sha256": "94da2069f37ca9ac9e0c3ff0e5489a3f081ea5274119be189e47f6cc22a349b1",
+    "path": "specs/005-farmatef-mvp-informe2/spec.md"
+  },
+  {
+    "sha256": "9bfcef5e75b199fa33394c09f6055b7c4dc17aefb7440b4e0e48ef1dc6510c76",
+    "path": "docs/ESTADO_PROYECTO.md"
+  }
+]

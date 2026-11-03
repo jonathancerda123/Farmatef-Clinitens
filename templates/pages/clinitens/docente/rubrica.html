@@ -1,0 +1,338 @@
+{% extends 'pages/clinitens/docente/base_docente.html' %}
+
+{% block page_title %}Evaluación con Rúbrica{% endblock page_title %}
+
+{% block javascript %}
+  {{ block.super }}
+
+  <script>
+    function rubricaApp(puntajesIniciales, maximo, totalCriterios, modoEdicionInicial) {
+      if (typeof puntajesIniciales === "string") {
+        try {
+          puntajesIniciales = JSON.parse(puntajesIniciales);
+        } catch (error) {
+          puntajesIniciales = {};
+        }
+      }
+
+      if (!puntajesIniciales || typeof puntajesIniciales !== "object") {
+        puntajesIniciales = {};
+      }
+
+      return {
+        puntajes: puntajesIniciales,
+        maximo: Number(maximo),
+        totalCriterios: Number(totalCriterios),
+        editando: Boolean(modoEdicionInicial),
+
+        seleccionar(codigo, puntos) {
+          if (!this.editando) return;
+
+          this.puntajes[codigo] = Number(puntos);
+        },
+
+        seleccionado(codigo, puntos) {
+          return Number(this.puntajes[codigo]) === Number(puntos);
+        },
+
+        total() {
+          return Object.values(this.puntajes)
+            .reduce((acumulado, valor) => acumulado + (Number(valor) || 0), 0);
+        },
+
+        porcentaje() {
+          if (!this.maximo) return "0.0";
+
+          return ((this.total() / this.maximo) * 100).toFixed(1);
+        },
+
+        nota() {
+          const porcentaje = Number(this.porcentaje());
+          let nota;
+
+          if (porcentaje <= 60) {
+            nota = 1 + ((porcentaje / 60) * 3);
+          } else {
+            nota = 4 + (((porcentaje - 60) / 40) * 3);
+          }
+
+          return (Math.round((nota + Number.EPSILON) * 10) / 10).toFixed(1);
+        },
+
+        criteriosEvaluados() {
+          return Object.keys(this.puntajes).length;
+        },
+
+        todosEvaluados() {
+          return this.criteriosEvaluados() === this.totalCriterios;
+        },
+
+        claseNota() {
+          if (this.total() === 0) {
+            return "border-slate-300 bg-slate-50 text-slate-600";
+          }
+
+          return Number(this.nota()) >= 4
+            ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+            : "border-rose-400 bg-rose-50 text-rose-700";
+        },
+
+        claseNivel(nivel, estaSeleccionado) {
+          if (!estaSeleccionado) {
+            if (!this.editando) {
+              return "border-slate-200 bg-slate-50 text-slate-400";
+            }
+
+            return "border-slate-300 bg-white text-slate-700 hover:border-brand-300 hover:bg-slate-50";
+          }
+
+          return "border-brand-600 bg-brand-50 text-brand-900 ring-1 ring-brand-600";
+        },
+      }
+    }
+  </script>
+{% endblock javascript %}
+
+{% block docente_content %}
+{{ seleccionados|json_script:"puntajes-iniciales" }}
+
+<div class="space-y-6"
+     x-data="rubricaApp(
+       JSON.parse(document.getElementById('puntajes-iniciales').textContent),
+       {{ puntaje_maximo }},
+       {{ criterios|length }},
+       {{ modo_edicion|yesno:'true,false' }}
+     )">
+
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <a href="{% url 'clinitensdocente:ficha_revisar' ficha.pk 'identidad' %}"
+       class="inline-flex h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
+      ← Volver a la ficha del estudiante
+    </a>
+
+    <p class="text-sm text-slate-500">
+      {{ ficha.estudiante.get_full_name|default:ficha.estudiante.username }}
+      · Código {{ ficha.codigo_actividad.codigo }}
+    </p>
+  </div>
+
+  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-none">
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
+      <h2 class="flex items-center gap-2 text-xl font-bold text-brand-700">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="h-5 w-5"
+             viewBox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+          <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+          <path d="m9 14 2 2 4-4"/>
+        </svg>
+        Evaluación con Rúbrica
+      </h2>
+
+      {% if ficha.estado == 'CALIFICADA' and not modo_edicion %}
+        <a href="?editar=1"
+           class="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               class="h-4 w-4"
+               viewBox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round">
+            <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/>
+            <path d="m15 5 4 4"/>
+          </svg>
+          Editar evaluación
+        </a>
+      {% endif %}
+    </div>
+
+    {% if ficha.estado == 'CALIFICADA' and not modo_edicion %}
+      <div class="mt-4 rounded-lg border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-800">
+        Evaluación publicada — modo solo lectura. Use “Editar evaluación” para modificarla.
+      </div>
+    {% endif %}
+
+    {% if ficha.estado == 'CALIFICADA' and modo_edicion %}
+      <div class="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+        <span>Estás editando una evaluación publicada. Guarda y publica para actualizar la nota.</span>
+
+        <a href="{% url 'clinitensdocente:ficha_rubrica' ficha.pk %}"
+           class="font-semibold hover:underline">
+          Cancelar edición
+        </a>
+      </div>
+    {% endif %}
+
+    <form method="post" class="mt-5 space-y-6">
+      <input type="hidden" name="version" value="{{ ficha.version }}">
+      {% csrf_token %}
+
+      <input type="hidden"
+             name="puntajes_json"
+             :value="JSON.stringify(puntajes)">
+
+      <input type="hidden"
+             name="modo_edicion"
+             :value="editando ? '1' : '0'">
+
+      <dl class="evaluation-summary">
+        <div><dt>Puntaje</dt><dd><span x-text="total()"></span><span class="text-base text-slate-500"> / {{ puntaje_maximo }}</span></dd></div>
+        <div><dt>Porcentaje</dt><dd><span x-text="porcentaje()"></span>%</dd></div>
+        <div><dt>Nota calculada (1.0–7.0)</dt><dd><span class="grade-value" :class="claseNota()" x-text="nota()"></span></dd></div>
+      </dl>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-brand-100 bg-brand-50 px-4 py-3 text-sm">
+        <span class="font-medium text-brand-800">
+          Criterios evaluados:
+          <span x-text="criteriosEvaluados()"></span> / {{ criterios|length }}
+        </span>
+
+        <span class="text-brand-700"
+              x-text="todosEvaluados() ? 'Rúbrica completa' : 'Faltan criterios por evaluar'">
+        </span>
+      </div>
+
+      <p id="rubrica-instrucciones" class="muted mb-3">Selecciona un nivel por indicador. Puedes guardar un borrador antes de publicar la evaluación completa.</p>
+      <div aria-describedby="rubrica-instrucciones" class="overflow-x-auto rounded-xl border border-slate-200" role="region" aria-label="Tabla desplazable" tabindex="0">
+        <table class="w-full min-w-[960px] border-collapse text-xs">
+          <thead>
+            <tr class="bg-brand-50 text-slate-800">
+              <th scope="col" class="w-24 p-3 text-left font-semibold">Código</th>
+              <th scope="col" class="min-w-[220px] p-3 text-left font-semibold">Indicador</th>
+              <th scope="col" class="min-w-[112px] p-3 text-center font-semibold">Experto</th>
+              <th scope="col" class="min-w-[112px] p-3 text-center font-semibold">Competente</th>
+              <th scope="col" class="min-w-[112px] p-3 text-center font-semibold">Elemental</th>
+              <th scope="col" class="min-w-[112px] p-3 text-center font-semibold">Inicial</th>
+              <th scope="col" class="min-w-[112px] p-3 text-center font-semibold">Ausente</th>
+              <th scope="col" class="w-16 p-3 text-center font-semibold">Pts. Máx.</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for criterio in criterios %}
+              <tr class="border-t border-slate-200 align-top">
+                <td class="bg-slate-50 p-3 align-top font-mono text-xs">
+                  {{ criterio.codigo }}
+                </td>
+
+                <td class="p-3 align-top text-sm font-semibold text-slate-800">
+                  {{ criterio.indicador }}
+                </td>
+
+                {% for nivel, puntos in criterio.niveles %}
+                  <td class="p-1.5 align-top">
+                    <button type="button"
+                            @click="seleccionar('{{ criterio.codigo }}', {{ puntos }})"
+                            :disabled="!editando" :aria-pressed="seleccionado('{{ criterio.codigo }}', {{ puntos }})"
+                            :class="[
+                              claseNivel(
+                                '{{ nivel }}',
+                                seleccionado('{{ criterio.codigo }}', {{ puntos }})
+                              ),
+                              editando ? 'cursor-pointer' : 'cursor-default'
+                            ]"
+                            class="h-full min-h-20 w-full rounded-lg border-2 p-3 text-left text-xs leading-relaxed transition disabled:cursor-default">
+
+                      <span class="mb-2 flex items-center gap-1 font-bold">
+                        <svg x-show="seleccionado('{{ criterio.codigo }}', {{ puntos }})"
+                             xmlns="http://www.w3.org/2000/svg"
+                             class="h-3.5 w-3.5"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"/>
+                          <path d="m9 12 2 2 4-4"/>
+                        </svg>
+
+                        {{ puntos }} pts
+                      </span>
+
+                      <span class="font-medium">{{ nivel }}</span>
+
+
+                    </button>
+                  </td>
+                {% endfor %}
+
+                <td class="p-3 text-center align-top text-sm font-bold">
+                  {{ criterio.maximo }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+
+          <tfoot>
+            <tr class="bg-slate-100 font-bold">
+              <td colspan="2" class="p-3 text-right">Total</td>
+
+              <td colspan="5" class="p-3 text-center text-brand-700">
+                <span x-text="total()"></span> / {{ puntaje_maximo }} pts ·
+                <span x-text="porcentaje()"></span>% ·
+                Nota <span x-text="nota()"></span>
+              </td>
+
+              <td class="p-3 text-center">{{ puntaje_maximo }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div>
+        <label for="retroalimentacion"
+               class="text-base font-semibold text-slate-800">
+          Retroalimentación general / por criterio
+        </label>
+
+        <textarea id="retroalimentacion"
+                  name="retroalimentacion"
+                  rows="6"
+                  :disabled="!editando" :aria-pressed="seleccionado('{{ criterio.codigo }}', {{ puntos }})"
+                  class="mt-2 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-hidden transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100 disabled:cursor-default disabled:bg-slate-100 disabled:text-slate-600"
+                  placeholder="Escriba la retroalimentación para el estudiante...">{{ retroalimentacion_editor }}</textarea>
+      </div>
+
+      {% if modo_edicion %}
+        <div class="flex flex-wrap gap-3 border-t border-slate-200 pt-5">
+
+          {% if ficha.estado != 'CALIFICADA' %}
+            <button type="submit"
+                    name="accion"
+                    value="borrador"
+                    class="inline-flex h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
+              Guardar borrador
+            </button>
+          {% endif %}
+
+          <button type="submit"
+                  name="accion"
+                  value="publicar"
+                  :disabled="!todosEvaluados()"
+                  @click="if (!todosEvaluados()) $event.preventDefault()"
+                  onclick="return confirm('¿Finalizar y publicar esta evaluación para el estudiante?');"
+                  class="inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-semibold text-white transition"
+                  :class="todosEvaluados()
+                    ? 'bg-emerald-600 hover:bg-emerald-700'
+                    : 'cursor-not-allowed bg-slate-300'">
+
+            {% if ficha.estado == 'CALIFICADA' %}
+              Guardar cambios y actualizar evaluación
+            {% else %}
+              Finalizar evaluación y publicar
+            {% endif %}
+          </button>
+        </div>
+      {% endif %}
+    </form>
+  </section>
+</div>
+{% endblock docente_content %}

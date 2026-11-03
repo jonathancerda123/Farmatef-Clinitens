@@ -1,0 +1,5 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% load allauth i18n %}
+{% block head_title %}Cerrar sesión | CliniTENS{% endblock head_title %}
+{% block page_title %}Cerrar sesión{% endblock page_title %}
+{% block content_main %}<section class="form-sheet"><h2 class="text-xl font-bold">¿Quieres cerrar tu sesión?</h2><p class="section-description mb-6">Podrás volver a ingresar con tu cuenta para continuar tus actividades.</p><form method="post" action="{% url 'account_logout' %}">{% csrf_token %}{{ redirect_field }}<div class="flex flex-wrap gap-3"><button type="submit" class="btn-primary">Cerrar sesión</button><a class="btn-secondary" href="{% url 'Home' %}">Continuar en CliniTENS</a></div></form></section>{% endblock content_main %}

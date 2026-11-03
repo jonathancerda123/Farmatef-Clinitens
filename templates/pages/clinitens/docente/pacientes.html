@@ -1,0 +1,407 @@
+{% extends 'pages/clinitens/docente/base_docente.html' %}
+{% block page_title %}Pacientes{% endblock page_title %}
+{% block extra_css %}
+  {{ block.super }}
+  <style>
+    [x-cloak] {
+      display: none !important;
+    }
+  </style>
+{% endblock extra_css %}
+{% block docente_content %}
+<div x-data="{ mostrarFormulario: {% if form.errors %}true{% else %}false{% endif %} }">
+
+  <div class="mb-6 flex items-center justify-between">
+    <div>
+      <h2 class="text-lg font-bold text-slate-900">Gestión de Pacientes</h2>
+      <p class="text-sm text-slate-500">
+        Pacientes persistentes disponibles para los casos clínicos.
+      </p>
+    </div>
+
+    <button type="button"
+            @click="mostrarFormulario = !mostrarFormulario" :aria-expanded="mostrarFormulario.toString()" aria-controls="formulario-registro"
+            class="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-700 focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="h-4 w-4 transition-transform"
+           :class="{ 'rotate-45': mostrarFormulario }"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="M5 12h14"></path>
+        <path d="M12 5v14"></path>
+      </svg>
+
+      <span x-text="mostrarFormulario ? 'Cerrar formulario' : 'Nuevo paciente'"></span>
+    </button>
+  </div>
+
+  <section x-cloak
+           x-show="mostrarFormulario" id="formulario-registro"
+           x-transition:enter="transition ease-out duration-200"
+           x-transition:enter-start="opacity-0 -translate-y-2"
+           x-transition:enter-end="opacity-100 translate-y-0"
+           x-transition:leave="transition ease-in duration-150"
+           x-transition:leave-start="opacity-100 translate-y-0"
+           x-transition:leave-end="opacity-0 -translate-y-2"
+           class="mb-6 rounded-xl border border-slate-200 bg-white p-6 shadow-none">
+
+    <form method="post"
+          enctype="multipart/form-data"
+          class="grid gap-4 md:grid-cols-2">
+      {% csrf_token %}
+      <div class="md:col-span-2">{% include 'components/design/form_errors.html' %}</div>
+
+      {% for field in form %}
+        {% if field.name != 'archivos' %}
+          <div class="{% if field.name == 'centro_atencion' or field.name == 'observaciones' %}md:col-span-2{% endif %}">
+            <label for="{{ form.archivos.id_for_label }}" class="text-sm font-medium">
+              {{ field.label }}{% if field.field.required %} *{% endif %}
+            </label>
+
+            {{ field }}
+
+            {% for error in field.errors %}
+              <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <div class="md:col-span-2">
+        <label for="{{ form.archivos.id_for_label }}" class="text-sm font-medium">Multimedia del paciente</label>
+        {{ form.archivos }}
+
+        <p class="mt-1 text-xs text-slate-500">
+          Archivos clínicos permitidos, máximo 50 MB cada uno.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3 md:col-span-2">
+        <button type="submit"
+                class="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-700 focus:outline-hidden focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"></path>
+            <path d="M12 5v14"></path>
+          </svg>
+
+          Registrar paciente
+        </button>
+
+        <button type="button"
+                @click="mostrarFormulario = false"
+                class="inline-flex h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </section>
+
+<div x-data="vistaPaciente">
+  <section class="mt-4 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-none" role="region" aria-label="Tabla desplazable" tabindex="0">
+    <table class="w-full min-w-[950px] text-left text-sm">
+
+      <thead class="border-b border-slate-200 bg-brand-50 text-brand-700">
+        <tr>
+          <th scope="col" class="p-4 font-semibold">RUT</th>
+          <th scope="col" class="p-4 font-semibold">Nombre</th>
+          <th scope="col" class="p-4 font-semibold">Edad</th>
+          <th scope="col" class="p-4 font-semibold">Sexo</th>
+          <th scope="col" class="p-4 font-semibold">CESFAM</th>
+          <th scope="col" class="p-4 font-semibold">Diagnósticos</th>
+          <th scope="col" class="p-4 font-semibold">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-slate-200">
+        {% for paciente in pacientes %}
+          <tr class="transition hover:bg-slate-50">
+
+            <td class="p-4 font-mono text-xs text-slate-700">
+              {{ paciente.rut }}
+            </td>
+
+            <td class="p-4 font-medium text-slate-900">
+              {{ paciente.nombre_completo }}
+            </td>
+
+            <td class="p-4 text-slate-700">
+              {{ paciente.edad|default:"—" }}
+            </td>
+
+            <td class="p-4 text-slate-700">
+              {{ paciente.get_sexo_display }}
+            </td>
+
+            <td class="p-4 text-xs text-slate-500">
+              {{ paciente.centro_atencion|default:"—" }}
+            </td>
+
+            <td class="p-4">
+              <div class="flex flex-wrap gap-1">
+
+                {% if paciente.diagnostico_1 %}
+                  <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-700">
+                    {{ paciente.diagnostico_1 }}
+                  </span>
+                {% endif %}
+
+                {% if paciente.diagnostico_2 %}
+                  <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-700">
+                    {{ paciente.diagnostico_2 }}
+                  </span>
+                {% endif %}
+
+                {% if not paciente.diagnostico_1 and not paciente.diagnostico_2 %}
+                  <span class="text-slate-400">—</span>
+                {% endif %}
+
+              </div>
+            </td>
+
+            <td class="p-4">
+              <div class="flex gap-1">
+
+                <button type="button"
+                        title="Ver ficha del paciente"
+                        @click="abrir('{% url 'clinitensdocente:paciente_detalle' paciente.pk %}')"
+                        class="flex h-10 w-10 items-center justify-center rounded-md text-slate-700 transition hover:bg-brand-50 hover:text-brand-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+
+                <a href="{% url 'clinitensdocente:paciente_editar' paciente.pk %}"
+                  title="Editar paciente"
+                  class="flex h-10 w-10 items-center justify-center rounded-md text-slate-700 transition hover:bg-brand-50 hover:text-brand-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/>
+                  </svg>
+                </a>
+
+                <form method="post"
+                      action="{% url 'clinitensdocente:paciente_eliminar' paciente.pk %}"
+                      onsubmit="return confirm('¿Seguro que deseas eliminar a {{ paciente.nombre_completo|escapejs }}?');">
+                  {% csrf_token %}
+
+                  <button type="submit"
+                          title="Eliminar paciente"
+                          class="flex h-10 w-10 items-center justify-center rounded-md text-red-600 transition hover:bg-red-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 6h18"/>
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                      <line x1="10" x2="10" y1="11" y2="17"/>
+                      <line x1="14" x2="14" y1="11" y2="17"/>
+                    </svg>
+                  </button>
+                </form>
+
+              </div>
+            </td>
+
+          </tr>
+
+        {% empty %}
+          <tr>
+            <td colspan="7" class="p-8 text-center text-slate-500">
+              Aún no hay pacientes registrados.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+  </section>
+  <dialog x-ref="detalle"
+          class="patient-dialog"
+          aria-labelledby="paciente-detalle-titulo"
+          @cancel.prevent="cerrar()"
+          @close="if (!$refs.detalle.open) cerrar()"
+          @click="cerrarFuera($event)">
+
+    <div>
+      <div class="flex items-start justify-between gap-4 border-b border-slate-200 p-6">
+        <h2 id="paciente-detalle-titulo" class="text-lg font-semibold text-slate-900"
+            x-text="paciente ? paciente.nombre : 'Ficha del paciente'"></h2>
+        <button type="button" autofocus @click="cerrar()"
+                class="btn-secondary">Cerrar</button>
+      </div>
+
+      <template x-if="cargando">
+        <div class="p-10 text-center text-slate-500">
+          Cargando información del paciente...
+        </div>
+      </template>
+
+      <p x-show="error" x-text="error" role="alert" class="field-errors p-6"></p>
+
+      <template x-if="!cargando && paciente">
+        <div>
+
+          <!-- Cabecera e información clínica -->
+          <div class="border-b border-slate-200 p-6">
+
+            <p class="font-mono text-xs text-slate-500" x-text="paciente.rut"></p>
+
+            <div class="mt-4 grid grid-cols-2 gap-3 text-xs md:grid-cols-4">
+              <div>
+                <span class="text-slate-500">Edad:</span>
+                <span class="font-medium text-slate-800" x-text="paciente.edad"></span>
+              </div>
+
+              <div>
+                <span class="text-slate-500">Sexo:</span>
+                <span class="font-medium text-slate-800" x-text="paciente.sexo"></span>
+              </div>
+
+              <div>
+                <span class="text-slate-500">Comuna:</span>
+                <span class="font-medium text-slate-800" x-text="paciente.comuna"></span>
+              </div>
+
+              <div>
+                <span class="text-slate-500">CESFAM:</span>
+                <span class="font-medium text-slate-800" x-text="paciente.cesfam"></span>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <p class="mb-2 text-xs text-slate-500">Diagnósticos:</p>
+
+              <div class="flex flex-wrap gap-2">
+                <template x-for="diagnostico in paciente.diagnosticos" :key="diagnostico">
+                  <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700"
+                        x-text="diagnostico"></span>
+                </template>
+
+                <span x-show="paciente.diagnosticos.length === 0"
+                      class="text-xs text-slate-400">
+                  Sin diagnósticos registrados.
+                </span>
+              </div>
+            </div>
+
+            <div class="mt-4 rounded-md bg-slate-100/80 p-3 text-sm text-slate-700">
+              <p class="mb-1 text-xs text-slate-500">Observaciones:</p>
+              <p x-text="paciente.observaciones"></p>
+            </div>
+
+          </div>
+
+          <!-- Historial -->
+          <div class="p-6">
+            <h4 class="mb-4 flex items-center gap-2 font-semibold text-slate-800">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+                <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+                <path d="M10 9H8"/>
+                <path d="M16 13H8"/>
+                <path d="M16 17H8"/>
+              </svg>
+              Historial de procedimientos
+            </h4>
+
+            <div class="overflow-x-auto rounded-md border border-slate-200" role="region" aria-label="Tabla desplazable" tabindex="0">
+              <table class="w-full min-w-[600px] text-sm">
+
+                <thead class="bg-slate-100 text-left text-slate-700">
+                  <tr>
+                    <th scope="col" class="p-3 font-semibold">Fecha y hora</th>
+                    <th scope="col" class="p-3 font-semibold">Procedimiento</th>
+                    <th scope="col" class="p-3 font-semibold">Realizado por</th>
+                    <th scope="col" class="p-3 font-semibold">Profesional</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td colspan="4" class="p-8 text-center text-sm text-slate-500">
+                      Aún no hay procedimientos registrados para este paciente.
+                    </td>
+                  </tr>
+                </tbody>
+
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </template>
+    </div>
+
+  </dialog>
+  </div>
+
+</div>
+
+
+<script>
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("vistaPaciente", () => ({
+      abierto: false,
+      cargando: false,
+      paciente: null,
+      error: "",
+      solicitud: 0,
+
+      async abrir(url) {
+        const solicitud = ++this.solicitud;
+        this.abierto = true;
+        this.cargando = true;
+        this.paciente = null;
+        this.error = "";
+        if (!this.$refs.detalle.open) this.$refs.detalle.showModal();
+
+        try {
+          const respuesta = await fetch(url);
+
+          if (!respuesta.ok) {
+            throw new Error("No fue posible cargar la información del paciente.");
+          }
+
+          const paciente = await respuesta.json();
+          if (solicitud === this.solicitud && this.abierto) this.paciente = paciente;
+
+        } catch (error) {
+          if (solicitud === this.solicitud && this.abierto) {
+            this.error = "No fue posible cargar la información del paciente. Cierra esta ventana e intenta nuevamente.";
+          }
+
+        } finally {
+          if (solicitud === this.solicitud) this.cargando = false;
+        }
+      },
+
+      cerrar() {
+        ++this.solicitud;
+        this.abierto = false;
+        this.cargando = false;
+        this.paciente = null;
+        this.error = "";
+        if (this.$refs.detalle.open) this.$refs.detalle.close();
+      },
+
+      cerrarFuera(event) {
+        const dialog = this.$refs.detalle;
+        if (event.target !== dialog) return;
+        const rect = dialog.getBoundingClientRect();
+        if (event.clientX < rect.left || event.clientX > rect.right ||
+            event.clientY < rect.top || event.clientY > rect.bottom) this.cerrar();
+      }
+    }));
+  });
+</script>
+{% endblock docente_content %}

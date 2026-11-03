@@ -1,0 +1,21 @@
+/* Fuente de identidad de CliniTENS. Valores RGB permiten opacidad en Tailwind 3. */
+:root {
+  --color-canvas: 242 246 246;
+  --color-surface: 255 255 255;
+  --color-ink: 25 54 60;
+  --color-muted: 86 107 113;
+  --color-border: 210 224 225;
+  --color-navigation: 23 71 78;
+  --color-primary: 0 121 111;
+  --color-primary-hover: 0 96 88;
+  --color-primary-soft: 230 244 240;
+  --color-success: 30 107 68;
+  --color-warning: 133 78 12;
+  --color-danger: 180 35 24;
+  --color-focus: 0 121 111;
+  --font-body: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-heading: "Trebuchet MS", "Segoe UI", sans-serif;
+  --radius-control: .4rem;
+  --radius-panel: .8rem;
+  --sidebar-width: 15rem;
+}

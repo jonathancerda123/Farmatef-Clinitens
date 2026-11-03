@@ -1,0 +1,795 @@
+{
+  "source": "lockfile incorporado en django-ckeditor-5==0.2.20; coincidente con bundle 47.5.0",
+  "provider_manifest": {
+    "name": "django_ckeditor_5",
+    "version": "0.2.20",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "dev": "webpack --mode development",
+      "prod": "webpack --mode production"
+    },
+    "author": "",
+    "license": "BSD-3-Clause",
+    "dependencies": {
+      "@ckeditor/ckeditor5-adapter-ckfinder": "^47.5.0",
+      "@ckeditor/ckeditor5-alignment": "^47.5.0",
+      "@ckeditor/ckeditor5-autoformat": "^47.5.0",
+      "@ckeditor/ckeditor5-autosave": "^47.5.0",
+      "@ckeditor/ckeditor5-basic-styles": "^47.5.0",
+      "@ckeditor/ckeditor5-block-quote": "^47.5.0",
+      "@ckeditor/ckeditor5-code-block": "^47.5.0",
+      "@ckeditor/ckeditor5-editor-classic": "^47.5.0",
+      "@ckeditor/ckeditor5-enter": "^47.5.0",
+      "@ckeditor/ckeditor5-essentials": "^47.5.0",
+      "@ckeditor/ckeditor5-find-and-replace": "^47.5.0",
+      "@ckeditor/ckeditor5-font": "^47.5.0",
+      "@ckeditor/ckeditor5-heading": "^47.5.0",
+      "@ckeditor/ckeditor5-highlight": "^47.5.0",
+      "@ckeditor/ckeditor5-horizontal-line": "^47.5.0",
+      "@ckeditor/ckeditor5-html-embed": "^47.5.0",
+      "@ckeditor/ckeditor5-html-support": "^47.5.0",
+      "@ckeditor/ckeditor5-image": "^47.5.0",
+      "@ckeditor/ckeditor5-indent": "^47.5.0",
+      "@ckeditor/ckeditor5-inspector": "^5.0.0",
+      "@ckeditor/ckeditor5-link": "^47.5.0",
+      "@ckeditor/ckeditor5-list": "^47.5.0",
+      "@ckeditor/ckeditor5-markdown-gfm": "^47.5.0",
+      "@ckeditor/ckeditor5-media-embed": "^47.5.0",
+      "@ckeditor/ckeditor5-mention": "^47.5.0",
+      "@ckeditor/ckeditor5-page-break": "^47.5.0",
+      "@ckeditor/ckeditor5-paragraph": "^47.5.0",
+      "@ckeditor/ckeditor5-paste-from-office": "^47.5.0",
+      "@ckeditor/ckeditor5-remove-format": "^47.5.0",
+      "@ckeditor/ckeditor5-select-all": "^47.5.0",
+      "@ckeditor/ckeditor5-show-blocks": "^47.5.0",
+      "@ckeditor/ckeditor5-source-editing": "^47.5.0",
+      "@ckeditor/ckeditor5-special-characters": "^47.5.0",
+      "@ckeditor/ckeditor5-style": "^47.5.0",
+      "@ckeditor/ckeditor5-table": "^47.5.0",
+      "@ckeditor/ckeditor5-theme-lark": "^47.5.0",
+      "@ckeditor/ckeditor5-ui": "^47.5.0",
+      "@ckeditor/ckeditor5-upload": "^47.5.0",
+      "@ckeditor/ckeditor5-word-count": "^47.5.0"
+    },
+    "devDependencies": {
+      "@ckeditor/ckeditor5-core": "^47.5.0",
+      "@ckeditor/ckeditor5-dev-translations": "^54.3.4",
+      "@ckeditor/ckeditor5-dev-utils": "^54.3.4",
+      "@ckeditor/ckeditor5-theme-lark": "^47.5.0",
+      "css-loader": "^7.1.4",
+      "mini-css-extract-plugin": "^2.10.0",
+      "postcss-loader": "^8.2.1",
+      "raw-loader": "4",
+      "style-loader": "4",
+      "terser-webpack-plugin": "^5.3.16",
+      "webpack": "^5.105.2",
+      "webpack-cli": "6.0.1"
+    }
+  },
+  "resolved_runtime": {
+    "@ckeditor/ckeditor5-adapter-ckfinder": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-alignment": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-autoformat": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-autosave": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-basic-styles": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-block-quote": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-bookmark": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-ckbox": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-ckfinder": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-clipboard": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-cloud-services": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-code-block": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-core": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-easy-image": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-editor-balloon": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-editor-classic": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-editor-decoupled": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-editor-inline": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-editor-multi-root": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-emoji": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-engine": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-enter": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-essentials": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-find-and-replace": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-font": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-fullscreen": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-heading": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-highlight": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-horizontal-line": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-html-embed": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-html-support": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-icons": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-image": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-indent": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-inspector": [
+      "5.0.0"
+    ],
+    "@ckeditor/ckeditor5-language": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-link": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-list": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-markdown-gfm": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-media-embed": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-mention": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-minimap": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-page-break": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-paragraph": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-paste-from-office": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-remove-format": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-restricted-editing": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-select-all": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-show-blocks": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-source-editing": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-special-characters": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-style": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-table": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-theme-lark": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-typing": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-ui": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-undo": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-upload": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-utils": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-watchdog": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-widget": [
+      "47.5.0"
+    ],
+    "@ckeditor/ckeditor5-word-count": [
+      "47.5.0"
+    ],
+    "@types/color-convert": [
+      "2.0.4"
+    ],
+    "@types/color-name": [
+      "1.1.5"
+    ],
+    "@types/debug": [
+      "4.1.12"
+    ],
+    "@types/hast": [
+      "3.0.4"
+    ],
+    "@types/mdast": [
+      "4.0.4"
+    ],
+    "@types/ms": [
+      "2.1.0"
+    ],
+    "@types/unist": [
+      "3.0.3"
+    ],
+    "@ungap/structured-clone": [
+      "1.3.0"
+    ],
+    "bail": [
+      "2.0.2"
+    ],
+    "blurhash": [
+      "2.0.5"
+    ],
+    "ccount": [
+      "2.0.1"
+    ],
+    "character-entities": [
+      "2.0.2"
+    ],
+    "character-entities-html4": [
+      "2.1.0"
+    ],
+    "character-entities-legacy": [
+      "3.0.0"
+    ],
+    "ckeditor5": [
+      "47.5.0"
+    ],
+    "color-convert": [
+      "3.1.0"
+    ],
+    "color-name": [
+      "2.1.0"
+    ],
+    "color-parse": [
+      "2.0.2"
+    ],
+    "comma-separated-tokens": [
+      "2.0.3"
+    ],
+    "debug": [
+      "4.4.3"
+    ],
+    "decode-named-character-reference": [
+      "1.3.0"
+    ],
+    "dequal": [
+      "2.0.3"
+    ],
+    "devlop": [
+      "1.1.0"
+    ],
+    "es-toolkit": [
+      "1.39.5"
+    ],
+    "extend": [
+      "3.0.2"
+    ],
+    "fuzzysort": [
+      "3.1.0"
+    ],
+    "hast-util-embedded": [
+      "3.0.0"
+    ],
+    "hast-util-from-dom": [
+      "5.0.1"
+    ],
+    "hast-util-has-property": [
+      "3.0.0"
+    ],
+    "hast-util-is-body-ok-link": [
+      "3.0.1"
+    ],
+    "hast-util-is-element": [
+      "3.0.0"
+    ],
+    "hast-util-minify-whitespace": [
+      "1.0.1"
+    ],
+    "hast-util-parse-selector": [
+      "4.0.0"
+    ],
+    "hast-util-phrasing": [
+      "3.0.1"
+    ],
+    "hast-util-to-dom": [
+      "4.0.1"
+    ],
+    "hast-util-to-html": [
+      "9.0.5"
+    ],
+    "hast-util-to-mdast": [
+      "10.1.2"
+    ],
+    "hast-util-to-text": [
+      "4.0.2"
+    ],
+    "hast-util-whitespace": [
+      "3.0.0"
+    ],
+    "hastscript": [
+      "9.0.1"
+    ],
+    "html-void-elements": [
+      "3.0.0"
+    ],
+    "is-plain-obj": [
+      "4.1.0"
+    ],
+    "longest-streak": [
+      "3.1.0"
+    ],
+    "markdown-table": [
+      "3.0.4"
+    ],
+    "mdast-util-find-and-replace": [
+      "3.0.2"
+    ],
+    "escape-string-regexp": [
+      "5.0.0"
+    ],
+    "mdast-util-from-markdown": [
+      "2.0.3"
+    ],
+    "mdast-util-gfm": [
+      "3.1.0"
+    ],
+    "mdast-util-gfm-autolink-literal": [
+      "2.0.1"
+    ],
+    "mdast-util-gfm-footnote": [
+      "2.1.0"
+    ],
+    "mdast-util-gfm-strikethrough": [
+      "2.0.0"
+    ],
+    "mdast-util-gfm-table": [
+      "2.0.0"
+    ],
+    "mdast-util-gfm-task-list-item": [
+      "2.0.0"
+    ],
+    "mdast-util-newline-to-break": [
+      "2.0.0"
+    ],
+    "mdast-util-phrasing": [
+      "4.1.0"
+    ],
+    "mdast-util-to-hast": [
+      "13.2.1"
+    ],
+    "mdast-util-to-markdown": [
+      "2.1.2"
+    ],
+    "mdast-util-to-string": [
+      "4.0.0"
+    ],
+    "micromark": [
+      "4.0.2"
+    ],
+    "micromark-core-commonmark": [
+      "2.0.3"
+    ],
+    "micromark-extension-gfm": [
+      "3.0.0"
+    ],
+    "micromark-extension-gfm-autolink-literal": [
+      "2.1.0"
+    ],
+    "micromark-extension-gfm-footnote": [
+      "2.1.0"
+    ],
+    "micromark-extension-gfm-strikethrough": [
+      "2.1.0"
+    ],
+    "micromark-extension-gfm-table": [
+      "2.1.1"
+    ],
+    "micromark-extension-gfm-tagfilter": [
+      "2.0.0"
+    ],
+    "micromark-extension-gfm-task-list-item": [
+      "2.1.0"
+    ],
+    "micromark-factory-destination": [
+      "2.0.1"
+    ],
+    "micromark-factory-label": [
+      "2.0.1"
+    ],
+    "micromark-factory-space": [
+      "2.0.1"
+    ],
+    "micromark-factory-title": [
+      "2.0.1"
+    ],
+    "micromark-factory-whitespace": [
+      "2.0.1"
+    ],
+    "micromark-util-character": [
+      "2.1.1"
+    ],
+    "micromark-util-chunked": [
+      "2.0.1"
+    ],
+    "micromark-util-classify-character": [
+      "2.0.1"
+    ],
+    "micromark-util-combine-extensions": [
+      "2.0.1"
+    ],
+    "micromark-util-decode-numeric-character-reference": [
+      "2.0.2"
+    ],
+    "micromark-util-decode-string": [
+      "2.0.1"
+    ],
+    "micromark-util-encode": [
+      "2.0.1"
+    ],
+    "micromark-util-html-tag-name": [
+      "2.0.1"
+    ],
+    "micromark-util-normalize-identifier": [
+      "2.0.1"
+    ],
+    "micromark-util-resolve-all": [
+      "2.0.1"
+    ],
+    "micromark-util-sanitize-uri": [
+      "2.0.1"
+    ],
+    "micromark-util-subtokenize": [
+      "2.1.0"
+    ],
+    "micromark-util-symbol": [
+      "2.0.1"
+    ],
+    "micromark-util-types": [
+      "2.0.2"
+    ],
+    "ms": [
+      "2.1.3"
+    ],
+    "property-information": [
+      "7.1.0"
+    ],
+    "rehype-dom-parse": [
+      "5.0.2"
+    ],
+    "rehype-dom-stringify": [
+      "4.0.2"
+    ],
+    "rehype-minify-whitespace": [
+      "6.0.2"
+    ],
+    "rehype-remark": [
+      "10.0.1"
+    ],
+    "remark-breaks": [
+      "4.0.0"
+    ],
+    "remark-gfm": [
+      "4.0.1"
+    ],
+    "remark-parse": [
+      "11.0.0"
+    ],
+    "remark-rehype": [
+      "11.1.2"
+    ],
+    "remark-stringify": [
+      "11.0.0"
+    ],
+    "space-separated-tokens": [
+      "2.0.2"
+    ],
+    "stringify-entities": [
+      "4.0.4"
+    ],
+    "trim-lines": [
+      "3.0.1"
+    ],
+    "trim-trailing-lines": [
+      "2.1.0"
+    ],
+    "trough": [
+      "2.2.0"
+    ],
+    "unified": [
+      "11.0.5"
+    ],
+    "unist-util-find-after": [
+      "5.0.0"
+    ],
+    "unist-util-is": [
+      "6.0.1"
+    ],
+    "unist-util-position": [
+      "5.0.0"
+    ],
+    "unist-util-stringify-position": [
+      "4.0.0"
+    ],
+    "unist-util-visit": [
+      "5.0.0"
+    ],
+    "unist-util-visit-parents": [
+      "6.0.2"
+    ],
+    "vanilla-colorful": [
+      "0.7.2"
+    ],
+    "vfile": [
+      "6.0.3"
+    ],
+    "vfile-message": [
+      "4.0.3"
+    ],
+    "web-namespaces": [
+      "2.0.1"
+    ],
+    "zwitch": [
+      "2.0.4"
+    ]
+  },
+  "latest_direct": {
+    "@ckeditor/ckeditor5-adapter-ckfinder": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-adapter-ckfinder"
+    },
+    "@ckeditor/ckeditor5-alignment": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-alignment"
+    },
+    "@ckeditor/ckeditor5-autoformat": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-autoformat"
+    },
+    "@ckeditor/ckeditor5-autosave": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-autosave"
+    },
+    "@ckeditor/ckeditor5-basic-styles": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-basic-styles"
+    },
+    "@ckeditor/ckeditor5-block-quote": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-block-quote"
+    },
+    "@ckeditor/ckeditor5-code-block": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-code-block"
+    },
+    "@ckeditor/ckeditor5-editor-classic": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-editor-classic"
+    },
+    "@ckeditor/ckeditor5-enter": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-enter"
+    },
+    "@ckeditor/ckeditor5-essentials": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-essentials"
+    },
+    "@ckeditor/ckeditor5-find-and-replace": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-find-and-replace"
+    },
+    "@ckeditor/ckeditor5-font": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-font"
+    },
+    "@ckeditor/ckeditor5-heading": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-heading"
+    },
+    "@ckeditor/ckeditor5-highlight": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-highlight"
+    },
+    "@ckeditor/ckeditor5-horizontal-line": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-horizontal-line"
+    },
+    "@ckeditor/ckeditor5-html-embed": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-html-embed"
+    },
+    "@ckeditor/ckeditor5-html-support": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-html-support"
+    },
+    "@ckeditor/ckeditor5-image": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-image"
+    },
+    "@ckeditor/ckeditor5-indent": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-indent"
+    },
+    "@ckeditor/ckeditor5-inspector": {
+      "latest": "5.0.3",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-inspector"
+    },
+    "@ckeditor/ckeditor5-link": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-link"
+    },
+    "@ckeditor/ckeditor5-list": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-list"
+    },
+    "@ckeditor/ckeditor5-markdown-gfm": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-markdown-gfm"
+    },
+    "@ckeditor/ckeditor5-media-embed": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-media-embed"
+    },
+    "@ckeditor/ckeditor5-mention": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-mention"
+    },
+    "@ckeditor/ckeditor5-page-break": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-page-break"
+    },
+    "@ckeditor/ckeditor5-paragraph": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-paragraph"
+    },
+    "@ckeditor/ckeditor5-paste-from-office": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-paste-from-office"
+    },
+    "@ckeditor/ckeditor5-remove-format": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-remove-format"
+    },
+    "@ckeditor/ckeditor5-select-all": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-select-all"
+    },
+    "@ckeditor/ckeditor5-show-blocks": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-show-blocks"
+    },
+    "@ckeditor/ckeditor5-source-editing": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-source-editing"
+    },
+    "@ckeditor/ckeditor5-special-characters": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-special-characters"
+    },
+    "@ckeditor/ckeditor5-style": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-style"
+    },
+    "@ckeditor/ckeditor5-table": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-table"
+    },
+    "@ckeditor/ckeditor5-theme-lark": {
+      "latest": "47.6.2",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-theme-lark"
+    },
+    "@ckeditor/ckeditor5-ui": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-ui"
+    },
+    "@ckeditor/ckeditor5-upload": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-upload"
+    },
+    "@ckeditor/ckeditor5-word-count": {
+      "latest": "49.0.0",
+      "source": "https://registry.npmjs.org/%40ckeditor%2Fckeditor5-word-count"
+    }
+  },
+  "service": "npm bulk advisories",
+  "advisories": {
+    "@ckeditor/ckeditor5-html-support": [
+      {
+        "id": 1114938,
+        "url": "https://github.com/advisories/GHSA-jrqm-vmqc-gm93",
+        "title": "CKEditor 5 has Cross-site Scripting (XSS) in the HTML Support package",
+        "severity": "moderate",
+        "vulnerable_versions": ">=29.0.0 <47.6.0",
+        "cwe": [
+          "CWE-79"
+        ],
+        "cvss": {
+          "score": 6.4,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N"
+        }
+      }
+    ],
+    "ckeditor5": [
+      {
+        "id": 1114937,
+        "url": "https://github.com/advisories/GHSA-jrqm-vmqc-gm93",
+        "title": "CKEditor 5 has Cross-site Scripting (XSS) in the HTML Support package",
+        "severity": "moderate",
+        "vulnerable_versions": ">=29.0.0 <47.6.0",
+        "cwe": [
+          "CWE-79"
+        ],
+        "cvss": {
+          "score": 6.4,
+          "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N"
+        }
+      }
+    ]
+  },
+  "limit": "Inventario de compilaci\u00f3n del proveedor; no equivale a demostrar qu\u00e9 funciones del bundle se ejecutan."
+}

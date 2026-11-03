@@ -1,0 +1,16 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block head_title %}Área clínica | CliniTENS{% endblock head_title %}
+{% block page_title %}Área clínica{% endblock page_title %}
+{% block content_main %}
+<section class="home-intro"><div><h2>Una práctica. Todo el proceso.</h2><p class="section-description">Prepara el escenario, registra la atención y acompaña el aprendizaje. Trabaja con casos simulados para la formación en Enfermería.</p><div class="intro-actions"><a class="btn-primary" href="{% url 'clinitensficha:ingreso' %}">Ingresar a una actividad {% include 'components/design/icon.html' with icon='arrow' %}</a></div></div>
+  <div class="clinical-guide"><h3>Ficha clínica electrónica</h3><div class="guide-step">{% include 'components/design/icon.html' with icon='patient' %}<div><strong>Identificación del paciente</strong><p>El punto de partida de tu registro.</p></div></div><div class="guide-step">{% include 'components/design/icon.html' with icon='clipboard' %}<div><strong>Atención y evolución</strong><p>Tratamientos, signos vitales y cuidados.</p></div></div><div class="guide-step">{% include 'components/design/icon.html' with icon='result' %}<div><strong>Evaluación del aprendizaje</strong><p>Entrega la ficha y revisa tu resultado.</p></div></div></div>
+</section>
+<div class="section-heading"><div><h2>¿Qué necesitas hacer?</h2><p class="section-description">Accesos a las herramientas disponibles para tu cuenta.</p></div></div>
+<div class="module-list">
+  <article class="module-entry"><span class="module-symbol">{% include 'components/design/icon.html' with icon='clipboard' %}</span><div><h3>Registrar una actividad</h3><p>Ingresa con el código de tu actividad para revisar el caso y completar tu ficha.</p><a href="{% url 'clinitensficha:ingreso' %}">Abrir ficha clínica</a></div></article>
+  {% if request.user.is_superuser or request.user.profile.position_FK.permission_code == 'ADMIN' or request.user.profile.position_FK.permission_code == 'MANAGER' %}
+  <article class="module-entry"><span class="module-symbol">{% include 'components/design/icon.html' with icon='course' %}</span><div><h3>Preparar y evaluar</h3><p>Organiza cursos y casos, comparte códigos y revisa las fichas de tus estudiantes.</p><a href="{% url 'clinitensdocente:dashboard' %}">Abrir panel docente</a></div></article>
+  {% endif %}
+</div>
+<section class="pending-modules"><h2 class="text-lg font-semibold">Más herramientas, en desarrollo</h2><p class="section-description">Estos módulos todavía no están disponibles.</p><ul><li>Atención de urgencia (DAU)</li><li>Laboratorio clínico</li><li>Kardex de enfermería</li><li>Perfil administrador de módulos</li></ul></section>
+{% endblock content_main %}

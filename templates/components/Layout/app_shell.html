@@ -1,0 +1,48 @@
+{% extends 'components/Layout/base.html' %}
+{% block head_title %}CliniTENS{% endblock head_title %}
+{% block content %}
+<a href="#contenido-principal" class="skip-link">Ir al contenido principal</a>
+<div class="app-shell">
+  <aside class="app-sidebar" aria-label="Navegación de CliniTENS">
+    {% include 'components/design/brand.html' %}
+    <details class="app-navigation" data-disclosure open>
+      <summary>Menú de navegación <span aria-hidden="true">☰</span></summary>
+      <div class="navigation-content">
+        <nav aria-label="Plataforma" class="nav-group">
+          {% url 'Home' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Inicio' icon='home' exact=True %}
+          {% url 'clinitens' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Área clínica' icon='case' exact=True %}
+          {% url 'farmatef' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Área farmacia' icon='course' exact=True %}
+        </nav>
+        {% block workspace_navigation %}
+          {% if request.user.is_superuser or request.user.profile.position_FK.permission_code == 'ADMIN' or request.user.profile.position_FK.permission_code == 'MANAGER' %}
+          <nav aria-label="Docencia" class="nav-group">
+            {% url 'clinitensdocente:dashboard' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Panel docente' icon='course' exact=True %}
+          </nav>
+          {% endif %}
+        {% endblock workspace_navigation %}
+        <nav aria-label="Mi cuenta" class="nav-group nav-account">
+          {% if request.user.is_superuser or request.user.profile.position_FK.permission_code == 'ADMIN' %}
+          {% url 'User' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Usuarios' icon='users' %}
+          {% url 'Register' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Crear cuenta' icon='patient' %}
+          {% endif %}
+          {% url 'Profile' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Mi perfil' icon='patient' %}
+          {% url 'account_change_password' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Contraseña' icon='lock' %}
+          {% url 'mfa_index' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Seguridad de acceso' icon='lock' %}
+        </nav>
+        <p class="sidebar-note">Entorno educativo<br>Simulación de atención clínica</p>
+      </div>
+    </details>
+  </aside>
+  <div class="app-workspace">
+    <header class="app-header">
+      <div class="workspace-heading"><p>{% block workspace_name %}Aprendizaje clínico{% endblock workspace_name %}</p><h1>{% block page_title %}Inicio{% endblock page_title %}</h1></div>
+      {% include 'components/header/components/profile.html' %}
+    </header>
+    <main id="contenido-principal" class="workspace-content" tabindex="-1">
+      {% include 'components/mensajes.html' %}
+      {% block workspace_content %}{% endblock workspace_content %}
+    </main>
+    <footer class="app-footer"><span>CliniTENS</span><span>Formación en Técnico en Enfermería</span></footer>
+  </div>
+</div>
+{% endblock content %}

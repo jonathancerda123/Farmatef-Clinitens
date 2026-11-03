@@ -1,0 +1,1926 @@
+{% extends base_template %}
+{% block page_title %}Ficha Clínica{% endblock page_title %}
+{% block sidebar %}
+  {% if not modo_revision %}
+    {% include 'pages/clinitens/ficha/partials/sidebar.html' %}
+  {% endif %}
+{% endblock sidebar %}
+
+{% block ficha_content %}
+
+{{ ficha.datos|json_script:"datos-ficha" }}
+
+<script>
+  document.addEventListener("alpine:init", () => {
+    Alpine.data("fichaApp", (initial = {}, bloqueada = false) => ({
+      datosIniciales: initial || {},
+      bloqueada,
+      tick: 0,
+
+      valor(ruta, porDefecto = "") {
+        return ruta.split(".").reduce(
+          (valor, clave) => valor?.[clave],
+          this.datosIniciales
+        ) ?? porDefecto;
+      },
+
+      actualizar() {
+        this.tick += 1;
+      },
+
+      asignar(objeto, ruta, valor) {
+        const partes = ruta.split(".");
+        let destino = objeto;
+
+        partes.slice(0, -1).forEach((parte) => {
+          destino = destino[parte] ||= {};
+        });
+
+        destino[partes.at(-1)] = valor;
+      },
+
+      serializar(evento, accion) {
+        const datos = {};
+        const gruposCheckbox = {};
+
+        this.$root.querySelectorAll("[data-campo]").forEach((campo) => {
+          if (campo.disabled) return;
+
+          const ruta = campo.dataset.campo;
+
+          if (campo.dataset.boolean !== undefined) {
+            this.asignar(datos, ruta, campo.checked);
+            return;
+          }
+
+          if (campo.dataset.json !== undefined) {
+            try {
+              this.asignar(datos, ruta, JSON.parse(campo.value || "[]"));
+            } catch {
+              this.asignar(datos, ruta, []);
+            }
+            return;
+          }
+
+          if (campo.type === "checkbox") {
+            gruposCheckbox[ruta] ||= [];
+
+            if (campo.checked) {
+              gruposCheckbox[ruta].push(campo.value);
+            }
+            return;
+          }
+
+          if (campo.type === "radio" && !campo.checked) return;
+
+          this.asignar(datos, ruta, campo.value);
+        });
+
+        Object.entries(gruposCheckbox).forEach(([ruta, valor]) => {
+          this.asignar(datos, ruta, valor);
+        });
+
+        this.$refs.datosJson.value = JSON.stringify(datos);
+        this.$refs.accion.value = accion;
+      },
+
+
+      imcCalculado() {
+        this.tick;
+
+        const peso = parseFloat(
+          this.$root.querySelector('[data-campo="signos.peso"]')?.value
+        );
+
+        const tallaCm = parseFloat(
+          this.$root.querySelector('[data-campo="signos.talla"]')?.value
+        );
+
+        if (!peso || !tallaCm || peso <= 0 || tallaCm <= 0) {
+          return null;
+        }
+
+        return peso / ((tallaCm / 100) ** 2);
+      },
+
+      clasificarIMC() {
+        const imc = this.imcCalculado();
+
+        if (imc === null) {
+          return {
+            texto: "Ingresa peso y talla para calcular el IMC.",
+            clase: "border-slate-200 bg-slate-50 text-slate-500",
+          };
+        }
+
+        if (imc < 18.5) {
+          return {
+            texto: "Bajo peso",
+            clase: "border-red-200 bg-red-50 text-red-700",
+          };
+        }
+
+        if (imc < 25) {
+          return {
+            texto: "Peso normal",
+            clase: "border-green-200 bg-green-50 text-green-700",
+          };
+        }
+
+        if (imc < 30) {
+          return {
+            texto: "Sobrepeso",
+            clase: "border-red-200 bg-red-50 text-red-700",
+          };
+        }
+
+        if (imc < 35) {
+          return {
+            texto: "Obesidad grado I",
+            clase: "border-red-200 bg-red-50 text-red-700",
+          };
+        }
+
+        if (imc < 40) {
+          return {
+            texto: "Obesidad grado II",
+            clase: "border-red-300 bg-red-100 text-red-800",
+          };
+        }
+
+        return {
+          texto: "Obesidad grado III",
+          clase: "border-red-400 bg-red-100 text-red-900",
+        };
+      },
+
+      total(rutas) {
+        this.tick;
+
+        return rutas.reduce((total, ruta) => {
+          const campo = this.$root.querySelector(
+            `[data-campo="${ruta}"]`
+          );
+
+          return total + (parseFloat(campo?.value) || 0);
+        }, 0);
+      },
+
+      puntaje(prefijo) {
+        this.tick;
+
+        return [...this.$root.querySelectorAll(`[data-campo^="${prefijo}"]`)]
+          .filter((campo) => campo.checked)
+          .reduce(
+            (total, campo) => total + Number(campo.dataset.puntos || 0),
+            0
+          );
+      },
+
+      clasificarGlasgow() {
+        const puntos = this.puntaje("riesgos.glasgow");
+
+        if (!puntos) return "Sin evaluar";
+        if (puntos <= 8) return "TEC severo";
+        if (puntos <= 12) return "TEC moderado";
+
+        return "TEC leve";
+      },
+
+      clasificarDownton() {
+        const puntos = this.puntaje("riesgos.downton");
+
+        if (!puntos) return "Sin evaluar";
+        if (puntos >= 3) return "Alto riesgo de caídas";
+        if (puntos === 2) return "Riesgo moderado";
+
+        return "Riesgo bajo";
+      },
+
+      clasificarBraden() {
+        const puntos = this.puntaje("riesgos.braden");
+
+        if (!puntos) return "Sin evaluar";
+        if (puntos <= 12) return "Riesgo alto";
+        if (puntos <= 14) return "Riesgo moderado";
+        if (puntos <= 18) return "Riesgo leve";
+
+        return "Sin riesgo";
+      },
+
+      necesidadesSeleccionadas() {
+        const campos = [
+          ...this.$root.querySelectorAll(
+            '[data-campo="necesidades.henderson"], [data-campo="necesidades.maslow"]'
+          ),
+        ];
+
+        if (campos.length) {
+          return campos
+            .filter((campo) => campo.checked)
+            .map((campo) => campo.value);
+        }
+
+        return [
+          ...(this.valor("necesidades.henderson", [])),
+          ...(this.valor("necesidades.maslow", [])),
+        ];
+      },
+
+      necesidadesParaPlan() {
+        this.tick;
+
+        const obtener = (ruta) => {
+          const guardado = this.valor(ruta, []);
+          return Array.isArray(guardado) ? guardado : [];
+        };
+
+        const henderson = obtener("necesidades.henderson");
+        const maslow = obtener("necesidades.maslow");
+
+        return [
+          ...henderson.map((necesidad) => ({
+            valor: `${necesidad} — Virginia Henderson`,
+            texto: `${necesidad} — Virginia Henderson`,
+          })),
+          ...maslow.map((necesidad) => ({
+            valor: `${necesidad} — Maslow`,
+            texto: `${necesidad} — Maslow`,
+          })),
+        ];
+      },
+
+      conteoNecesidades(campo) {
+        this.tick;
+
+        return [
+          ...this.$root.querySelectorAll(`[data-campo="${campo}"]`)
+        ].filter((input) => input.checked).length;
+      },
+
+      estadoGlasgow() {
+        const puntaje = this.puntaje("riesgos.glasgow");
+
+        if (!puntaje) {
+          return { texto: "Sin evaluación", clase: "border-slate-200 bg-slate-50 text-slate-500" };
+        }
+        if (puntaje <= 8) {
+          return { texto: "TEC severo", clase: "border-red-200 bg-red-50 text-red-700" };
+        }
+        if (puntaje <= 12) {
+          return { texto: "TEC moderado", clase: "border-amber-200 bg-amber-50 text-amber-800" };
+        }
+        return { texto: "TEC leve", clase: "border-green-200 bg-green-50 text-green-700" };
+      },
+
+      estadoDownton() {
+        const puntaje = this.puntaje("riesgos.downton");
+
+        if (!puntaje) {
+          return { texto: "Sin evaluación", clase: "border-slate-200 bg-slate-50 text-slate-500" };
+        }
+        if (puntaje >= 3) {
+          return { texto: "Alto riesgo de caída", clase: "border-red-200 bg-red-50 text-red-700" };
+        }
+        return { texto: "Bajo riesgo de caída", clase: "border-green-200 bg-green-50 text-green-700" };
+      },
+
+      estadoBraden() {
+        const puntaje = this.puntaje("riesgos.braden");
+
+        if (!puntaje) {
+          return { texto: "Sin evaluación", clase: "border-slate-200 bg-slate-50 text-slate-500" };
+        }
+        if (puntaje <= 9) {
+          return { texto: "Riesgo muy alto de LPP", clase: "border-red-300 bg-red-100 text-red-800" };
+        }
+        if (puntaje <= 12) {
+          return { texto: "Riesgo alto de LPP", clase: "border-orange-200 bg-orange-50 text-orange-800" };
+        }
+        if (puntaje <= 14) {
+          return { texto: "Riesgo moderado de LPP", clase: "border-amber-200 bg-amber-50 text-amber-800" };
+        }
+        if (puntaje <= 18) {
+          return { texto: "Riesgo leve de LPP", clase: "border-yellow-200 bg-yellow-50 text-yellow-800" };
+        }
+        return { texto: "Sin riesgo de LPP", clase: "border-green-200 bg-green-50 text-green-700" };
+      },
+
+      ingresosBalance() {
+        return this.total([
+          "balance.ingresos_sueros",
+          "balance.ingresos_medicamentos",
+          "balance.ingresos_agua",
+          "balance.ingresos_alimentacion",
+          "balance.ingresos_otros",
+        ]);
+      },
+
+      perdidasInsensibles() {
+        const peso = this.total(["balance.peso"]);
+        const temperatura = this.total(["balance.temperatura"]);
+        const horas = this.total(["balance.horas"]);
+
+        if (!peso || !horas) return 0;
+
+        const basal = 0.5 * peso * horas;
+        const ajusteFiebre = temperatura > 37
+          ? basal * (0.10 * (temperatura - 37))
+          : 0;
+
+        return basal + ajusteFiebre;
+      },
+
+      egresosBalance() {
+        return this.total([
+          "balance.egresos_diuresis",
+          "balance.egresos_vomitos",
+          "balance.egresos_deposiciones",
+          "balance.egresos_drenajes",
+        ]) + this.perdidasInsensibles();
+      },
+
+      balanceFinal() {
+        return this.ingresosBalance() - this.egresosBalance();
+      },
+
+      estadoBalance() {
+        const balance = this.balanceFinal();
+
+        if (balance > 0) {
+          return {
+            texto: "Balance positivo",
+            clase: "border-green-200 bg-green-50 text-green-700",
+            numero: "text-green-700",
+          };
+        }
+
+        if (balance < 0) {
+          return {
+            texto: "Balance negativo",
+            clase: "border-red-200 bg-red-50 text-red-700",
+            numero: "text-red-600",
+          };
+        }
+
+        return {
+          texto: "Balance neutro",
+          clase: "border-brand-200 bg-brand-50 text-brand-700",
+          numero: "text-brand-700",
+        };
+      },
+
+    }));
+
+    Alpine.data("tabla", (inicial = [], columnas = []) => ({
+      columnas,
+      filas: Array.isArray(inicial) ? inicial : [],
+
+      agregar() {
+        this.filas.push(
+          Object.fromEntries(
+            this.columnas.map((columna) => [columna.key, ""])
+          )
+        );
+      },
+
+      quitar(indice) {
+        this.filas.splice(indice, 1);
+      },
+    }));
+  });
+</script>
+
+<form method="post"
+      x-data="fichaApp(
+        JSON.parse(document.getElementById('datos-ficha').textContent),
+        {% if modo_revision %}true{% else %}{{ ficha.bloqueada|yesno:'true,false' }}{% endif %}
+      )"
+      @input="actualizar()"
+      @change="actualizar()"
+      @submit="
+        if (bloqueada) {
+          $event.preventDefault();
+          return;
+        }
+        serializar($event, $event.submitter ? $event.submitter.value : 'guardar');
+      "
+      class="grid gap-6 lg:grid-cols-[288px_minmax(0,1fr)]">
+
+{% csrf_token %}<input x-ref="datosJson" type="hidden" name="datos_json"><input x-ref="accion" type="hidden" name="accion">
+<input type="hidden" name="version" value="{{ ficha.version }}">
+
+
+
+<aside class="section-navigation h-fit rounded-xl border border-slate-200 bg-white p-5 shadow-none ">
+  <h2 class="mb-4 text-sm font-bold text-brand-700">Secciones</h2>
+
+  <nav aria-label="Secciones de la ficha clínica" class="space-y-1 text-xs font-medium">
+    <a href="{% url ruta_editor ficha.pk 'identidad' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+      {% if seccion_actual == 'identidad' %}aria-current="step"{% endif %} class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'identidad' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+       <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      </svg>
+      1. Identificación del Paciente
+    </a>
+
+    <a href="{% url ruta_editor ficha.pk 'farmacos' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+       {% if seccion_actual == 'farmacos' %}aria-current="step"{% endif %} class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'farmacos' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/>
+      </svg>
+      2. Tratamiento Farmacológico
+    </a>
+
+    <a href="{% url ruta_editor ficha.pk 'signos' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+       {% if seccion_actual == 'signos' %}aria-current="step"{% endif %} class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'signos' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>
+      </svg>
+      3. Signos Vitales
+    </a>
+
+    <a href="{% url ruta_editor ficha.pk 'recontroles' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+       {% if seccion_actual == 'recontroles' %}aria-current="step"{% endif %} class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'recontroles' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+      </svg>
+      4. Recontroles de Signos Vitales
+    </a>
+
+    <a href="{% url ruta_editor ficha.pk  'necesidades' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+       class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'necesidades' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/>
+      </svg>
+      5. Necesidades (Henderson/Maslow)
+    </a>
+
+    <a href="{% url ruta_editor ficha.pk 'plan' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+       {% if seccion_actual == 'plan' %}aria-current="step"{% endif %} class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'plan' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>
+      </svg>
+      6. Plan de Cuidados de Enfermería
+    </a>
+
+    <a href="{% url ruta_editor ficha.pk 'registro' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+       {% if seccion_actual == 'registro' %}aria-current="step"{% endif %} class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'registro' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M11 2v2"/><path d="M5 2v2"/><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/>
+      </svg>
+      7. Plan de Cuidados (Registro)
+    </a>
+
+    <a href="{% url ruta_editor ficha.pk 'riesgos' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+       {% if seccion_actual == 'riesgos' %}aria-current="step"{% endif %} class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'riesgos' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+      </svg>
+      8. Riesgos y Escalas Clínicas
+    </a>
+
+    <a href="{% url ruta_editor ficha.pk 'balance' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+       {% if seccion_actual == 'balance' %}aria-current="step"{% endif %} class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'balance' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/>
+      </svg>
+      9. Balance Hídrico
+    </a>
+
+    <a href="{% url ruta_editor ficha.pk 'examenes' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+       {% if seccion_actual == 'examenes' %}aria-current="step"{% endif %} class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'examenes' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/>
+      </svg>
+      10. Exámenes Solicitados
+    </a>
+
+    <a href="{% url ruta_editor ficha.pk  'dispositivos' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+       class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'dispositivos' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/>
+      </svg>
+      11. Dispositivos Invasivos
+    </a>
+
+    <a href="{% url ruta_editor ficha.pk 'indicaciones' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+       {% if seccion_actual == 'indicaciones' %}aria-current="step"{% endif %} class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'indicaciones' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>
+      </svg>
+      12. Otras Indicaciones
+    </a>
+
+    <a href="{% url ruta_editor ficha.pk 'evolucion' %}{% if parametros_origen %}?{{ parametros_origen }}{% endif %}"
+       {% if seccion_actual == 'evolucion' %}aria-current="step"{% endif %} class="flex items-center gap-2 rounded-md px-3 py-2 transition {% if seccion_actual == 'evolucion' %}bg-brand-50 font-semibold text-brand-700{% else %}text-slate-500 hover:bg-slate-100{% endif %}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+      </svg>
+      13. Evolución y Entrega de Turno
+    </a>
+  </nav>
+</aside>
+
+<div>
+{% if conflicto %}
+<p role="alert" class="rounded-lg bg-amber-100 p-4 text-amber-900">La ficha cambió en otra pestaña. Tu entrada se conserva aquí. Revisa los datos antes de guardar de nuevo.</p>
+{% endif %}
+{% if seccion_actual != 'identidad' %}
+<label class="mb-4 block rounded-lg border border-slate-300 bg-white p-4">
+  <input type="checkbox" data-boolean data-campo="{{ seccion_actual }}.no_aplica"
+         x-init="$el.checked=valor('{{ seccion_actual }}.no_aplica', false)"
+         {% if modo_revision or ficha.bloqueada %}disabled{% endif %}>
+  Esta sección no aplica al caso clínico
+</label>
+{% endif %}
+<fieldset {% if modo_revision or ficha.bloqueada %}disabled{% endif %}
+          :disabled="bloqueada"
+          class="space-y-5 disabled:opacity-90">
+
+{% if seccion_actual == 'identidad' %}
+<section class="clinical-card">
+  <h2>
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-5 w-5"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+    Identificación del Paciente
+  </h2>
+
+  <div class="grid gap-4 md:grid-cols-2">
+    <div>
+      <label>Nombre *</label>
+      <input data-campo="identidad.nombre"
+             x-init="$el.value = valor('identidad.nombre')"
+             class="input"
+             maxlength="150"
+             required>
+    </div>
+
+    <div>
+      <label>Nombre social (opcional)</label>
+      <input data-campo="identidad.nombre_social"
+             x-init="$el.value = valor('identidad.nombre_social')"
+             class="input"
+             maxlength="150"
+             placeholder="Cómo prefiere ser llamado/a">
+    </div>
+
+    <div>
+      <label>Edad *</label>
+      <input type="number"
+             min="0"
+             max="120"
+             data-campo="identidad.edad"
+             x-init="$el.value = valor('identidad.edad')"
+             class="input"
+             placeholder="Ej.: 78"
+             required>
+    </div>
+
+    <div>
+      <label>Sexo biológico *</label>
+
+      <div class="mt-2 flex flex-wrap gap-2">
+        <label class="choice">
+          <input type="radio"
+                 name="sexo_biologico"
+                 value="Mujer"
+                 data-campo="identidad.sexo"
+                 x-init="$el.checked = valor('identidad.sexo') === 'Mujer'"
+                 required>
+          Mujer
+        </label>
+
+        <label class="choice">
+          <input type="radio"
+                 name="sexo_biologico"
+                 value="Hombre"
+                 data-campo="identidad.sexo"
+                 x-init="$el.checked = valor('identidad.sexo') === 'Hombre'">
+          Hombre
+        </label>
+
+        <label class="choice">
+          <input type="radio"
+                 name="sexo_biologico"
+                 value="Intersexual"
+                 data-campo="identidad.sexo"
+                 x-init="$el.checked = valor('identidad.sexo') === 'Intersexual'">
+          Intersexual
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <label>RUT / Número de identificación *</label>
+      <input type="text"
+             data-campo="identidad.rut"
+             x-init="$el.value = valor('identidad.rut')"
+             class="input"
+             placeholder="Ej.: 12.345.678-9"
+             maxlength="12"
+             required>
+    </div>
+
+    <div>
+      <label>Diagnóstico médico</label>
+      <input data-campo="identidad.diagnostico"
+             x-init="$el.value = valor('identidad.diagnostico')"
+             class="input"
+             maxlength="200"
+             placeholder="Ej.: Insuficiencia cardíaca congestiva"
+             required>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <label>Descripción y causas de la patología</label>
+    <textarea data-campo="identidad.patologia"
+              x-init="$el.value = valor('identidad.patologia')"
+              class="input h-28"
+              maxlength="2000"
+              placeholder="Explique el diagnóstico médico, sus causas y factores asociados."></textarea>
+  </div>
+
+  <div class="mt-4 grid gap-4 md:grid-cols-2">
+    <div>
+      <label>Anamnesis remota</label>
+      <textarea data-campo="identidad.anamnesis_remota"
+                x-init="$el.value = valor('identidad.anamnesis_remota')"
+                class="input h-32"
+                maxlength="3000"
+                placeholder="Antecedentes mórbidos, quirúrgicos, alergias, tratamientos y hábitos."></textarea>
+    </div>
+
+    <div>
+      <label>Anamnesis próxima</label>
+      <textarea data-campo="identidad.anamnesis_proxima"
+                x-init="$el.value = valor('identidad.anamnesis_proxima')"
+                class="input h-32"
+                maxlength="3000"
+                placeholder="Motivo de consulta, síntomas actuales y evolución del cuadro clínico."></textarea>
+    </div>
+  </div>
+</section>
+
+{% elif seccion_actual == 'farmacos' %}
+<section class="clinical-card"
+         x-data="tabla(valor('farmacos.filas', []), [
+           {key:'medicamento',label:'Medicamento'},
+           {key:'dosis',label:'Dosis'},
+           {key:'horario',label:'Horario'},
+           {key:'via',label:'Vía (VO/EV/IM/SC)'},
+           {key:'accion',label:'Acción farmacológica'},
+           {key:'reaccion',label:'Reacción adversa'},
+           {key:'cuidado',label:'Cuidado de enfermería'}
+         ])">
+
+  <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>Tratamiento Farmacológico</h2>
+
+  <div class="overflow-x-auto" role="region" aria-label="Tabla desplazable" tabindex="0">
+    <table class="table">
+      <thead>
+        <tr>
+          <template x-for="columna in columnas">
+            <th scope="col" x-text="columna.label"></th>
+          </template>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <template x-for="(fila, indice) in filas" :key="indice">
+          <tr>
+            <template x-for="columna in columnas">
+              <td>
+                <input class="input" x-model="fila[columna.key]">
+              </td>
+            </template>
+
+            <td class="w-12 align-middle text-center">
+              <button type="button"
+                      @click="quitar(indice)"
+                      title="Eliminar fila"
+                      class="inline-flex h-9 w-9 items-center justify-center rounded-md text-red-600 transition hover:bg-red-50 hover:text-red-700 focus:outline-hidden focus:ring-2 focus:ring-red-400 focus:ring-offset-1">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                  <path d="M3 6h18"/>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                  <line x1="10" x2="10" y1="11" y2="17"/>
+                  <line x1="14" x2="14" y1="11" y2="17"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+
+  <input type="hidden"
+         data-campo="farmacos.filas"
+         data-json
+         :value="JSON.stringify(filas)">
+
+  <button type="button" @click="agregar()" class="btn-secondary mt-3">
+    ＋ Agregar fila
+  </button>
+</section>
+
+{% elif seccion_actual == 'signos' %}
+<section class="clinical-card">
+  <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></svg>Signos Vitales</h2>
+
+  <div class="grid gap-4 md:grid-cols-3">
+    <div>
+      <label>Presión arterial sistólica (PAS)</label>
+      <input type="number" data-campo="signos.pas"
+             x-init="$el.value=valor('signos.pas')"
+             class="input" placeholder="mmHg">
+    </div>
+
+    <div>
+      <label>Presión arterial diastólica (PAD)</label>
+      <input type="number" data-campo="signos.pad"
+             x-init="$el.value=valor('signos.pad')"
+             class="input" placeholder="mmHg">
+    </div>
+
+    <div>
+      <label>PAM (automática)</label>
+      <input :value="(total(['signos.pas']) + 2 * total(['signos.pad'])) / 3 || ''"
+             class="input bg-slate-100"
+             readonly>
+    </div>
+
+    <div>
+      <label>Frecuencia cardíaca</label>
+      <input type="number" data-campo="signos.fc"
+             x-init="$el.value=valor('signos.fc')"
+             class="input" placeholder="lpm">
+    </div>
+
+    <div>
+      <label>Frecuencia respiratoria</label>
+      <input type="number" data-campo="signos.fr"
+             x-init="$el.value=valor('signos.fr')"
+             class="input" placeholder="rpm">
+    </div>
+
+    <div>
+      <label>Temperatura</label>
+      <input type="number" step="0.1" data-campo="signos.temperatura"
+             x-init="$el.value=valor('signos.temperatura')"
+             class="input" placeholder="°C">
+    </div>
+
+    <div>
+      <label>Saturación O₂</label>
+      <input type="number" data-campo="signos.saturacion"
+             x-init="$el.value=valor('signos.saturacion')"
+             class="input" placeholder="%">
+    </div>
+
+    <div>
+      <label>HGT</label>
+      <input type="number" data-campo="signos.hgt"
+             x-init="$el.value=valor('signos.hgt')"
+             class="input" placeholder="mg/dL">
+    </div>
+
+    <div>
+      <label>EVA / ENA</label>
+      <input type="number" min="0" max="10" data-campo="signos.eva"
+             x-init="$el.value=valor('signos.eva')"
+             class="input" placeholder="0 - 10">
+    </div>
+
+    <div>
+      <label>Peso</label>
+      <input type="number" step="0.1" data-campo="signos.peso"
+             x-init="$el.value=valor('signos.peso')"
+             class="input" placeholder="kg">
+    </div>
+
+    <div>
+      <label>Talla</label>
+      <input type="number" data-campo="signos.talla"
+             x-init="$el.value=valor('signos.talla')"
+             class="input" placeholder="cm">
+    </div>
+
+
+    <div>
+      <label>IMC (automático)</label>
+
+      <input :value="imcCalculado() ? imcCalculado().toFixed(1) : ''"
+            class="input bg-slate-100 font-semibold"
+            placeholder="—"
+            readonly>
+
+      <div class="mt-2 flex items-center gap-2 rounded-md border px-3 py-2 text-xs font-semibold"
+          :class="clasificarIMC().clase">
+
+        <svg xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+          <path d="M12 2v20"/>
+          <path d="M2 12h20"/>
+          <circle cx="12" cy="12" r="9"/>
+        </svg>
+
+        <span x-text="clasificarIMC().texto"></span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mt-4">
+    <label>Interpretación de signos vitales</label>
+    <textarea data-campo="signos.interpretacion"
+              x-init="$el.value=valor('signos.interpretacion')"
+              class="input h-28"
+              placeholder="Analice alteraciones, normalidad y hallazgos clínicos relevantes."></textarea>
+  </div>
+</section>
+
+{% elif seccion_actual == 'recontroles' %}
+<section class="clinical-card"
+         x-data="tabla(valor('recontroles.filas', []), [
+           {key:'fecha',label:'Fecha'},
+           {key:'hora',label:'Hora'},
+           {key:'pa',label:'Presión arterial'},
+           {key:'fc',label:'FC (lpm)'},
+           {key:'fr',label:'FR (rpm)'},
+           {key:'temp',label:'Temperatura (°C)'},
+           {key:'sat',label:'Sat. O₂ (%)'},
+           {key:'hgt',label:'HGT (mg/dL)'}
+         ])">
+
+  <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Recontroles de Signos Vitales</h2>
+  <p class="muted">Registre múltiples controles de signos vitales durante el turno.</p>
+
+  <div class="overflow-x-auto" role="region" aria-label="Tabla desplazable" tabindex="0">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Fecha</th>
+          <th scope="col">Hora</th>
+          <th scope="col">Presión arterial</th>
+          <th scope="col">FC (lpm)</th>
+          <th scope="col">FR (rpm)</th>
+          <th scope="col">Temperatura (°C)</th>
+          <th scope="col">Sat. O₂ (%)</th>
+          <th scope="col">HGT (mg/dL)</th>
+          <th scope="col" class="w-12 text-center">Acción</th>
+        </tr>
+      </thead>
+
+
+      <tbody>
+        <template x-for="(fila, indice) in filas" :key="indice">
+          <tr>
+            <td>
+              <input type="date"
+                    class="input"
+                    x-model="fila.fecha">
+            </td>
+
+            <td>
+              <input type="time"
+                    class="input"
+                    x-model="fila.hora">
+            </td>
+
+            <td>
+              <input type="number"
+                    class="input"
+                    x-model="fila.pa"
+                    min="0"
+                    placeholder="PAS/PAD">
+            </td>
+
+            <td>
+              <input type="number"
+                    class="input"
+                    x-model="fila.fc"
+                    min="0"
+                    placeholder="lpm">
+            </td>
+
+            <td>
+              <input type="number"
+                    class="input"
+                    x-model="fila.fr"
+                    min="0"
+                    placeholder="rpm">
+            </td>
+
+            <td>
+              <input type="number"
+                    class="input"
+                    x-model="fila.temp"
+                    min="25"
+                    max="45"
+                    step="0.1"
+                    placeholder="°C">
+            </td>
+
+            <td>
+              <input type="number"
+                    class="input"
+                    x-model="fila.sat"
+                    min="0"
+                    max="100"
+                    placeholder="%">
+            </td>
+
+            <td>
+              <input type="number"
+                    class="input"
+                    x-model="fila.hgt"
+                    min="0"
+                    placeholder="mg/dL">
+            </td>
+
+            <td class="w-12 align-middle text-center">
+              <button type="button"
+                      @click="quitar(indice)"
+                      title="Eliminar control"
+                      class="inline-flex h-9 w-9 items-center justify-center rounded-md text-red-600 transition hover:bg-red-50 hover:text-red-700 focus:outline-hidden focus:ring-2 focus:ring-red-400 focus:ring-offset-1">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                  <path d="M3 6h18"/>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                  <line x1="10" x2="10" y1="11" y2="17"/>
+                  <line x1="14" x2="14" y1="11" y2="17"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+
+
+
+    </table>
+  </div>
+
+
+  <input type="hidden"
+         data-campo="recontroles.filas"
+         data-json
+         :value="JSON.stringify(filas)">
+
+  <button type="button" @click="agregar()" class="btn-secondary mt-3">
+    ＋ Agregar fila
+  </button>
+</section>
+
+{% elif seccion_actual == 'necesidades' %}
+<section class="clinical-card">
+  <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/></svg>Necesidades Alteradas</h2>
+
+  <p class="muted">
+    Selecciona todas las necesidades alteradas; estarán disponibles para el plan de cuidados.
+  </p>
+
+
+  <div class="mt-5 rounded-xl border border-brand-200 bg-brand-50/70 p-4">
+  <div class="flex items-center gap-3 border-b border-brand-200 pb-3">
+      <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
+        VH
+      </div>
+
+      <div>
+        <h3 class="font-bold text-brand-800">Modelo Virginia Henderson</h3>
+        <p class="text-xs text-brand-600">
+          Necesidades básicas de la persona.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-4 grid gap-2 md:grid-cols-2">
+      {% for necesidad in henderson %}
+        <label class="check bg-white">
+          <input type="checkbox"
+                value="{{ necesidad }}"
+                data-campo="necesidades.henderson"
+                x-init="$el.checked=valor('necesidades.henderson',[]).includes('{{ necesidad|escapejs }}')">
+
+          {{ forloop.counter }}. {{ necesidad }}
+        </label>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="mt-8 rounded-xl border border-violet-200 bg-violet-50/70 p-4">
+    <div class="flex items-center gap-3 border-b border-violet-200 pb-3">
+      <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-violet-600 text-sm font-bold text-white">
+        M
+      </div>
+
+      <div>
+        <h3 class="font-bold text-violet-800">Modelo de Maslow</h3>
+        <p class="text-xs text-violet-600">
+          Necesidades organizadas según su nivel de prioridad.
+        </p>
+      </div>
+    </div>
+
+    {% for grupo, opciones in maslow.items %}
+      <div class="mt-4 rounded-lg border border-violet-200 bg-white p-3">
+        <h4 class="font-semibold text-violet-700">{{ grupo }}</h4>
+
+        <div class="mt-3 grid gap-2 md:grid-cols-2">
+          {% for necesidad in opciones %}
+            <label class="check bg-violet-50/40">
+              <input type="checkbox"
+                    value="{{ necesidad }}"
+                    data-campo="necesidades.maslow"
+                    x-init="$el.checked=valor('necesidades.maslow',[]).includes('{{ necesidad|escapejs }}')">
+
+              {{ necesidad }}
+            </label>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+
+
+  <div class="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-4">
+    <p class="text-xs font-bold uppercase tracking-wide text-slate-500">
+      Total: <span x-text="conteoNecesidades('necesidades.henderson') + conteoNecesidades('necesidades.maslow')"></span>
+      necesidades alteradas
+    </p>
+
+    <div class="mt-3 flex flex-wrap gap-2">
+      <span class="rounded-full bg-brand-100 px-3 py-1 text-xs font-semibold text-brand-700">
+        Virginia Henderson:
+        <span x-text="conteoNecesidades('necesidades.henderson')"></span>
+      </span>
+
+      <span class="rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700">
+        Maslow:
+        <span x-text="conteoNecesidades('necesidades.maslow')"></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <label>Justificación / observaciones clínicas</label>
+
+    <textarea data-campo="necesidades.justificacion"
+              x-init="$el.value=valor('necesidades.justificacion')"
+              class="input h-28"
+              maxlength="2000"
+              placeholder="Justifique las necesidades alteradas en relación con el caso clínico."></textarea>
+  </div>
+
+  <div class="mt-4 rounded-xl border border-slate-200 bg-white p-5">
+    <h3 class="text-lg font-bold text-brand-700">Roles de Enfermería</h3>
+
+    <div class="mt-5 space-y-5">
+      <div>
+        <label>Rol asistencial — Acciones directas de cuidado</label>
+
+        <textarea data-campo="necesidades.rol_asistencial"
+                  x-init="$el.value=valor('necesidades.rol_asistencial')"
+                  class="input h-28"
+                  maxlength="2000"
+                  placeholder="Describa las acciones directas de cuidado que realizará el equipo de enfermería."></textarea>
+      </div>
+
+      <div>
+        <label>Rol administrativo — Gestión de recursos y procesos</label>
+
+        <textarea data-campo="necesidades.rol_administrativo"
+                  x-init="$el.value=valor('necesidades.rol_administrativo')"
+                  class="input h-28"
+                  maxlength="2000"
+                  placeholder="Describa la gestión de recursos, coordinación y procesos requeridos."></textarea>
+      </div>
+
+      <div>
+        <label>Rol educativo — Enseñanza al paciente, familia o comunidad</label>
+
+        <textarea data-campo="necesidades.rol_educativo"
+                  x-init="$el.value=valor('necesidades.rol_educativo')"
+                  class="input h-28"
+                  maxlength="2000"
+                  placeholder="Describa la educación que se entregará al paciente, familia o cuidador."></textarea>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+{% elif seccion_actual == 'plan' %}
+<section class="clinical-card">
+  <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>Plan de Cuidados de Enfermería</h2>
+
+  <p class="muted">
+    Selecciona hasta tres necesidades alteradas y registra tres cuidados específicos para cada una.
+  </p>
+
+  {% for numero in '123' %}
+    <div class="mt-4 rounded-lg border border-slate-200 p-4">
+      <h3 class="font-semibold text-brand-700">Necesidad {{ numero }}</h3>
+
+      <label class="mt-3 block">
+        Necesidad alterada
+
+        <select class="input"
+                data-campo="plan.necesidad_{{ numero }}"
+                x-init="$nextTick(() => { $el.value = valor('plan.necesidad_{{ numero }}') })">
+
+          <option value="">— Seleccionar —</option>
+
+          <template x-for="necesidad in necesidadesParaPlan()" :key="necesidad.valor">
+            <option :value="necesidad.valor" x-text="necesidad.texto"></option>
+          </template>
+        </select>
+      </label>
+
+      {% for cuidado in '123' %}
+        <label class="mt-3 block">
+          Cuidado {{ cuidado }}
+
+          <textarea data-campo="plan.n{{ numero }}_c{{ cuidado }}"
+                    x-init="$el.value=valor('plan.n{{ numero }}_c{{ cuidado }}')"
+                    class="input h-20"></textarea>
+        </label>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</section>
+
+{% elif seccion_actual == 'registro' %}
+<section class="clinical-card"
+         x-data="tabla(valor('registro.filas', []), [
+           {key:'hora',label:'Hora'},
+           {key:'procedimiento',label:'Procedimiento realizado'},
+           {key:'materiales',label:'Materiales utilizados'},
+           {key:'alteraciones',label:'Alteraciones observadas'},
+           {key:'manejo',label:'Manejo de alteraciones'},
+           {key:'firma',label:'Firma'}
+         ])">
+
+  <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2v2"/><path d="M5 2v2"/><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/></svg>Plan de Cuidados (Registro)</h2>
+
+  <div class="overflow-x-auto" role="region" aria-label="Tabla desplazable" tabindex="0">
+    <table class="table">
+      <thead>
+        <tr>
+          <template x-for="columna in columnas">
+            <th scope="col" x-text="columna.label"></th>
+          </template>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <template x-for="(fila, indice) in filas" :key="indice">
+          <tr>
+            <td>
+              <input type="time"
+                    class="input"
+                    x-model="fila.hora">
+            </td>
+
+            <td><input class="input" x-model="fila.procedimiento"></td>
+            <td><input class="input" x-model="fila.materiales"></td>
+            <td><input class="input" x-model="fila.alteraciones"></td>
+            <td><input class="input" x-model="fila.manejo"></td>
+            <td><input class="input" x-model="fila.firma"></td>
+
+            <td class="w-12 align-middle text-center">
+              <button type="button"
+                      @click="quitar(indice)"
+                      title="Eliminar registro"
+                      class="inline-flex h-9 w-9 items-center justify-center rounded-md text-red-600 transition hover:bg-red-50 hover:text-red-700 focus:outline-hidden focus:ring-2 focus:ring-red-400 focus:ring-offset-1">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                  <path d="M3 6h18"/>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                  <line x1="10" x2="10" y1="11" y2="17"/>
+                  <line x1="14" x2="14" y1="11" y2="17"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+
+
+    </table>
+  </div>
+
+  <input type="hidden"
+         data-campo="registro.filas"
+         data-json
+         :value="JSON.stringify(filas)">
+
+  <button type="button" @click="agregar()" class="btn-secondary mt-3">
+    ＋ Agregar fila
+  </button>
+</section>
+
+{% elif seccion_actual == 'riesgos' %}
+<section class="clinical-card space-y-7">
+  <div>
+    <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Riesgos y Escalas Clínicas</h2>
+    <p class="muted">
+      Evalúa riesgos clínicos, escalas de valoración y precauciones necesarias para el paciente.
+    </p>
+  </div>
+
+  {# GLASGOW #}
+  <article class="rounded-xl border border-violet-200 bg-violet-50/50 p-5">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-violet-200 pb-3">
+      <h3 class="font-semibold text-violet-800">Escala de Glasgow</h3>
+
+      <div class="rounded-full border px-3 py-1 text-sm font-semibold"
+           :class="estadoGlasgow().clase">
+        Total: <span x-text="puntaje('riesgos.glasgow')"></span>
+        · <span x-text="estadoGlasgow().texto"></span>
+      </div>
+    </div>
+
+    {% for escala, grupos in glasgow.items %}
+      <div class="mt-4">
+        <p class="text-sm font-semibold text-slate-800">{{ escala }}</p>
+
+        <div class="mt-2 flex flex-wrap gap-2">
+          {% for opcion, puntos in grupos %}
+            <label class="cursor-pointer">
+              <input type="radio"
+                     class="peer sr-only"
+                     name="glasgow_{{ forloop.parentloop.counter }}"
+                     value="{{ opcion }}"
+                     data-puntos="{{ puntos }}"
+                     data-campo="riesgos.glasgow_{{ forloop.parentloop.counter }}"
+                     x-init="$el.checked=valor('riesgos.glasgow_{{ forloop.parentloop.counter }}')==='{{ opcion|escapejs }}'">
+
+              <span class="block rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-700 transition peer-checked:border-violet-700 peer-checked:bg-violet-700 peer-checked:text-white">
+                {{ opcion }} ({{ puntos }})
+              </span>
+            </label>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </article>
+
+  {# DOWNTON #}
+  <article class="rounded-xl border border-amber-200 bg-amber-50/50 p-5">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-amber-200 pb-3">
+      <h3 class="font-semibold text-amber-800">Escala de Downton</h3>
+
+      <div class="rounded-full border px-3 py-1 text-sm font-semibold"
+           :class="estadoDownton().clase">
+        Total: <span x-text="puntaje('riesgos.downton')"></span>
+        · <span x-text="estadoDownton().texto"></span>
+      </div>
+    </div>
+
+    {% for escala, grupos in downton.items %}
+      <div class="mt-4">
+        <p class="text-sm font-semibold text-slate-800">{{ escala }}</p>
+
+        <div class="mt-2 flex flex-wrap gap-2">
+          {% for opcion, puntos in grupos %}
+            <label class="cursor-pointer">
+              <input type="radio"
+                     class="peer sr-only"
+                     name="downton_{{ forloop.parentloop.counter }}"
+                     value="{{ opcion }}"
+                     data-puntos="{{ puntos }}"
+                     data-campo="riesgos.downton_{{ forloop.parentloop.counter }}"
+                     x-init="$el.checked=valor('riesgos.downton_{{ forloop.parentloop.counter }}')==='{{ opcion|escapejs }}'">
+
+              <span class="block rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-700 transition peer-checked:border-amber-600 peer-checked:bg-amber-600 peer-checked:text-white">
+                {{ opcion }} ({{ puntos }})
+              </span>
+            </label>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </article>
+
+  {# BRADEN #}
+  <article class="rounded-xl border border-rose-200 bg-rose-50/50 p-5">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-rose-200 pb-3">
+      <h3 class="font-semibold text-rose-800">Escala de Braden · Riesgo de LPP</h3>
+
+      <div class="rounded-full border px-3 py-1 text-sm font-semibold"
+           :class="estadoBraden().clase">
+        Total: <span x-text="puntaje('riesgos.braden')"></span>
+        · <span x-text="estadoBraden().texto"></span>
+      </div>
+    </div>
+
+    {% for escala, grupos in braden.items %}
+      <div class="mt-4">
+        <p class="text-sm font-semibold text-slate-800">{{ escala }}</p>
+
+        <div class="mt-2 flex flex-wrap gap-2">
+          {% for opcion, puntos in grupos %}
+            <label class="cursor-pointer">
+              <input type="radio"
+                     class="peer sr-only"
+                     name="braden_{{ forloop.parentloop.counter }}"
+                     value="{{ opcion }}"
+                     data-puntos="{{ puntos }}"
+                     data-campo="riesgos.braden_{{ forloop.parentloop.counter }}"
+                     x-init="$el.checked=valor('riesgos.braden_{{ forloop.parentloop.counter }}')==='{{ opcion|escapejs }}'">
+
+              <span class="block rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-700 transition peer-checked:border-rose-700 peer-checked:bg-rose-700 peer-checked:text-white">
+                {{ opcion }} ({{ puntos }})
+              </span>
+            </label>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </article>
+
+  {# PRECAUCIONES #}
+  <article class="rounded-xl border border-cyan-200 bg-cyan-50/50 p-5">
+    <div class="border-b border-cyan-200 pb-3">
+      <h3 class="font-semibold text-cyan-800">Precauciones de aislamiento y entorno</h3>
+      <p class="mt-1 text-sm text-slate-500">
+        Selecciona las precauciones y elementos requeridos para la atención.
+      </p>
+    </div>
+
+    <div class="mt-5">
+      <p class="text-sm font-semibold text-slate-800">
+        Tipo de aislamiento <span class="text-slate-500">(selección múltiple)</span>
+      </p>
+
+      <div class="mt-2 flex flex-wrap gap-2">
+        {% for opcion in aislamientos %}
+          <label class="cursor-pointer">
+            <input type="checkbox"
+                   class="peer sr-only"
+                   value="{{ opcion }}"
+                   data-campo="riesgos.aislamiento"
+                   x-init="$el.checked=valor('riesgos.aislamiento', []).includes('{{ opcion|escapejs }}')">
+
+            <span class="block rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 transition peer-checked:border-brand-700 peer-checked:bg-brand-700 peer-checked:text-white">
+              {{ opcion }}
+            </span>
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <p class="text-sm font-semibold text-slate-800">
+        Elementos de Protección Personal (EPP)
+        <span class="text-slate-500">(selección múltiple)</span>
+      </p>
+
+      <div class="mt-2 flex flex-wrap gap-2">
+        {% for opcion in epp %}
+          <label class="cursor-pointer">
+            <input type="checkbox"
+                   class="peer sr-only"
+                   value="{{ opcion }}"
+                   data-campo="riesgos.epp"
+                   x-init="$el.checked=valor('riesgos.epp', []).includes('{{ opcion|escapejs }}')">
+
+            <span class="block rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 transition peer-checked:border-brand-700 peer-checked:bg-brand-700 peer-checked:text-white">
+              {{ opcion }}
+            </span>
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="mt-5">
+      <p class="text-sm font-semibold text-slate-800">Tipo de habitación</p>
+
+      <div class="mt-2 flex flex-wrap gap-2">
+        {% for opcion in habitaciones %}
+          <label class="cursor-pointer">
+            <input type="radio"
+                   class="peer sr-only"
+                   name="tipo_habitacion"
+                   value="{{ opcion }}"
+                   data-campo="riesgos.habitacion"
+                   x-init="$el.checked=valor('riesgos.habitacion')==='{{ opcion|escapejs }}'">
+
+            <span class="block rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 transition peer-checked:border-brand-700 peer-checked:bg-brand-700 peer-checked:text-white">
+              {{ opcion }}
+            </span>
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+  </article>
+</section>
+
+{% elif seccion_actual == 'balance' %}
+<section class="clinical-card">
+  <h2 class="flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         class="h-5 w-5 text-brand-600"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+      <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/>
+      <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/>
+    </svg>
+    Balance Hídrico
+  </h2>
+
+  <div class="mt-5 space-y-5">
+
+    <article class="rounded-xl border border-brand-200 bg-brand-50/40 p-4">
+      <h3 class="font-semibold text-brand-700">＋ Ingresos (ml)</h3>
+
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        <div><label>Sueros</label><input type="number" min="0" data-campo="balance.ingresos_sueros" x-init="$el.value=valor('balance.ingresos_sueros')" class="input" placeholder="ml"></div>
+        <div><label>Medicamentos EV</label><input type="number" min="0" data-campo="balance.ingresos_medicamentos" x-init="$el.value=valor('balance.ingresos_medicamentos')" class="input" placeholder="ml"></div>
+        <div><label>Agua</label><input type="number" min="0" data-campo="balance.ingresos_agua" x-init="$el.value=valor('balance.ingresos_agua')" class="input" placeholder="ml"></div>
+        <div><label>Alimentación enteral</label><input type="number" min="0" data-campo="balance.ingresos_alimentacion" x-init="$el.value=valor('balance.ingresos_alimentacion')" class="input" placeholder="ml"></div>
+        <div><label>Otros ingresos</label><input type="number" min="0" data-campo="balance.ingresos_otros" x-init="$el.value=valor('balance.ingresos_otros')" class="input" placeholder="ml"></div>
+      </div>
+
+      <div class="mt-4 rounded-lg bg-brand-100/60 px-4 py-3 text-right text-sm font-semibold text-brand-800">
+        Ingresos totales:
+        <span x-text="ingresosBalance().toFixed(1)"></span> ml
+      </div>
+    </article>
+
+    <article class="rounded-xl border border-orange-200 bg-orange-50/40 p-4">
+      <h3 class="font-semibold text-orange-700">− Egresos (ml)</h3>
+
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        <div><label>Diuresis</label><input type="number" min="0" data-campo="balance.egresos_diuresis" x-init="$el.value=valor('balance.egresos_diuresis')" class="input" placeholder="ml"></div>
+        <div><label>Vómitos</label><input type="number" min="0" data-campo="balance.egresos_vomitos" x-init="$el.value=valor('balance.egresos_vomitos')" class="input" placeholder="ml"></div>
+        <div><label>Deposiciones líquidas</label><input type="number" min="0" data-campo="balance.egresos_deposiciones" x-init="$el.value=valor('balance.egresos_deposiciones')" class="input" placeholder="ml"></div>
+        <div><label>Drenajes</label><input type="number" min="0" data-campo="balance.egresos_drenajes" x-init="$el.value=valor('balance.egresos_drenajes')" class="input" placeholder="ml"></div>
+
+        <div>
+          <label>Pérdidas insensibles (auto)</label>
+          <input class="input bg-slate-100 font-semibold"
+                 :value="perdidasInsensibles().toFixed(1) + ' ml'"
+                 readonly>
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-lg bg-orange-100/60 px-4 py-3 text-right text-sm font-semibold text-orange-800">
+        Egresos totales:
+        <span x-text="egresosBalance().toFixed(1)"></span> ml
+      </div>
+    </article>
+
+    <article class="rounded-xl border border-cyan-200 bg-cyan-50/40 p-4">
+      <h3 class="font-semibold text-cyan-700">💧 Pérdidas insensibles</h3>
+
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        <div>
+          <label>Peso del paciente (kg)</label>
+          <input type="number" min="1" max="300" step="0.1"
+                 data-campo="balance.peso"
+                 x-init="$el.value=valor('balance.peso')"
+                 class="input" placeholder="kg">
+        </div>
+
+        <div>
+          <label>Temperatura (°C)</label>
+          <input type="number" min="25" max="45" step="0.1"
+                 data-campo="balance.temperatura"
+                 x-init="$el.value=valor('balance.temperatura')"
+                 class="input" placeholder="°C">
+        </div>
+
+        <div>
+          <label>Horas hospitalizado / turno</label>
+          <input type="number" min="1" max="24"
+                 data-campo="balance.horas"
+                 x-init="$el.value=valor('balance.horas')"
+                 class="input" placeholder="hrs">
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-lg border border-cyan-200 bg-white p-4">
+        <p class="text-xs font-medium text-slate-600">Pérdidas insensibles totales (automático)</p>
+        <p class="mt-1 text-xl font-bold text-cyan-700">
+          <span x-text="perdidasInsensibles().toFixed(1)"></span> ml
+        </p>
+        <p class="mt-1 text-xs text-slate-500">
+          Fórmula educativa: 0.5 ml × peso × horas, con ajuste por temperatura sobre 37 °C.
+        </p>
+      </div>
+    </article>
+
+    <article class="rounded-xl border-2 p-5"
+             :class="estadoBalance().clase">
+      <h3 class="font-semibold">⚖️ Balance hídrico final</h3>
+
+      <div class="mt-3 flex flex-wrap items-end justify-between gap-4">
+        <p class="text-sm text-slate-600">
+          Ingresos (<span x-text="ingresosBalance().toFixed(1)"></span>)
+          − Egresos (<span x-text="egresosBalance().toFixed(1)"></span>)
+        </p>
+
+        <div class="text-right">
+          <p class="text-3xl font-bold" :class="estadoBalance().numero">
+            <span x-text="balanceFinal().toFixed(1)"></span> ml
+          </p>
+
+          <span class="mt-1 inline-flex rounded-full px-3 py-1 text-xs font-semibold"
+                :class="estadoBalance().clase"
+                x-text="estadoBalance().texto"></span>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+{% elif seccion_actual == 'examenes' %}
+<section class="clinical-card"
+         x-data="tabla(valor('examenes.filas', []), [
+           {key:'categoria',label:'Categoría'},
+           {key:'examen',label:'Examen solicitado'},
+           {key:'observaciones',label:'Observaciones'}
+         ])">
+
+  <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>Exámenes Solicitados</h2>
+
+  <p class="muted">
+    Registra exámenes y observaciones clínicas asociadas.
+  </p>
+
+  <div class="overflow-x-auto" role="region" aria-label="Tabla desplazable" tabindex="0">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Categoría</th>
+          <th scope="col">Examen solicitado</th>
+          <th scope="col">Observaciones</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <template x-for="(fila, indice) in filas" :key="indice">
+          <tr>
+            <td>
+              <select class="input" x-model="fila.categoria">
+                <option>Hematológicos</option>
+                <option>Bioquímicos</option>
+                <option>Serológicos</option>
+                <option>Inmunológicos</option>
+                <option>Hormonales</option>
+                <option>Orina y deposiciones</option>
+                <option>Test nasofaríngeos</option>
+                <option>Imagenológicos</option>
+                <option>Otros</option>
+              </select>
+            </td>
+
+            <td><input class="input" x-model="fila.examen"></td>
+            <td><input class="input" x-model="fila.observaciones"></td>
+
+
+            <td class="w-12 align-middle text-center">
+              <button type="button"
+                      @click="quitar(indice)"
+                      title="Eliminar examen"
+                      class="inline-flex h-9 w-9 items-center justify-center rounded-md text-red-600 transition hover:bg-red-50 hover:text-red-700 focus:outline-hidden focus:ring-2 focus:ring-red-400 focus:ring-offset-1">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                  <path d="M3 6h18"/>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                  <line x1="10" x2="10" y1="11" y2="17"/>
+                  <line x1="14" x2="14" y1="11" y2="17"/>
+                </svg>
+              </button>
+            </td>
+
+
+
+        </template>
+      </tbody>
+    </table>
+  </div>
+
+  <input type="hidden"
+         data-campo="examenes.filas"
+         data-json
+         :value="JSON.stringify(filas)">
+
+  <button type="button" @click="agregar()" class="btn-secondary mt-3">
+    ＋ Agregar fila
+  </button>
+</section>
+
+{% elif seccion_actual == 'dispositivos' %}
+<section class="clinical-card"
+         x-data="tabla(valor('dispositivos.filas', []), [
+           {key:'tipo',label:'Tipo de dispositivo'},
+           {key:'caracteristicas',label:'Características'},
+           {key:'dias',label:'Días de uso'},
+           {key:'cuidado1',label:'Cuidado 1'},
+           {key:'cuidado2',label:'Cuidado 2'},
+           {key:'cuidado3',label:'Cuidado 3'}
+         ])">
+
+  <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg>Dispositivos Invasivos</h2>
+
+  <div class="overflow-x-auto" role="region" aria-label="Tabla desplazable" tabindex="0">
+    <table class="table">
+      <thead>
+        <tr>
+          <template x-for="columna in columnas">
+            <th scope="col" x-text="columna.label"></th>
+          </template>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <template x-for="(fila, indice) in filas" :key="indice">
+          <tr>
+            <td><input class="input" x-model="fila.tipo" placeholder="Ej.: VVP #22"></td>
+
+            <td><input class="input" x-model="fila.caracteristicas" placeholder="Ubicación, fecha, condición"></td>
+
+            <td>
+              <input type="number"
+                    min="0"
+                    class="input"
+                    x-model="fila.dias"
+                    placeholder="Días">
+            </td>
+
+            <td><input class="input" x-model="fila.cuidado1"></td>
+            <td><input class="input" x-model="fila.cuidado2"></td>
+            <td><input class="input" x-model="fila.cuidado3"></td>
+
+            <td class="w-12 align-middle text-center">
+              <button type="button"
+                      @click="quitar(indice)"
+                      title="Eliminar dispositivo"
+                      class="inline-flex h-9 w-9 items-center justify-center rounded-md text-red-600 transition hover:bg-red-50 hover:text-red-700 focus:outline-hidden focus:ring-2 focus:ring-red-400 focus:ring-offset-1">
+
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    class="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                  <path d="M3 6h18"/>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                  <line x1="10" x2="10" y1="11" y2="17"/>
+                  <line x1="14" x2="14" y1="11" y2="17"/>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+
+
+    </table>
+  </div>
+
+  <input type="hidden"
+         data-campo="dispositivos.filas"
+         data-json
+         :value="JSON.stringify(filas)">
+
+  <button type="button" @click="agregar()" class="btn-secondary mt-3">
+    ＋ Agregar fila
+  </button>
+</section>
+
+{% elif seccion_actual == 'indicaciones' %}
+<section class="clinical-card">
+  <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>Otras Indicaciones</h2>
+
+  <div class="grid gap-4">
+
+    <div class="rounded-lg border border-slate-200 p-4">
+      <h3 class="font-semibold text-brand-700">Oxigenoterapia</h3>
+      {% for numero in '123' %}
+        <label class="mt-3 block">
+          Cuidado {{ numero }}
+          <textarea data-campo="indicaciones.oxigenoterapia_{{ numero }}"
+                    x-init="$el.value=valor('indicaciones.oxigenoterapia_{{ numero }}')"
+                    class="input h-20"></textarea>
+        </label>
+      {% endfor %}
+    </div>
+
+    <div class="rounded-lg border border-slate-200 p-4">
+      <h3 class="font-semibold text-brand-700">Curaciones</h3>
+      {% for numero in '123' %}
+        <label class="mt-3 block">
+          Cuidado {{ numero }}
+          <textarea data-campo="indicaciones.curaciones_{{ numero }}"
+                    x-init="$el.value=valor('indicaciones.curaciones_{{ numero }}')"
+                    class="input h-20"></textarea>
+        </label>
+      {% endfor %}
+    </div>
+
+    <div class="rounded-lg border border-slate-200 p-4">
+      <h3 class="font-semibold text-brand-700">Monitorización</h3>
+      {% for numero in '123' %}
+        <label class="mt-3 block">
+          Cuidado {{ numero }}
+          <textarea data-campo="indicaciones.monitorizacion_{{ numero }}"
+                    x-init="$el.value=valor('indicaciones.monitorizacion_{{ numero }}')"
+                    class="input h-20"></textarea>
+        </label>
+      {% endfor %}
+    </div>
+
+    <div class="rounded-lg border border-slate-200 p-4">
+      <h3 class="font-semibold text-brand-700">Toma de exámenes</h3>
+      {% for numero in '123' %}
+        <label class="mt-3 block">
+          Cuidado {{ numero }}
+          <textarea data-campo="indicaciones.examenes_{{ numero }}"
+                    x-init="$el.value=valor('indicaciones.examenes_{{ numero }}')"
+                    class="input h-20"></textarea>
+        </label>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% elif seccion_actual == 'evolucion' %}
+<section class="clinical-card">
+  <h2><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>Evolución y Entrega de Turno</h2>
+
+  <label>
+    Datos del paciente
+    <textarea data-campo="evolucion.datos_paciente"
+              x-init="$el.value=valor('evolucion.datos_paciente')"
+              class="input mt-1 h-24"></textarea>
+  </label>
+
+  <label class="mt-4 block">
+    Novedades
+    <textarea data-campo="evolucion.novedades"
+              x-init="$el.value=valor('evolucion.novedades')"
+              class="input mt-1 h-24"></textarea>
+  </label>
+
+  <label class="mt-4 block">
+    Actividades pendientes
+    <textarea data-campo="evolucion.actividades_pendientes"
+              x-init="$el.value=valor('evolucion.actividades_pendientes')"
+              class="input mt-1 h-24"></textarea>
+  </label>
+
+  <label class="mt-4 block">
+    Eventos adversos
+    <textarea data-campo="evolucion.eventos_adversos"
+              x-init="$el.value=valor('evolucion.eventos_adversos')"
+              class="input mt-1 h-24"></textarea>
+  </label>
+</section>
+
+{% endif %}
+
+</fieldset>
+
+{% if modo_revision %}
+  <div class="mt-5 flex items-center border-t border-slate-200 pt-4">
+    <span class="ml-auto flex items-center gap-1 text-xs text-slate-500">
+      Vista de solo lectura para docente
+    </span>
+  </div>
+
+{% elif ficha.bloqueada %}
+  <div class="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+    <div class="flex items-center gap-2 font-semibold">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="h-4 w-4"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      Ficha enviada
+    </div>
+
+    <p class="mt-1">
+      Está en modo previsualización y pendiente de calificación.
+    </p>
+  </div>
+
+{% else %}
+  <div class="mt-5 flex flex-wrap items-center gap-3 border-t border-slate-200 pt-4">
+    <button name="accion"
+            value="guardar"
+            class="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-700">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="h-4 w-4"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
+        <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/>
+        <path d="M7 3v4a1 1 0 0 0 1 1h7"/>
+      </svg>
+      Guardar ficha
+    </button>
+
+    <button name="accion"
+            value="finalizar"
+            onclick="return confirm('¿Enviar y finalizar la ficha? Después no podrás editarla.');"
+            class="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="h-4 w-4"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      Enviar y finalizar
+    </button>
+
+    <span class="ml-auto text-xs text-slate-500">
+      Guardado manual: presiona “Guardar ficha”.
+    </span>
+  </div>
+{% endif %}
+
+</div>
+</form>
+{% endblock ficha_content %}

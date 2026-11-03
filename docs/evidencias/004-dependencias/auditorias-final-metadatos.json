@@ -1,0 +1,35 @@
+[
+  {
+    "name": "pip-audit-final",
+    "command": [
+      "C:\\Users\\Fernando\\Desktop\\CliniTENS\\.test-artifacts\\dependencias-004\\audit-tools\\Scripts\\python.exe",
+      "-m",
+      "pip_audit",
+      "-r",
+      "requirements.txt",
+      "--no-deps",
+      "--disable-pip",
+      "--format=json",
+      "--output",
+      "C:\\Users\\Fernando\\Desktop\\CliniTENS\\docs\\evidencias\\004-dependencias\\pip-audit-final.json"
+    ],
+    "exit_code": 0,
+    "seconds": 5.719,
+    "stderr": "WARNING:pip_audit._cli:--no-deps is supported, but users are encouraged to fully hash their pinned dependencies\nWARNING:pip_audit._cli:Consider using a tool like `pip-compile`: https://pip-tools.readthedocs.io/en/latest/#using-hashes\nNo known vulnerabilities found\n"
+  },
+  {
+    "name": "npm-audit-final",
+    "command": [
+      "npm.cmd",
+      "audit",
+      "--json",
+      "--prefix",
+      "theme/static_src",
+      "--cache",
+      "C:\\Users\\Fernando\\Desktop\\CliniTENS\\.test-artifacts\\npm-cache"
+    ],
+    "exit_code": 0,
+    "seconds": 0.922,
+    "stderr": ""
+  }
+]

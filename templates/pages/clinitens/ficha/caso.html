@@ -1,0 +1,170 @@
+{% extends 'pages/clinitens/ficha/base_estudiante.html' %}
+{% load clinical %}
+
+{% block page_title %}Caso Clínico{% endblock page_title %}
+
+{% block sidebar %}
+  {% include 'pages/clinitens/ficha/partials/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block ficha_content %}
+<div class="space-y-5">
+
+  <section class="rounded-xl border-2 border-brand-500/20 bg-brand-50/50 p-6 shadow-none">
+    <h2 class="flex items-center gap-2 border-b border-brand-200 pb-4 text-xl font-bold text-brand-700">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="h-5 w-5"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+        <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+        <path d="M10 9H8"/>
+        <path d="M16 13H8"/>
+        <path d="M16 17H8"/>
+      </svg>
+
+      Multimedia del Paciente
+    </h2>
+
+    <p class="mb-3 mt-4 text-xs text-slate-500">
+      Observa al paciente antes de revisar el caso clínico y completar la ficha.
+    </p>
+
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+      {% for archivo in ficha.codigo_actividad.caso_clinico.archivos.all %}
+        {% with nombre=archivo.archivo.name|lower %}
+          <a href="{{ archivo.archivo.url }}"
+             target="_blank"
+             title="Abrir: {{ archivo.archivo.name }}"
+             class="group relative overflow-hidden rounded-md border border-slate-200 bg-white shadow-none transition hover:border-brand-400 hover:shadow-md">
+
+            {% if '.jpg' in nombre or '.jpeg' in nombre or '.png' in nombre or '.webp' in nombre or '.gif' in nombre %}
+              <img src="{{ archivo.archivo.url }}"
+                   alt="{{ archivo.archivo.name }}"
+                   class="h-32 w-full cursor-zoom-in object-cover">
+
+              <span class="absolute left-1 top-1 inline-flex items-center gap-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] text-white">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="h-3 w-3"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+                  <rect width="18" height="18" x="3" y="3" rx="2"/>
+                  <circle cx="9" cy="9" r="2"/>
+                  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                </svg>
+                Imagen
+              </span>
+
+            {% elif '.mp4' in nombre or '.webm' in nombre or '.mov' in nombre %}
+              <video class="h-32 w-full cursor-pointer bg-black object-cover"
+                     preload="metadata"
+                     muted>
+                <source src="{{ archivo.archivo.url }}">
+                Tu navegador no soporta video.
+              </video>
+
+              <span class="absolute left-1 top-1 inline-flex items-center gap-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] text-white">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="h-3 w-3"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+                  <path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/>
+                  <rect x="2" y="6" width="14" height="12" rx="2"/>
+                </svg>
+                Video
+              </span>
+
+            {% elif '.pdf' in nombre %}
+              <div class="flex h-32 flex-col items-center justify-center bg-red-50 text-red-600">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="h-10 w-10"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+                  <path d="M9 15h6"/>
+                  <path d="M9 11h6"/>
+                </svg>
+                <span class="mt-2 text-xs font-semibold">Documento PDF</span>
+              </div>
+
+            {% else %}
+              <div class="flex h-32 flex-col items-center justify-center bg-slate-100 text-slate-500">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="h-10 w-10"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round">
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+                </svg>
+                <span class="mt-2 text-xs font-semibold">Archivo</span>
+              </div>
+            {% endif %}
+
+            <span class="block truncate px-2 py-1 text-[10px] text-slate-500">
+              {{ archivo.archivo.name|truncatechars:30 }}
+            </span>
+          </a>
+        {% endwith %}
+      {% empty %}
+        <p class="col-span-full py-4 text-sm text-slate-500">
+          El caso no tiene archivos multimedia adjuntos.
+        </p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-none">
+    <h2 class="flex items-center gap-2 border-b border-slate-200 pb-4 text-xl font-bold text-brand-700">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           class="h-5 w-5"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="M12 7v14"/>
+        <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+      </svg>
+
+      Caso Clínico Asignado
+    </h2>
+
+    <article class="prose prose-sm mt-5 max-w-none leading-relaxed text-slate-800">
+      {{ ficha.codigo_actividad.caso_clinico.contenido|clinical_html }}
+    </article>
+  </section>
+
+</div>
+<section class="mt-6 rounded-xl bg-white p-6">
+  <h2 class="text-lg font-bold">Apoyo diagnóstico disponible</h2>
+  {% for resultado in resultados %}
+    <article class="mt-4 border-t pt-3">
+      <h3 class="font-semibold">{{ resultado.nombre_examen }}</h3>
+      <p>{{ resultado.observaciones|linebreaksbr }}</p>
+      {% if resultado.archivo %}<a class="text-brand-700 underline" href="{{ resultado.archivo.url }}" target="_blank" rel="noopener">Abrir resultado</a>{% endif %}
+    </article>
+  {% empty %}<p class="mt-2 text-slate-500">No hay resultados publicados para este caso.</p>{% endfor %}
+</section>
+{% endblock ficha_content %}

@@ -1,0 +1,289 @@
+{
+  "version": "4.0.0",
+  "name": "theme",
+  "dependencies": {
+    "@tailwindcss/cli": {
+      "version": "4.3.3",
+      "resolved": "https://registry.npmjs.org/@tailwindcss/cli/-/cli-4.3.3.tgz",
+      "overridden": false,
+      "dependencies": {
+        "@parcel/watcher": {
+          "version": "2.6.0",
+          "resolved": "https://registry.npmjs.org/@parcel/watcher/-/watcher-2.6.0.tgz",
+          "overridden": true,
+          "dependencies": {
+            "@parcel/watcher-android-arm64": {},
+            "@parcel/watcher-darwin-arm64": {},
+            "@parcel/watcher-darwin-x64": {},
+            "@parcel/watcher-freebsd-x64": {},
+            "@parcel/watcher-linux-arm-glibc": {},
+            "@parcel/watcher-linux-arm-musl": {},
+            "@parcel/watcher-linux-arm64-glibc": {},
+            "@parcel/watcher-linux-arm64-musl": {},
+            "@parcel/watcher-linux-x64-glibc": {},
+            "@parcel/watcher-linux-x64-musl": {},
+            "@parcel/watcher-win32-arm64": {},
+            "@parcel/watcher-win32-x64": {
+              "version": "2.6.0",
+              "resolved": "https://registry.npmjs.org/@parcel/watcher-win32-x64/-/watcher-win32-x64-2.6.0.tgz",
+              "overridden": false
+            },
+            "detect-libc": {
+              "version": "2.1.2",
+              "resolved": "https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.2.tgz",
+              "overridden": false
+            },
+            "is-glob": {
+              "version": "4.0.3",
+              "resolved": "https://registry.npmjs.org/is-glob/-/is-glob-4.0.3.tgz",
+              "overridden": false,
+              "dependencies": {
+                "is-extglob": {
+                  "version": "2.1.1",
+                  "resolved": "https://registry.npmjs.org/is-extglob/-/is-extglob-2.1.1.tgz",
+                  "overridden": false
+                }
+              }
+            },
+            "node-addon-api": {
+              "version": "7.1.1",
+              "resolved": "https://registry.npmjs.org/node-addon-api/-/node-addon-api-7.1.1.tgz",
+              "overridden": false
+            },
+            "picomatch": {
+              "version": "4.0.7",
+              "resolved": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz",
+              "overridden": false
+            }
+          }
+        },
+        "@tailwindcss/node": {
+          "version": "4.3.3",
+          "resolved": "https://registry.npmjs.org/@tailwindcss/node/-/node-4.3.3.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@jridgewell/remapping": {
+              "version": "2.3.5",
+              "resolved": "https://registry.npmjs.org/@jridgewell/remapping/-/remapping-2.3.5.tgz",
+              "overridden": false,
+              "dependencies": {
+                "@jridgewell/gen-mapping": {
+                  "version": "0.3.13",
+                  "resolved": "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.13.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "@jridgewell/sourcemap-codec": {
+                      "version": "1.6.0"
+                    },
+                    "@jridgewell/trace-mapping": {
+                      "version": "0.3.31"
+                    }
+                  }
+                },
+                "@jridgewell/trace-mapping": {
+                  "version": "0.3.31",
+                  "resolved": "https://registry.npmjs.org/@jridgewell/trace-mapping/-/trace-mapping-0.3.31.tgz",
+                  "overridden": false,
+                  "dependencies": {
+                    "@jridgewell/resolve-uri": {
+                      "version": "3.1.2",
+                      "resolved": "https://registry.npmjs.org/@jridgewell/resolve-uri/-/resolve-uri-3.1.2.tgz",
+                      "overridden": false
+                    },
+                    "@jridgewell/sourcemap-codec": {
+                      "version": "1.6.0"
+                    }
+                  }
+                }
+              }
+            },
+            "enhanced-resolve": {
+              "version": "5.26.0"
+            },
+            "jiti": {
+              "version": "2.7.0",
+              "resolved": "https://registry.npmjs.org/jiti/-/jiti-2.7.0.tgz",
+              "overridden": false
+            },
+            "lightningcss": {
+              "version": "1.32.0",
+              "resolved": "https://registry.npmjs.org/lightningcss/-/lightningcss-1.32.0.tgz",
+              "overridden": false,
+              "dependencies": {
+                "detect-libc": {
+                  "version": "2.1.2"
+                },
+                "lightningcss-android-arm64": {},
+                "lightningcss-darwin-arm64": {},
+                "lightningcss-darwin-x64": {},
+                "lightningcss-freebsd-x64": {},
+                "lightningcss-linux-arm-gnueabihf": {},
+                "lightningcss-linux-arm64-gnu": {},
+                "lightningcss-linux-arm64-musl": {},
+                "lightningcss-linux-x64-gnu": {},
+                "lightningcss-linux-x64-musl": {},
+                "lightningcss-win32-arm64-msvc": {},
+                "lightningcss-win32-x64-msvc": {
+                  "version": "1.32.0",
+                  "resolved": "https://registry.npmjs.org/lightningcss-win32-x64-msvc/-/lightningcss-win32-x64-msvc-1.32.0.tgz",
+                  "overridden": false
+                }
+              }
+            },
+            "magic-string": {
+              "version": "0.30.21",
+              "resolved": "https://registry.npmjs.org/magic-string/-/magic-string-0.30.21.tgz",
+              "overridden": false,
+              "dependencies": {
+                "@jridgewell/sourcemap-codec": {
+                  "version": "1.6.0",
+                  "resolved": "https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.6.0.tgz",
+                  "overridden": false
+                }
+              }
+            },
+            "source-map-js": {
+              "version": "1.2.2",
+              "resolved": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.2.tgz",
+              "overridden": false
+            },
+            "tailwindcss": {
+              "version": "4.3.3"
+            }
+          }
+        },
+        "@tailwindcss/oxide": {
+          "version": "4.3.3",
+          "resolved": "https://registry.npmjs.org/@tailwindcss/oxide/-/oxide-4.3.3.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@tailwindcss/oxide-android-arm64": {},
+            "@tailwindcss/oxide-darwin-arm64": {},
+            "@tailwindcss/oxide-darwin-x64": {},
+            "@tailwindcss/oxide-freebsd-x64": {},
+            "@tailwindcss/oxide-linux-arm-gnueabihf": {},
+            "@tailwindcss/oxide-linux-arm64-gnu": {},
+            "@tailwindcss/oxide-linux-arm64-musl": {},
+            "@tailwindcss/oxide-linux-x64-gnu": {},
+            "@tailwindcss/oxide-linux-x64-musl": {},
+            "@tailwindcss/oxide-wasm32-wasi": {},
+            "@tailwindcss/oxide-win32-arm64-msvc": {},
+            "@tailwindcss/oxide-win32-x64-msvc": {
+              "version": "4.3.3",
+              "resolved": "https://registry.npmjs.org/@tailwindcss/oxide-win32-x64-msvc/-/oxide-win32-x64-msvc-4.3.3.tgz",
+              "overridden": false
+            }
+          }
+        },
+        "enhanced-resolve": {
+          "version": "5.26.0",
+          "resolved": "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.26.0.tgz",
+          "overridden": false,
+          "dependencies": {
+            "graceful-fs": {
+              "version": "4.2.11",
+              "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz",
+              "overridden": false
+            },
+            "tapable": {
+              "version": "2.3.3",
+              "resolved": "https://registry.npmjs.org/tapable/-/tapable-2.3.3.tgz",
+              "overridden": false
+            }
+          }
+        },
+        "mri": {
+          "version": "1.2.0",
+          "resolved": "https://registry.npmjs.org/mri/-/mri-1.2.0.tgz",
+          "overridden": false
+        },
+        "picocolors": {
+          "version": "1.1.1",
+          "resolved": "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz",
+          "overridden": false
+        },
+        "tailwindcss": {
+          "version": "4.3.3"
+        }
+      }
+    },
+    "@tailwindcss/forms": {
+      "version": "0.5.11",
+      "resolved": "https://registry.npmjs.org/@tailwindcss/forms/-/forms-0.5.11.tgz",
+      "overridden": false,
+      "dependencies": {
+        "mini-svg-data-uri": {
+          "version": "1.4.4",
+          "resolved": "https://registry.npmjs.org/mini-svg-data-uri/-/mini-svg-data-uri-1.4.4.tgz",
+          "overridden": false
+        },
+        "tailwindcss": {
+          "version": "4.3.3"
+        }
+      }
+    },
+    "@tailwindcss/typography": {
+      "version": "0.5.20",
+      "resolved": "https://registry.npmjs.org/@tailwindcss/typography/-/typography-0.5.20.tgz",
+      "overridden": false,
+      "dependencies": {
+        "postcss-selector-parser": {
+          "version": "7.1.6",
+          "resolved": "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-7.1.6.tgz",
+          "overridden": true,
+          "dependencies": {
+            "cssesc": {
+              "version": "3.0.0",
+              "resolved": "https://registry.npmjs.org/cssesc/-/cssesc-3.0.0.tgz",
+              "overridden": false
+            },
+            "util-deprecate": {
+              "version": "1.0.2",
+              "resolved": "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz",
+              "overridden": false
+            }
+          }
+        },
+        "tailwindcss": {
+          "version": "4.3.3"
+        }
+      }
+    },
+    "alpinejs": {
+      "version": "3.17.4",
+      "resolved": "https://registry.npmjs.org/alpinejs/-/alpinejs-3.17.4.tgz",
+      "overridden": false,
+      "dependencies": {
+        "@vue/reactivity": {
+          "version": "3.5.43",
+          "resolved": "https://registry.npmjs.org/@vue/reactivity/-/reactivity-3.5.43.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@vue/shared": {
+              "version": "3.5.43",
+              "resolved": "https://registry.npmjs.org/@vue/shared/-/shared-3.5.43.tgz",
+              "overridden": false
+            }
+          }
+        }
+      }
+    },
+    "dompurify": {
+      "version": "3.4.16",
+      "resolved": "https://registry.npmjs.org/dompurify/-/dompurify-3.4.16.tgz",
+      "overridden": false,
+      "dependencies": {
+        "@types/trusted-types": {
+          "version": "2.0.7",
+          "resolved": "https://registry.npmjs.org/@types/trusted-types/-/trusted-types-2.0.7.tgz",
+          "overridden": false
+        }
+      }
+    },
+    "tailwindcss": {
+      "version": "4.3.3",
+      "resolved": "https://registry.npmjs.org/tailwindcss/-/tailwindcss-4.3.3.tgz",
+      "overridden": false
+    }
+  }
+}
