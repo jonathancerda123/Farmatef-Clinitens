@@ -12,6 +12,9 @@ class Medicamento(models.Model):
     principio_activo = models.CharField(max_length=160, blank=True)
     concentracion = models.CharField(max_length=80, blank=True)
     forma_farmaceutica = models.CharField(max_length=100, blank=True)
+    clasificacion = models.CharField(max_length=120, blank=True)
+    observaciones = models.CharField(max_length=300, blank=True)
+    fuente_documental = models.CharField(max_length=120, blank=True)
     codigo_barras = models.CharField(max_length=64, blank=True)
     stock_minimo = models.PositiveIntegerField(default=0)
     dias_alerta_vencimiento = models.PositiveSmallIntegerField(
@@ -74,6 +77,7 @@ class LoteInventario(models.Model):
     numero_lote = models.CharField(max_length=80)
     vence_el = models.DateField()
     unidades = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    es_simulado = models.BooleanField(default=False)
     registrado_por = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,

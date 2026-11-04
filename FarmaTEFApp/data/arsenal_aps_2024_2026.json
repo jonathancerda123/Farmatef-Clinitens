@@ -1,0 +1,3269 @@
+[
+  {
+    "nombre": "ÁCIDO FÓLICO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "0,4 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ÁCIDO FÓLICO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "1 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°22, 60",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ÁCIDO FÓLICO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "5 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ÁCIDO MEFENÁMICO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "500 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°41, 46",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ADENOSINA",
+    "forma": "SOLUCION INYECTABLE",
+    "concentracion": "6 mg/2 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "Uso exclusivo urgencias",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "AGUA BIDESTILADA ESTERIL",
+    "forma": "AGUA APIROGÉNICA PRO INYECTABLE",
+    "concentracion": "GENERAL",
+    "clasificacion": "Miscelaneo",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "AGUA OXIGENADA",
+    "forma": "SOLUCIÓN USO EXTERNO",
+    "concentracion": "10 VOLÚMENES",
+    "clasificacion": "Miscelaneo",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ALCOHOL ETÍLICO",
+    "forma": "SOLUCIÓN DESNATURALIZADA",
+    "concentracion": "70%",
+    "clasificacion": "Miscelaneo",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ALCOHOL GEL",
+    "forma": "BASE ALCOHÓLICA",
+    "concentracion": "70% v/v",
+    "clasificacion": "Miscelaneo",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ALOPURINOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "300 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ALUMINIO HIDRÓXIDO",
+    "forma": "SUSPENSION ORAL",
+    "concentracion": "6%",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Camarones",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "AMIODARONA (CLORHIDRATO)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "150 mg/3 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "GES N°5, Uso exclusivo urgencias",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ATROPINA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "1 mg/mL",
+    "clasificacion": "SAPU, SAR, SUR, PSR, carro paro CESFAM",
+    "observaciones": "Uso en urgencia general",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ATROPINA + PAPAVERINA",
+    "forma": "COMPRIMIDO ADULTO",
+    "concentracion": "0,5 mg + 40 mg",
+    "clasificacion": "SUR, PSR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "BETAMETASONA",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "0,5 mg/mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°19",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "BETAMETASONA",
+    "forma": "CREMA TÓPICA",
+    "concentracion": "0,0005 g",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "BETAMETASONA (FOSFATO DISÓDICO)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "4 mg/mL",
+    "clasificacion": "SAPU, SAR, SUR, carro paro CESFAM",
+    "observaciones": "Uso en urgencia general",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "BUDESONIDA/FORMOTEROL",
+    "forma": "AEROSOL PARA INHALACIÓN ORAL",
+    "concentracion": "160 mcg/4,5 mcg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°61, alternativa a salmeterol/fluticasona",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "BUPROPION",
+    "forma": "COMPRIMIDO",
+    "concentracion": "150 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre y G. Lagos",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "BUPROPION",
+    "forma": "COMPRIMIDO",
+    "concentracion": "300 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre y G. Lagos",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CALCIO CARBONATO + VITAMINA D",
+    "forma": "CÁPSULA O COMPRIMIDO",
+    "concentracion": "450 mg + 175 UI",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CALCIO GLUCONATO",
+    "forma": "SOLUCION INYECTABLE",
+    "concentracion": "1 g/10 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CAPTOPRIL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "25 mg",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CARBON ACTIVADO",
+    "forma": "POLVO",
+    "concentracion": "50 g",
+    "clasificacion": "SAR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CETIRIZINA",
+    "forma": "CÁPSULA O COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "10 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CIANOCOBALAMINA (VITAMINA B12)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "0,1 mg/mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CICLOBENZAPRINA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "10 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CITALOPRAM",
+    "forma": "COMPRIMIDO",
+    "concentracion": "20 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°85",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CLONAZEPAM",
+    "forma": "COMPRIMIDO",
+    "concentracion": "0,5 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°22, 34, 53, 60",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CLONAZEPAM",
+    "forma": "COMPRIMIDO",
+    "concentracion": "2 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°22, 34, 53, 60",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CLONIXINATO DE LISINA",
+    "forma": "CÁPSULA, COMPRIMIDO RECUBIERTO.",
+    "concentracion": "125 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°41, 46",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CLOPIDOGREL",
+    "forma": "COMPRIMIDO RECUBIERTO",
+    "concentracion": "75 mg",
+    "clasificacion": "SAPU, SAR, SUR, carro paro CESFAM",
+    "observaciones": "GES N°5, uso en urgencia general",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CLORFENAMINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "4 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°5",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CLORFENAMINA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "10 mg/mL",
+    "clasificacion": "Arsenal básico, PSR",
+    "observaciones": "GES N°5,",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CLORFENAMINA",
+    "forma": "JARABE",
+    "concentracion": "2,5 mg/5 mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CLORHEXIDINA",
+    "forma": "JABÓN LÍQUIDO",
+    "concentracion": "2%",
+    "clasificacion": "Miscelaneo",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CLORHEXIDINA DIGLUCONATO",
+    "forma": "SOLUCIÓN ENJUAGUE BUCAL",
+    "concentracion": "0,12%",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°46, 66",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CLORPROMAZINA",
+    "forma": "COMPRIMIDO O GRAGEA",
+    "concentracion": "100 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°34",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CLOTRIMAZOL",
+    "forma": "CREMA TÓPICA",
+    "concentracion": "1%",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CLOTRIMAZOL",
+    "forma": "ÓVULOS",
+    "concentracion": "500 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "CREMA CICATRIZANTE C/ÓXIDO ZINC",
+    "forma": "CREMA TÓPICA",
+    "concentracion": "25 g/100 g",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "DELTAMETRINA + PIPERONIL BUTÓXIDO",
+    "forma": "LOCIÓN",
+    "concentracion": "0,02% + 2,50%",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "DIAZEPAM",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "10 mg/2 mL",
+    "clasificacion": "SAPU, SAR, carro paro CESFAM",
+    "observaciones": "Uso en urgencia general",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "DIAZEPAM",
+    "forma": "COMPRIMIDO",
+    "concentracion": "10 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°53",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "DICLOFENACO",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "75 mg/3 mL",
+    "clasificacion": "Arsenal básico, SAPU, SAR, SUR, PSR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "DICLOFENACO",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "50 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°41, 46",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "DICLOFENACO",
+    "forma": "SUPOSITORIO",
+    "concentracion": "12,5 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre y Camarones",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "DICLOFENACO",
+    "forma": "GEL TÓPICO",
+    "concentracion": "1%",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "DOMPERIDONA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "10 mg/2 mL",
+    "clasificacion": "SAPU, SAR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "DOMPERIDONA",
+    "forma": "CÁPSULA O COMPRIMIDO",
+    "concentracion": "10 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ENOXAPARINA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "40 mg/0,4 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "GES N°5",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "EPINEFRINA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "1 mg/mL",
+    "clasificacion": "SAPU, SUR, PSR, carro paro CESFAM",
+    "observaciones": "GES N°19, uso en urgencia general",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ESZOPICLONA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "3 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°34, Excepto G. Lagos",
+    "seccion": "",
+    "pagina": 1
+  },
+  {
+    "nombre": "ETOMIDATO",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "20 mg/10 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "FENOBARBITAL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "100 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°60",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "FERROSO SULFATO",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "125 mg/mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "FERROSO SULFATO",
+    "forma": "CÁPSULA O COMPRIMIDO RECUBIERTO",
+    "concentracion": "200 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "FITOQUINONA O FITOMENADIONA (VITAMINA K1)",
+    "forma": "SOLUCIÓN INYECTABLE ENDOVENOSA",
+    "concentracion": "10 mg/mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "FLUMAZENILO",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "0,5 mg/5 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "Uso exclusivo urgencias",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "FLUNARIZINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "10 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto G. Lagos",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "FLUOR",
+    "forma": "SOLUCIÓN BÁRNIZ TÓPICA",
+    "concentracion": "5%",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°23, 66",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "FLUORURO DE SODIO",
+    "forma": "SOLUCIÓN ENJUAGUE BUCAL",
+    "concentracion": "0,05%",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°66",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "FLUOXETINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "20 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°34, 53",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "FUROSEMIDA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "20 mg/mL",
+    "clasificacion": "SAPU, SAR, SUR, PSR, carro paro CESFAM",
+    "observaciones": "Uso en urgencia general",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "GEMFIBROZILO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "600 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "GLUCOSA SOLUCIÓN HIPERTÓNICA 10%",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "500 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "GLUCOSA SOLUCIÓN HIPERTÓNICA 30%",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "20 y 250 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "GLUCOSA SOLUCIÓN HIPERTÓNICA 30%",
+    "forma": "AMPOLLA",
+    "concentracion": "20 mL",
+    "clasificacion": "SAPU, SAR, SUR, PSR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "GLUCOSA SOLUCIÓN ISOTÓNICA 5%",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "500 mL",
+    "clasificacion": "SAPU, PSR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "HALOPERIDOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "5 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°53",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "HIDROCORTISONA",
+    "forma": "POLVO LIOFILIZADO PARA SOLUCIÓN INYECTABLE",
+    "concentracion": "100 mg",
+    "clasificacion": "SAPU, SAR, SAR, PSR, carro de paro CESFAM",
+    "observaciones": "GES N°38, uso en urgencia general",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "HIDROCORTISONA",
+    "forma": "POLVO LIOFILIZADO PARA SOLUCIÓN INYECTABLE",
+    "concentracion": "500 mg",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "GES N°38",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "HIDROXIETILALMIDON",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "6%",
+    "clasificacion": "SAPU, SAR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "HIERRO POLIMATOSADO (III)",
+    "forma": "COMPRIMIDO",
+    "concentracion": "100 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto G. Lagos",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "HIERRO POLIMATOSADO (III)",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "50 mg/mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto G. Lagos",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "IBUPROFENO",
+    "forma": "JARABE",
+    "concentracion": "200 mg/5 mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "IBUPROFENO",
+    "forma": "CÁPSULA O COMPRIMIDO O COMPRIMIDO RECUBIERTO O GRAGEA",
+    "concentracion": "400 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°41, 46",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "IBUPROFENO",
+    "forma": "CÁPSULA O COMPRIMIDO O COMPRIMIDO RECUBIERTO O GRAGEA",
+    "concentracion": "600 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°41, 46, excepto Putre y G. Lagos",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "IOHEXOL",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "350 mg yodo/mL",
+    "clasificacion": "Tamizaje colorectal",
+    "observaciones": "Excepto Camarones, General Lagos y Putre",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "IPRATROPIO (BROMURO)",
+    "forma": "SOLUCIÓN PARA NEBULIZACIÓN",
+    "concentracion": "0,25 mg/mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "IPRATROPIO + FENOTEROL",
+    "forma": "SOLUCIÓN PARA NEBULIZACIÓN",
+    "concentracion": "0,25 mg/0,5 mg",
+    "clasificacion": "SAR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "KETOPROFENO",
+    "forma": "COMPRIMIDO CON RECUBRIMIENTO ENTÉRICO",
+    "concentracion": "200 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°41, 46",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "KETOPROFENO",
+    "forma": "POLVO LIOFILIZADO PARA SOLUCIÓN INYECTABLE",
+    "concentracion": "100 mg/2 mL",
+    "clasificacion": "SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "KETOROLACO (TROMETANOL)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "30 mg/mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "GES N°41, 46",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "LAGRIMAS ARTIFICIALES",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "0,50%",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "LANATOSIDO C",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "0,4 mg/2 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "LIDOCAÍNA (CLORHIDRATO)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "2%",
+    "clasificacion": "SAPU, SAR, SUR, PSR, carro paro CESFAM",
+    "observaciones": "GES N°5, uso en urgencia general",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "LOPERAMIDA (CLORHIDRATO)",
+    "forma": "COMPRIMIDO",
+    "concentracion": "2 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "LORATADINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "10 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "LORATADINA",
+    "forma": "JARABE",
+    "concentracion": "5 mg/mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "MAGNESIO SULFATO",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "20%",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "MEBENDAZOL",
+    "forma": "SUSPENSIÓN ORAL",
+    "concentracion": "100 mg/5 mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "MEBENDAZOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "100 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "MELOXICAM",
+    "forma": "COMPRIMIDO",
+    "concentracion": "15 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°41, 46",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "METAMIZOL (SÓDICO)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "1 g/2 mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Arsenal PSR",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "METAMIZOL (SÓDICO)",
+    "forma": "SUPOSITORIO",
+    "concentracion": "250 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre y G. Lagos",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "METILFENIDATO (CLORHIDRATO)",
+    "forma": "COMPRIMIDO",
+    "concentracion": "10 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°53",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "NAPROXENO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "550 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°41, 46, Excepto G. Lagos",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "NISTATINA",
+    "forma": "COMPRIMIDO VAGINAL",
+    "concentracion": "100.000 UI",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "NISTATINA",
+    "forma": "POMADA O CREMA",
+    "concentracion": "100.000 UI",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "N - ACETILCISTEINA",
+    "forma": "SOLUCIÓN PARA NEBULIZAR",
+    "concentracion": "10 g/10 mL",
+    "clasificacion": "SAR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "OMEPRAZOL",
+    "forma": "CÁPSULA O COMPRIMIDO",
+    "concentracion": "20 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°41, 80",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "OMEPRAZOL",
+    "forma": "POLVO ESTÉRIL LIOFILIZADO",
+    "concentracion": "40 mg",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "GES N°5",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "OSELTAMIVIR",
+    "forma": "CÁPSULA O COMPRIMIDO",
+    "concentracion": "75 mg",
+    "clasificacion": "Campaña invierno",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "OSELTAMIVIR",
+    "forma": "SUSPENSIÓN ORAL",
+    "concentracion": "12 mg/mL",
+    "clasificacion": "Campaña invierno",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "PAPAVERINA (CLORHIDRATO)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "40 mg/mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre y G. Lagos",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "PARACETAMOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "500 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°41, 46, 66",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "PARACETAMOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "1 g",
+    "clasificacion": "Dental",
+    "observaciones": "Excepto Putre y G. Lagos",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "PARACETAMOL",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "100 mg/mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°19",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "PARACETAMOL",
+    "forma": "SUPOSITORIO",
+    "concentracion": "125 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Arsenal PSR",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "PARACETAMOL",
+    "forma": "JARABE",
+    "concentracion": "120 mg/5 mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°19",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "PARGEVERINA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "5 mg/5 mL",
+    "clasificacion": "SAPU, SAR, SUR, PSR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "PARGEVERINA",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "5 mg/5 mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Arsenal PSR",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "PAROXETINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "20 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "PETIDINA CLORHIDRATO",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "100 mg/2 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "PIRIDOXINA CLORHIDRATO",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "100 mg/mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "POLIETILENGLICOL 3350",
+    "forma": "POLVO",
+    "concentracion": "20 g",
+    "clasificacion": "Tamizaje colorectal",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "POLIVITAMINICO",
+    "forma": "JARABE",
+    "concentracion": "GENERAL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 2
+  },
+  {
+    "nombre": "POTASIO CLORURO",
+    "forma": "CÁPSULA O GRAGEA ACCIÓN PROLONGADA",
+    "concentracion": "600 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Camarones, G. Lagos y Putre",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "POTASIO CLORURO",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "10%",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "POVIDONA YODADA",
+    "forma": "SOLUCIÓN TÓPICA",
+    "concentracion": "10%",
+    "clasificacion": "Miscelaneo",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "PREDNISONA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "5 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°38, 61",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "PREDNISONA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "20 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°38, 61",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "PROPRANOLOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "40 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Solo tratamiento migraña",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "PROPIFENAZONA + ADIFENINA",
+    "forma": "SUPOSITORIO INFANTIL",
+    "concentracion": "220 mg + 25 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "PROPIFENAZONA + ADIFENINA",
+    "forma": "SUPOSITORIO ADULTO",
+    "concentracion": "440 mg + 50 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "QUETIAPINA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "100 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°85, Excepto G. Lagos",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "RANITIDINA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "25 mg/mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "RINGER LACTATO",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "500 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "RISPERIDONA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "3 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°53, 85, excepto G. Lagos",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "ROSUVASTATINA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "10 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Solo Arica, alternativa a Atorvastatina, usuarios con RAM",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "SALBUTAMOL",
+    "forma": "SOLUCIÓN PARA NEBULIZACIÓN",
+    "concentracion": "5 mg/mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "SALES DE REHIDRATACIÓN ORAL",
+    "forma": "SOLUCIÓN ORAL",
+    "concentracion": "60 mEq de sodio/L",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "SAPU, SAR, SUR, PSR",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "SALES DE REHIDRATACIÓN ORAL",
+    "forma": "SOLUCIÓN ORAL",
+    "concentracion": "90 mEq de sodio/L",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "SALICILATO DE METILO",
+    "forma": "UNGÜENTO TÓPICO (BENGUÉ)",
+    "concentracion": "10%",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "SERTRALINA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "50 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°34, 53, 85",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "SILDENAFIL (CITRATO)",
+    "forma": "COMPRIMIDO RECUBIERTO, COMPRIMIDO MASTICABLE O CÁPSULA",
+    "concentracion": "50 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "SODIO BICARBONATO",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "8,4%",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "SODIO CLORURO",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "0,9%",
+    "clasificacion": "Miscelaneo",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "SODIO CLORURO",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "10%",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "SUCCINILCOLINA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "100 mg/2 mL",
+    "clasificacion": "SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "TENECTEPLASE",
+    "forma": "POLVO LIOFILIZADO PARA SOLUCIÓN INYECTABLE",
+    "concentracion": "50 mg (10.000 UI)/10 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "GES N°5",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "TIAMINA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "30 mg/mL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "TIOTROPIO",
+    "forma": "AEROSOL PARA INHALACIÓN ORAL",
+    "concentracion": "2,5 mcg/dosis",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "TRAZODONA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "25 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°85",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "TRAZODONA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "100 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°85",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "TRICLOSÁN",
+    "forma": "JABÓN",
+    "concentracion": "1%",
+    "clasificacion": "Miscelaneo",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "TRICLOSÁN",
+    "forma": "JABÓN",
+    "concentracion": "2%",
+    "clasificacion": "Miscelaneo",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "TRIMEBUTINO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "100 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "VASELINA AZUFRADA",
+    "forma": "POMADA O CREMA",
+    "concentracion": "6%",
+    "clasificacion": "Miscelaneo",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "VASELINA LÍQUIDA MEDICINAL",
+    "forma": "ACEITE MINERAL",
+    "concentracion": "GENERAL",
+    "clasificacion": "Miscelaneo",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "VENLAFAXINA",
+    "forma": "CÁPSULA, COMPRIMIDO O COMPRIMIDO RANURADO LIBERACIÓN PROLONGADA",
+    "concentracion": "75 mg",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "GES N°34, 53",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "VERAPAMILO (CLORHIDRATO)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "5 mg/2 mL",
+    "clasificacion": "SAPU, SAR, SUR",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "VITAMINAS A-C-D",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "GENERAL",
+    "clasificacion": "Arsenal básico",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "ÁCIDO VALPROICO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "200 mg",
+    "clasificacion": "PM Epilepsia",
+    "observaciones": "GES N°22, 60",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "ÁCIDO VALPROICO",
+    "forma": "JARABE",
+    "concentracion": "250 mg/5 mL",
+    "clasificacion": "PM Epilepsia",
+    "observaciones": "GES N°22",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "ÁCIDO VALPROICO",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "10 mg/gota",
+    "clasificacion": "PM Epilepsia",
+    "observaciones": "GES N°22",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "BUDESONIDA",
+    "forma": "AEROSOL PARA INHALACIÓN ORAL",
+    "concentracion": "200 mcg/dosis",
+    "clasificacion": "PM IRA ERA",
+    "observaciones": "GES N°61",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "CARBAMAZEPINA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RANURADO",
+    "concentracion": "200 mg",
+    "clasificacion": "PM Epilepsia",
+    "observaciones": "GES N°22, 53, 60",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "CARBAMAZEPINA",
+    "forma": "COMPRIMIDO DE LIBERACIÓN PROLONGADA",
+    "concentracion": "400 mg",
+    "clasificacion": "PM Epilepsia",
+    "observaciones": "GES N°22, 60",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "CELECOXIB",
+    "forma": "CÁPSULA",
+    "concentracion": "200 mg",
+    "clasificacion": "PM Artrosis",
+    "observaciones": "GES N°41",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "DESLORATADINA",
+    "forma": "COMPRIMIDO RECUBIERTO O COMPRIMIDO BUCODISPERSABLE",
+    "concentracion": "5 mg",
+    "clasificacion": "PM IRA ERA",
+    "observaciones": "GES N°61",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "DIDROGESTERONA/ESTRADIOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "5 mg/1 mg",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "DIVALPROATO DE SODIO",
+    "forma": "COMPRIMIDO RECUBIERTO O CÁPSULA DE LIBERACIÓN PROLONGADA",
+    "concentracion": "500 mg",
+    "clasificacion": "PM Epilepsia",
+    "observaciones": "GES N°22, 60",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "ESTRADIOL",
+    "forma": "GEL TRANSDÉRMICO",
+    "concentracion": "0,5 mg",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "Climaterio",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "ESTRADIOL MICONIZADO",
+    "forma": "COMPRIMIDO RECUBIERTO O GRAGEA",
+    "concentracion": "1 mg",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "Climaterio",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "ETINILESTRADIOL + ETONOGESTREL",
+    "forma": "ANILLO VAGINAL LIBERACIÓN CONTROLADA",
+    "concentracion": "2,7 mg/11,7 mg ó 3,474 mg/11 mg",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "ETINILESTRADIOL + LEVONOGESTREL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "0,03 mg/0,15 mg",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "ETONOGESTREL",
+    "forma": "IMPLANTE SUBCUTÁNEO",
+    "concentracion": "68 mg",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "FENITOINA (SÓDICA)",
+    "forma": "COMPRIMIDO",
+    "concentracion": "100 mg",
+    "clasificacion": "PM Epilepsia",
+    "observaciones": "GES N°22, 60",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "FLUTICASONA",
+    "forma": "AEROSOL PARA INHALACIÓN ORAL",
+    "concentracion": "125 mcg/dosis",
+    "clasificacion": "PM IRA ERA",
+    "observaciones": "GES N°39",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "FLUTICASONA + SALMETEROL",
+    "forma": "AEROSOL PARA INHALACIÓN ORAL",
+    "concentracion": "250 mcg/25 mcg",
+    "clasificacion": "PM IRA ERA",
+    "observaciones": "GES N° 61, Alternativa Budesonida/Formoterol",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "FLUTICASONA + SALMETEROL",
+    "forma": "AEROSOL PARA INHALACIÓN ORAL",
+    "concentracion": "125 mcg/25 mcg",
+    "clasificacion": "PM IRA ERA",
+    "observaciones": "GES N° 61, Alternativa Budesonida/Formoterol",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "INSULINA CRISTALINA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "100 UI/mL",
+    "clasificacion": "PM Cardiovascular",
+    "observaciones": "GES N°7",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "INSULINA NPH",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "100 UI/mL",
+    "clasificacion": "PM Cardiovascular",
+    "observaciones": "GES N°7",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "IPRATROPIO (BROMURO)",
+    "forma": "AEROSOL PARA INHALACION ORAL LIBRE DE CFC",
+    "concentracion": "20 mcg/dosis",
+    "clasificacion": "PM IRA ERA",
+    "observaciones": "GES N°38, 61",
+    "seccion": "",
+    "pagina": 3
+  },
+  {
+    "nombre": "LAMOTRIGINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "50 mg",
+    "clasificacion": "PM Epilepsia",
+    "observaciones": "GES N°22, 60",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "LAMOTRIGINA",
+    "forma": "COMPRIMIDO O COMPRIMIDO DISPERSABLE",
+    "concentracion": "100 mg",
+    "clasificacion": "PM Epilepsia",
+    "observaciones": "GES N°22, 60",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "LEVETIRACETAM",
+    "forma": "COMPRIMIDO RECUBIERTO",
+    "concentracion": "500 mg",
+    "clasificacion": "PM Epilepsia",
+    "observaciones": "GES N°22, 60",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "LEVETIRACETAM",
+    "forma": "COMPRIMIDO RECUBIERTO",
+    "concentracion": "1.000 mg",
+    "clasificacion": "PM Epilepsia",
+    "observaciones": "GES N°22, 60",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "LEVETIRACETAM",
+    "forma": "SOLUCIÓN ORAL",
+    "concentracion": "100 mg/mL",
+    "clasificacion": "PM Epilepsia",
+    "observaciones": "GES N°22",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "LEVODOPA + BENSERAZIDA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "200 mg/50 mg",
+    "clasificacion": "PM Parkinson",
+    "observaciones": "GES N°62",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "LEVODOPA + CARBIDOPA",
+    "forma": "CÁPSULA",
+    "concentracion": "250 mg/25 mg",
+    "clasificacion": "PM Parkinson",
+    "observaciones": "GES N°62",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "LEVONORGESTREL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "0,75 mg",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "Arsenal PSR",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "LEVONORGESTREL",
+    "forma": "IMPLANTE SUBDÉRMICO",
+    "concentracion": "75 mg x 2 varillas",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "LEVOTIROXINA SÓDICA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "50 mcg",
+    "clasificacion": "PM Hipotiroidismo",
+    "observaciones": "GES N°76",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "LEVOTIROXINA SÓDICA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "100 mcg",
+    "clasificacion": "PM Hipotiroidismo",
+    "observaciones": "GES N°76",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "MEDROXIPROGESTERONA (ACETATO)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "150 mg/mL",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "MEDROXIPROGESTERONA (ACETATO)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "104 mg/0,65 mL",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "MEDROXIPROGESTERONA (ACETATO) / ESTRADIOL (CIPIONATO)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "25 mg/5 mg",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "NORETISTERONA (ENANTATO) + ESTRADIOL (VALERATO)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "50 mg/5 mg",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "PRAMIPEXOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "0,25 mg",
+    "clasificacion": "PM Parkinson",
+    "observaciones": "GES N°62",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "PRAMIPEXOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "1 mg",
+    "clasificacion": "PM Parkinson",
+    "observaciones": "GES N°62",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "PREDNISONA",
+    "forma": "JARABE",
+    "concentracion": "20 mg/5 mL",
+    "clasificacion": "PM IRA ERA",
+    "observaciones": "GES N°19, 39",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "PROGESTERONA MICRONIZADA",
+    "forma": "CÁPSULA",
+    "concentracion": "100 mg",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "Climaterio",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "PROGESTERONA MICRONIZADA",
+    "forma": "CÁPSULA",
+    "concentracion": "200 mg",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "Climaterio",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "QUETIAPINA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "25 mg",
+    "clasificacion": "PM Parkinson",
+    "observaciones": "GES N°62",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "SALBUTAMOL",
+    "forma": "AEROSOL PARA INHALACION ORAL",
+    "concentracion": "100 mcg/dosis",
+    "clasificacion": "PM IRA ERA",
+    "observaciones": "GES N°19, 20, 38, 39, 61",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "SALMETEROL",
+    "forma": "AEROSOL PARA INHALACIÓN ORAL",
+    "concentracion": "25 mcg/dosis",
+    "clasificacion": "PM IRA ERA",
+    "observaciones": "GES N°39",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "TIBOLONA",
+    "forma": "COMPRIMIDO, COMPRIMIDO RECUBIERTO",
+    "concentracion": "2,5 mg",
+    "clasificacion": "PM Salud sexual y reproductiva",
+    "observaciones": "Climaterio",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "TRAMADOL",
+    "forma": "CÁPSULA O COMPRIMIDO RECUBIERTO",
+    "concentracion": "50 mg",
+    "clasificacion": "PM Artrosis",
+    "observaciones": "GES N°41",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "TRAMADOL",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "100 mg/mL",
+    "clasificacion": "PM Artrosis",
+    "observaciones": "GES N°41",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "TRIHEXIFENIDILO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "2 mg",
+    "clasificacion": "PM Parkinson",
+    "observaciones": "GES N°62",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "VILDAGLIPTINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "50 mg",
+    "clasificacion": "PM Cardiovascular",
+    "observaciones": "GES N°7 Solo si cumplen criterios de inclusión",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "ÁCIDO ACETILSALICÍLICO",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "100 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°5, 7, 21",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "AMLODIPINO",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "5 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°21",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "AMLODIPINO",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "10 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°21",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "ATENOLOL",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "50 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°5, 21",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "ATORVASTATINA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "20 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°5, 7, 21",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "CARVEDILOL",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "6,25 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°5",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "CARVEDILOL",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "11,5 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°5",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "CARVEDILOL",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "25 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°5",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "ENALAPRIL (MALEATO)",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "10 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°5, 7, 21",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "ESPIRONOLACTONA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "25 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°21",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "FUROSEMIDA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "40 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°5, 21",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "GLIBENCLAMIDA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "5 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°7",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "HIDROCLOROTIAZIDA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "50 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°21",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "LOSARTÁN (POTÁSICO)",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "50 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°5, 7, 21",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "METFORMINA (CLORHIDRATO)",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "850 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°7",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "METFORMINA (CLORHIDRATO)",
+    "forma": "COMPRIMIDO DE LIBERACIÓN PROLONGADA",
+    "concentracion": "1.000 mg",
+    "clasificacion": "FOFAR",
+    "observaciones": "GES N°7",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "ACICLOVIR",
+    "forma": "COMPRIMIDO",
+    "concentracion": "400 mg",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "ACICLOVIR",
+    "forma": "SUSPENSIÓN ORAL",
+    "concentracion": "400 mg/5 mL",
+    "clasificacion": "PROA",
+    "observaciones": "Excepto G. Lagos y Putre",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "AMOXICILINA",
+    "forma": "POLVO PARA SUSPENSION ORAL",
+    "concentracion": "250 mg/5 mL",
+    "clasificacion": "PROA",
+    "observaciones": "GES N°19, Excepto Camarones",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "AMOXICILINA",
+    "forma": "POLVO PARA SUSPENSION ORAL",
+    "concentracion": "500 mg/5 mL",
+    "clasificacion": "PROA",
+    "observaciones": "GES N°19",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "AMOXICILINA",
+    "forma": "CÁPSULA O COMPRIMIDO",
+    "concentracion": "500 mg",
+    "clasificacion": "PROA",
+    "observaciones": "GES N°46, 61, 80",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "AMOXICILINA",
+    "forma": "CAPSULA O COMPRIMIDO",
+    "concentracion": "750 mg",
+    "clasificacion": "PROA",
+    "observaciones": "GES N°46, 61",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "AMOXICILINA + ACIDO CLAVULÁNICO",
+    "forma": "CÁPSULA O COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "500 mg/125 mg",
+    "clasificacion": "PROA",
+    "observaciones": "GES N°20, 38, 46",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "AMOXICILINA + ACIDO CLAVULÁNICO",
+    "forma": "POLVO PARA SUSPENSION ORAL",
+    "concentracion": "400 mg/57 mg/5 mL",
+    "clasificacion": "PROA",
+    "observaciones": "GES N°19",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "AZITROMICINA",
+    "forma": "CÁPSULA, COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "500 mg",
+    "clasificacion": "PROA",
+    "observaciones": "GES N°61",
+    "seccion": "",
+    "pagina": 4
+  },
+  {
+    "nombre": "AZITROMICINA",
+    "forma": "SUSPENSIÓN ORAL",
+    "concentracion": "200 mg/5 mL",
+    "clasificacion": "PROA",
+    "observaciones": "GES N°19, Excepto G. Lagos",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "PENICILINA BENZATINA",
+    "forma": "POLVO PARA SOLUCIÓN INYECTABLE",
+    "concentracion": "1.200.000 UI",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CEFADROXILO",
+    "forma": "JARABE",
+    "concentracion": "250 mg/5 mL",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CEFADROXILO",
+    "forma": "CAPSULA O COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "500 mg",
+    "clasificacion": "PROA",
+    "observaciones": "SAPU",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CEFRADINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "500 mg",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CEFTRIAXONA",
+    "forma": "POLVO PARA RECONSTITUCION INYECTABLE",
+    "concentracion": "1 g",
+    "clasificacion": "PROA",
+    "observaciones": "Uso exclusivo urgencias SAPU, SAR y SUR",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CIPROFLOXACINO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "500 mg",
+    "clasificacion": "PROA",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CIPROFLOXACINO/DEXAMETASONA",
+    "forma": "SUSPENSIÓN ÓTICA",
+    "concentracion": "3 mg/1 mg",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CLARITROMICINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "500 mg",
+    "clasificacion": "PROA",
+    "observaciones": "GES N°20, 38, 80, Excepto G. Lagos",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CLARITROMICINA",
+    "forma": "POLVO PARA SUSPENSIÓN ORAL",
+    "concentracion": "125 mg/5 mL",
+    "clasificacion": "PROA",
+    "observaciones": "GES N°19, Excepto Putre",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CLINDAMICINA",
+    "forma": "CÁPSULA",
+    "concentracion": "300 mg",
+    "clasificacion": "PROA",
+    "observaciones": "GES N°46, vaginosis bacteriana y patología mamaria",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CLORAMFENICOL",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "0,5%",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CLORAMFENICOL",
+    "forma": "UNGÜENTO OFTÁLMICO",
+    "concentracion": "1%",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CLOXACILINA",
+    "forma": "CÁPSULA O COMPRIMIDO",
+    "concentracion": "500 mg",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CLOXACILINA",
+    "forma": "FRASCO AMPOLLA",
+    "concentracion": "500 mg",
+    "clasificacion": "PROA",
+    "observaciones": "SAPU, SAR, SUR",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "COTRIMOXAZOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "800 mg/160 mg",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "DOXICICLINA",
+    "forma": "CÁPSULA O COMPRIMIDO",
+    "concentracion": "100 mg",
+    "clasificacion": "PROA",
+    "observaciones": "Resolutividad odontología, teledermatología, UAPO",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "ERITROMICINA",
+    "forma": "POLVO PARA SUSPENSION ORAL",
+    "concentracion": "200 mg/5 mL",
+    "clasificacion": "PROA",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "ERITROMICINA",
+    "forma": "COMPRIMIDO RECUBIERTO",
+    "concentracion": "500 mg",
+    "clasificacion": "PROA",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "FLUCLOXACILINA",
+    "forma": "POLVO PARA SUSPENSION ORAL",
+    "concentracion": "250 mg/5 mL",
+    "clasificacion": "PROA",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "FLUCLOXACILINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "500 mg",
+    "clasificacion": "PROA",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "FLUCONAZOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "150 mg",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "GENTAMICINA",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "0,3%",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "GENTAMICINA",
+    "forma": "UNGÜENTO OFTÁLMICO",
+    "concentracion": "0,3%",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "GENTAMICINA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "40 mg/mL",
+    "clasificacion": "PROA",
+    "observaciones": "Solo SAPU-SUR",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "METRONIDAZOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "500 mg",
+    "clasificacion": "PROA",
+    "observaciones": "GES N°46, 80",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "METRONIDAZOL",
+    "forma": "COMPRIMIDO VAGINAL",
+    "concentracion": "500 mg",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "METRONIDAZOL",
+    "forma": "JARABE",
+    "concentracion": "125 mg/5 mL",
+    "clasificacion": "PROA",
+    "observaciones": "Excepto G. Lagos",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "MUPIROCINA",
+    "forma": "CREMA",
+    "concentracion": "2%",
+    "clasificacion": "PROA",
+    "observaciones": "Solo Arica y valles",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "NITROFURANTOINA",
+    "forma": "CÁPSULA",
+    "concentracion": "100 mg",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "PENICILINA SÓDICA",
+    "forma": "POLVO PARA SOLUCIÓN INYECTABLE",
+    "concentracion": "2.000.000 UI",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "PENICILINA SÓDICA",
+    "forma": "POLVO PARA SOLUCIÓN INYECTABLE",
+    "concentracion": "1.000.000 UI",
+    "clasificacion": "PROA",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "BEDAQUILINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "100 mg",
+    "clasificacion": "TBC",
+    "observaciones": "TBC Multiresistente",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CICLOSERINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "750 mg",
+    "clasificacion": "TBC",
+    "observaciones": "TBC uso transitorio resistencia a RIF",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "CLOFAZIMINA",
+    "forma": "CÁPSULA O COMPRIMIDO",
+    "concentracion": "100 mg",
+    "clasificacion": "TBC",
+    "observaciones": "TBC Multiresistente",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "ETAMBUTOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "100 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "ETAMBUTOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "400 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "ETAMBUTOL/ISONIAZIDA/PIRAZINAMIDA/RIFAMPICINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "275 mg/75 mg/400 mg/150 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "ISONIAZIDA",
+    "forma": "COMPRIMIDO O COMPRIMIDO DISPERSABLE",
+    "concentracion": "100 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "ISONIAZIDA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "300 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "ISONIAZIDA",
+    "forma": "JARABE",
+    "concentracion": "100 mg/5 mL",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "ISONIAZIDA",
+    "forma": "JARABE",
+    "concentracion": "200 mg/5 mL",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "ISONIAZIDA",
+    "forma": "SOLUCION INYECTABLE",
+    "concentracion": "100 mg/mL",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "LEVOFLOXACINO",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "500 mg",
+    "clasificacion": "TBC",
+    "observaciones": "TBC uso transitorio resistencia a RIF",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "LEVOFLOXACINO",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "750 mg",
+    "clasificacion": "TBC",
+    "observaciones": "TBC uso transitorio resistencia a RIF",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "LINEZOLID",
+    "forma": "COMPRIMIDO RECUBIERTO",
+    "concentracion": "600 mg",
+    "clasificacion": "TBC",
+    "observaciones": "TBC Multiresistente",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "MOXIFLOXACINO",
+    "forma": "COMPRIMIDO RECUBIERTO",
+    "concentracion": "400 mg",
+    "clasificacion": "TBC",
+    "observaciones": "TBC Multiresistente",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "PIRAZINAMIDA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "500 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "PIRIDOXINA CLORHIDRATO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "10 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "PIRIDOXINA CLORHIDRATO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "50 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "RIFAMPICINA",
+    "forma": "SUSPENSIÓN ORAL",
+    "concentracion": "100 mg/5 mL",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "RIFAMPICINA",
+    "forma": "CÁPSULA",
+    "concentracion": "150 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "RIFAMPICINA",
+    "forma": "POLVO LIOFILIZADO PARA SOLUCIÓN INYECTABLE",
+    "concentracion": "600 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "RIFAMPICINA/ISONIAZIDA",
+    "forma": "COMPRIMIDO DISPERSABLE",
+    "concentracion": "75 mg/50 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "RIFAMPICINA/ISONIAZIDA",
+    "forma": "CÁPSULA O COMPRIMIDO",
+    "concentracion": "150 mg/75 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "RIFAMPICINA/ISONIAZIDA/PIRAZINAMIDA",
+    "forma": "COMPRIMIDO DISPERSABLE",
+    "concentracion": "75 mg/50 mg/150 mg",
+    "clasificacion": "TBC",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "RIFAPENTINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "150 mg",
+    "clasificacion": "TBC",
+    "observaciones": "TBC Latente",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "RIFAPENTINA/ISONIAZIDA",
+    "forma": "CÁPSULA O COMPRIMIDO",
+    "concentracion": "300 mg/300 mg",
+    "clasificacion": "TBC",
+    "observaciones": "TBC Latente",
+    "seccion": "",
+    "pagina": 5
+  },
+  {
+    "nombre": "ÁCIDO TRANEXÁMICO",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "1.000 mg/10 mL",
+    "clasificacion": "CPU",
+    "observaciones": "Dental",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "ÁCIDO TRANEXÁMICO",
+    "forma": "COMPRIMIDO",
+    "concentracion": "300 mg",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "ALPRAZOLAM",
+    "forma": "COMPRIMIDO",
+    "concentracion": "0,5 mg",
+    "clasificacion": "CPU",
+    "observaciones": "GES N°53, Excepto G. Lagos",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "AMITRIPTILINA",
+    "forma": "CÁPSULA O COMPRIMIDO O COMPRIMIDO RECUBIERTO O GRAGEA",
+    "concentracion": "25 mg",
+    "clasificacion": "CPU",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "BUPRENORFINA",
+    "forma": "PARCHE",
+    "concentracion": "35 mcg/h",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "CLORPROMAZINA",
+    "forma": "COMPRIMIDO O GRAGEA",
+    "concentracion": "25 mg",
+    "clasificacion": "CPU",
+    "observaciones": "GES N°34",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "CLORPROMAZINA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "25 mg/2 mL",
+    "clasificacion": "CPU",
+    "observaciones": "SAPU-SUR",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "DEXAMETASONA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "4 mg/mL",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "DEXAMETASONA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "4 mg",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "DOMPERIDONA",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "10 mg/mL",
+    "clasificacion": "CPU",
+    "observaciones": "Arsenal básico",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "ESCOPOLAMINA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "20 mg/mL",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "FOSFATO DE SODIO/FOSFATO DISODICO",
+    "forma": "SOLUCIÓN PARA ENEMA RECTAL",
+    "concentracion": "19 g - 7 g/133 mL",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "GABAPENTINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "300 mg",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "GABAPENTINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "400 mg",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "GLICERINA",
+    "forma": "SUPOSITORIO",
+    "concentracion": "3,5 g",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "HALOPERIDOL",
+    "forma": "COMPRIMIDO",
+    "concentracion": "1 mg",
+    "clasificacion": "CPU",
+    "observaciones": "GES N°53, Excepto Putre y G. Lagos",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "HALOPERIDOL",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "5 mg/mL",
+    "clasificacion": "CPU",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "IMIPRAMINA",
+    "forma": "COMPRIMIDO, COMPRIMIDO RECUBIERTO, GRAGEA O CÁPSULA",
+    "concentracion": "25 mg",
+    "clasificacion": "CPU",
+    "observaciones": "Excepto Putre y G. Lagos",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "KETOPROFENO",
+    "forma": "CÁPSULA, COMPRIMIDO CON RECUBRIMIENTO ENTÉRICO",
+    "concentracion": "50 mg",
+    "clasificacion": "CPU",
+    "observaciones": "GES N°41, 46, Excepto G. Lagos",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "LACTULOSA",
+    "forma": "SOLUCIÓN ORAL",
+    "concentracion": "65 g/100 mL",
+    "clasificacion": "CPU",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "LORAZEPAM",
+    "forma": "COMPRIMIDO",
+    "concentracion": "2 mg",
+    "clasificacion": "CPU",
+    "observaciones": "GES N°53, Excepto Putre y G. Lagos",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "METAMIZOL (SÓDICO)",
+    "forma": "COMPRIMIDO",
+    "concentracion": "300 mg",
+    "clasificacion": "CPU",
+    "observaciones": "GES N°41, 46",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "METOCLOPRAMIDA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "10 mg",
+    "clasificacion": "CPU",
+    "observaciones": "Arsenal básico",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "METOCLOPRAMIDA",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "10 mg/2 mL",
+    "clasificacion": "CPU",
+    "observaciones": "SAPU, SAR. SUR",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "MIDAZOLAM",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "5 mg/mL",
+    "clasificacion": "CPU",
+    "observaciones": "GES N°53, SAPU; SAR, SUR, PSR",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "MIRTAZAPINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "30 mg",
+    "clasificacion": "CPU",
+    "observaciones": "GES N°34, Excepto G. Lagos",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "MORFINA (CLORHIDRATO)",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "20 mg/mL",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "MORFINA (CLORHIDRATO)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "20 mg/mL",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "MORFINA (CLORHIDRATO)",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "10 mg/mL",
+    "clasificacion": "CPU",
+    "observaciones": "GES N°5, SAPU, SAR, SUR, uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "NISTATINA",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "100.000 UI/mL",
+    "clasificacion": "CPU",
+    "observaciones": "Excepto Putre y G. Lagos",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "ONDANSETRÓN",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "8 mg/4 mL",
+    "clasificacion": "CPU",
+    "observaciones": "SAPU, Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "ONDANSETRÓN",
+    "forma": "COMPRIMIDO",
+    "concentracion": "8 mg",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "POLIETILENGLICOL 3350",
+    "forma": "SOBRE CON POLVO",
+    "concentracion": "17 g",
+    "clasificacion": "CPU",
+    "observaciones": "Uso exclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "RISPERIDONA",
+    "forma": "COMPRIMIDO O COMPRIMIDO RECUBIERTO",
+    "concentracion": "1 mg",
+    "clasificacion": "CPU",
+    "observaciones": "GES N°53",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "RISPERIDONA",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "1 mg/mL",
+    "clasificacion": "CPU",
+    "observaciones": "Excepto Putre y G. Lagos",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "TRAMADOL",
+    "forma": "SOLUCIÓN INYECTABLE",
+    "concentracion": "100 mg/2 mL",
+    "clasificacion": "CPU",
+    "observaciones": "SAPU, SAR, SUR y uso exxclusivo CPU",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "ZOPICLONA",
+    "forma": "COMPRIMIDO, COMPRIMIDO RECUBIERTO",
+    "concentracion": "7,5 mg",
+    "clasificacion": "CPU",
+    "observaciones": "Excepto Putre",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "ÁCIDO SALICILICO + ÁCIDO LÁCTICO",
+    "forma": "SOLUCIÓN",
+    "concentracion": "16,7% y 16,7%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "ADAPALENO",
+    "forma": "GEL TÓPICO",
+    "concentracion": "0,10%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "ADAPALENO",
+    "forma": "GEL TÓPICO",
+    "concentracion": "0,30%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "ADAPALENO + PERÓXIDO DE BENZOILO",
+    "forma": "GEL TÓPICO",
+    "concentracion": "0,1% + 2,5%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "CICLOPIROXOLAMINA",
+    "forma": "CREMA",
+    "concentracion": "1%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "CLOBETASOL",
+    "forma": "CREMA",
+    "concentracion": "0,05%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "HIDROCORTISONA",
+    "forma": "CREMA",
+    "concentracion": "1%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "HIDROXICINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "20 mg",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "HIDROXICINA",
+    "forma": "JARABE",
+    "concentracion": "10 mg/5 mL",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "IVERMECTINA",
+    "forma": "CREMA",
+    "concentracion": "1%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "KETOCONAZOL",
+    "forma": "SHAMPOO",
+    "concentracion": "2%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "LEVOCETIRIZINA",
+    "forma": "COMPRIMIDO RECUBIERTO",
+    "concentracion": "5 mg",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "LEVOCETIRIZINA",
+    "forma": "JARABE",
+    "concentracion": "5 mg/mL",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "LEVOCETIRIZINA",
+    "forma": "SOLUCIÓN PARA GOTAS ORALES",
+    "concentracion": "2,5 mg/5 mL",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "METRONIDAZOL",
+    "forma": "GEL TÓPICO",
+    "concentracion": "0,75%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "PERMETRINA",
+    "forma": "LOCIÓN CAPILAR",
+    "concentracion": "1%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "PERMETRINA",
+    "forma": "LOCIÓN CORPORAL",
+    "concentracion": "5%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "TACROLIMUS",
+    "forma": "UNGÜENTO TÓPICO",
+    "concentracion": "0,10%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "TACROLIMUS",
+    "forma": "UNGÜENTO TÓPICO",
+    "concentracion": "0,03%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "TERBINAFINA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "250 mg",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 6
+  },
+  {
+    "nombre": "TERBINAFINA",
+    "forma": "CREMA TÓPICA",
+    "concentracion": "1%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "VASELINA SALICILICA",
+    "forma": "POMADA O CREMA",
+    "concentracion": "5%",
+    "clasificacion": "Teledermatologia",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "ACETAZOLAMIDA",
+    "forma": "COMPRIMIDO",
+    "concentracion": "250 mg",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "BIMATOPROST",
+    "forma": "COLIRIO",
+    "concentracion": "0,3 mg/mL",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "BIMATOPROST/TIMOLOL",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "0,03%/0,5%",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "BRIMONIDINA",
+    "forma": "COLIRIO",
+    "concentracion": "2 mg",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "CICLOPENTOLATO",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "10 mg/mL",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "DORZOLAMIDA + TIMOLOL",
+    "forma": "SOLUCION OFTALMICA",
+    "concentracion": "20 mg + 5 mg",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "FENILEFRINA",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "2,5%",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "KETOTIFENO",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "0,05 mg",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "LATANOPROST",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "50 mcg/mL",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "LATANOPROST + TIMOLOL",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "50 mcg + 5 mg/mL",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "LOTEPREDNOL",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "2 mg",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "PILOCARPINA",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "2%",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "PREDNISOLONA ACETATO",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "0,05 mg",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "PROPARACAÍNA (CLORHIDRATO)",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "0,50%",
+    "clasificacion": "UAPO",
+    "observaciones": "Arsenal urgencia SAPU-SAR",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "TIMOLOL (MALEATO)",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "0,5%",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "TOBRAMICINA + DEXAMETASONA",
+    "forma": "COLIRIO",
+    "concentracion": "3 mg + 1 mg/mL",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  },
+  {
+    "nombre": "TROPICAMIDA",
+    "forma": "SOLUCIÓN OFTÁLMICA",
+    "concentracion": "1%",
+    "clasificacion": "UAPO",
+    "observaciones": "",
+    "seccion": "",
+    "pagina": 7
+  }
+]

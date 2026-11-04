@@ -5,8 +5,8 @@ from .models import LoteInventario, Medicamento
 
 @admin.register(Medicamento)
 class MedicamentoAdmin(admin.ModelAdmin):
-    list_display = ("nombre", "principio_activo", "stock_minimo", "activo", "creado_por")
-    search_fields = ("nombre", "principio_activo", "codigo_barras")
+    list_display = ("nombre", "principio_activo", "clasificacion", "stock_minimo", "activo", "creado_por")
+    search_fields = ("nombre", "principio_activo", "codigo_barras", "clasificacion", "observaciones")
     list_filter = ("activo",)
     readonly_fields = ("creado_por", "creado_en", "actualizado_en")
 
@@ -18,7 +18,7 @@ class MedicamentoAdmin(admin.ModelAdmin):
 
 @admin.register(LoteInventario)
 class LoteInventarioAdmin(admin.ModelAdmin):
-    list_display = ("medicamento", "numero_lote", "vence_el", "unidades", "registrado_por")
+    list_display = ("medicamento", "numero_lote", "vence_el", "unidades", "es_simulado", "registrado_por")
     search_fields = ("medicamento__nombre", "numero_lote")
     list_filter = ("vence_el",)
     readonly_fields = ("registrado_por", "creado_en")

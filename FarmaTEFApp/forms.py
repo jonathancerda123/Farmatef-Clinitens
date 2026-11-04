@@ -20,6 +20,8 @@ class MedicamentoForm(forms.ModelForm):
             "principio_activo",
             "concentracion",
             "forma_farmaceutica",
+            "clasificacion",
+            "observaciones",
             "codigo_barras",
             "stock_minimo",
             "dias_alerta_vencimiento",
@@ -29,6 +31,8 @@ class MedicamentoForm(forms.ModelForm):
             "principio_activo": forms.TextInput(attrs={"maxlength": 160}),
             "concentracion": forms.TextInput(attrs={"maxlength": 80}),
             "forma_farmaceutica": forms.TextInput(attrs={"maxlength": 100}),
+            "clasificacion": forms.TextInput(attrs={"maxlength": 120}),
+            "observaciones": forms.TextInput(attrs={"maxlength": 300}),
             "codigo_barras": forms.TextInput(attrs={"maxlength": 64}),
             "stock_minimo": forms.NumberInput(attrs={"min": 0}),
             "dias_alerta_vencimiento": forms.NumberInput(
