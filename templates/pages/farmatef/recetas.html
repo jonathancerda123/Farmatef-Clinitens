@@ -1,0 +1,111 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% load static %}
+{% block head_title %}Recetas simuladas | FarmaTEF{% endblock head_title %}
+{% block page_title %}Recetas{% endblock page_title %}
+{% block content_main %}
+<div class="mb-6">
+  <a class="text-sm font-medium text-brand-700 hover:underline" href="{% url 'farmatef' %}">← Volver a FarmaTEF</a>
+  <p class="section-description mt-2">Busca una receta por su número y registra qué medicamentos se entregan. Los registros de este entorno son simulados; puedes marcar por separado una sospecha de falsificación del documento presentado.</p>
+</div>
+
+<div class="grid gap-6 xl:grid-cols-2">
+  <section class="rounded-xl border border-slate-200 bg-white p-5">
+    <h2 class="text-lg font-semibold text-slate-900">Buscar receta</h2>
+    <form method="get" class="mt-4 flex flex-wrap items-end gap-3">
+      <div class="min-w-[16rem] flex-1">
+        <label class="text-sm font-medium text-slate-700" for="numero">Número único</label>
+        <input class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" id="numero" name="numero" maxlength="32" value="{{ request.GET.numero }}" required>
+      </div>
+      <button class="btn-primary" type="submit">Buscar</button>
+    </form>
+    {% if receta %}
+      <div class="mt-6 rounded-lg border border-slate-200 p-4">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div><h3 class="font-semibold text-slate-900">Receta {{ receta.numero }}</h3><p class="text-sm text-slate-600">Alias ficticio: {{ receta.persona_ficticia }} · Curso: {{ receta.curso|default:"Sin asignar" }} · Válida hasta {{ receta.vence_el|date:"d/m/Y" }}</p></div>
+          <div class="flex flex-wrap gap-2"><span class="rounded-full bg-sky-100 px-3 py-1 text-sm font-medium text-sky-800">Registro simulado</span>
+            {% if receta.sospecha_falsificacion %}<span class="rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-800">Sospecha de falsificación · no dispensar</span>{% endif %}
+            {% if receta.estado == 'ENTREGADA' %}<span class="rounded-full bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-800">Completa</span>{% elif receta.estado == 'PARCIAL' %}<span class="rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-800">Parcial</span>{% elif receta.vence_el < today %}<span class="rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-800">Vencida</span>{% else %}<span class="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700">Pendiente</span>{% endif %}
+          </div>
+        </div>
+        <h4 class="mt-5 text-sm font-semibold text-slate-800">Medicamentos y saldo</h4>
+        <ul class="mt-2 space-y-2 text-sm text-slate-700">
+          {% for linea in receta.lineas.all %}<li>{{ linea.medicamento.nombre }} — {% if receta.curso_id %}prescritas {{ linea.unidades }} unidades{% else %}entregadas {{ linea.unidades_entregadas }} de {{ linea.unidades }}; pendientes {{ linea.unidades_pendientes }}{% endif %}</li>{% endfor %}
+        </ul>
+        {% if receta.dispensaciones.exists %}
+          <h4 class="mt-5 text-sm font-semibold text-slate-800">Entregas registradas</h4>
+          <div class="mt-2 space-y-3">
+            {% for entrega in receta.dispensaciones.all %}
+              <div class="rounded-lg bg-slate-50 p-3 text-sm">
+                <p class="font-medium text-slate-800">Entrega simulada · {{ entrega.entregado_en|date:"d/m/Y H:i" }}</p>
+                <ul class="mt-1 space-y-1 text-slate-600">
+                  {% for uso in entrega.lotes_usados.all %}<li>{{ uso.linea.medicamento.nombre }} · lote {{ uso.lote.numero_lote }} · {{ uso.unidades }} un.</li>{% endfor %}
+                </ul>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if receta.curso_id %}<div class="mt-5 rounded-lg border border-brand-200 bg-brand-50 p-3 text-sm text-brand-900"><p class="font-semibold">Caso de práctica del curso</p><p>La respuesta del alumno se evalúa por separado y el descuento de stock ocurre solo si dispensa correctamente un caso válido.</p></div>{% endif %}
+        {% if intentos %}
+          <h4 class="mt-6 text-sm font-semibold text-slate-800">Respuestas de estudiantes</h4>
+          <div class="mt-2 overflow-x-auto rounded-lg border border-slate-200">
+            <table class="w-full min-w-[600px] text-left text-sm"><thead class="bg-slate-50"><tr><th scope="col" class="p-2">Estudiante</th><th scope="col" class="p-2">Decisión</th><th scope="col" class="p-2">Motivo</th><th scope="col" class="p-2">Resultado</th><th scope="col" class="p-2">Fecha</th></tr></thead><tbody class="divide-y divide-slate-200">
+              {% for intento in intentos %}<tr><td class="p-2">{{ intento.estudiante.get_full_name|default:intento.estudiante.username }}</td><td class="p-2">{{ intento.get_decision_display }}</td><td class="p-2">{{ intento.get_motivo_rechazo_display|default:"—" }}</td><td class="p-2">{% if intento.correcta %}Correcta{% else %}Revisar{% endif %}</td><td class="p-2">{{ intento.respondida_en|date:"d/m/Y H:i" }}</td></tr>{% endfor %}
+            </tbody></table>
+          </div>
+        {% endif %}
+        {% if receta.sospecha_falsificacion %}<p class="mt-5 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">Esta receta quedó marcada para revisión por sospecha de falsificación. La simulación bloquea cualquier despacho.</p>{% elif receta.curso_id %}<p class="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">El docente no registra una entrega manual de este caso; el alumno realizará el ejercicio. Cada dispensación correcta se audita por estudiante.</p>{% elif receta.estado != 'ENTREGADA' and receta.vence_el >= today %}
+          <form method="post" action="{% url 'farmatef:entregar_receta' receta.id %}" class="mt-5 space-y-3">
+            {% csrf_token %}{{ entrega_formset.management_form }}
+            <h4 class="text-sm font-semibold text-slate-800">Selecciona los medicamentos que entregarás</h4>
+            <p class="text-xs text-slate-600">Marca cada medicamento. La cantidad propuesta es el saldo pendiente; puedes reducirla para registrar una entrega parcial.</p>
+            {% for linea, form in lineas_entrega %}
+              <div class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-200 p-3">
+                <div class="flex min-w-0 flex-1 items-start gap-3">{{ form.linea_id }}{{ form.entregar }}<div><label class="text-sm font-medium text-slate-800" for="{{ form.entregar.id_for_label }}">{{ linea.medicamento.nombre }}</label><p class="text-xs text-slate-600">Pendientes: {{ linea.unidades_pendientes }}</p></div></div>
+                <div><label class="text-xs font-medium text-slate-700" for="{{ form.unidades.id_for_label }}">Unidades</label>{{ form.unidades }}{% for error in form.unidades.errors %}<p class="text-xs text-red-700">{{ error }}</p>{% endfor %}</div>
+              </div>
+            {% endfor %}
+            {% for error in entrega_formset.non_form_errors %}<p class="text-sm text-red-700">{{ error }}</p>{% endfor %}
+            <button class="btn-primary" type="submit">Registrar entrega simulada</button>
+          </form>
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="rounded-xl border border-slate-200 bg-white p-5">
+    <h2 class="text-lg font-semibold text-slate-900">Registrar receta para simulación</h2>
+    <p class="mb-4 mt-1 text-sm text-slate-600">El registro será simulado y se asignará a un curso. Usa un alias; no ingreses datos reales. La clave docente no aparecerá antes de que el alumno responda; prepara una pista visible y una explicación posterior para los casos que deban rechazarse. Hasta 10 medicamentos.</p>
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+      {% for field in receta_form %}<div><label class="text-sm font-medium text-slate-700" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>{{ field }}{% for error in field.errors %}<p class="mt-1 text-sm text-red-700">{{ error }}</p>{% endfor %}</div>{% endfor %}
+      <div class="space-y-3" data-receta-formset data-max-forms="10">
+        {{ lineas_formset.management_form }}
+        <div class="flex flex-wrap items-center justify-between gap-2"><h3 class="text-sm font-semibold text-slate-800">Medicamentos (una línea por medicamento)</h3><button class="btn-secondary" type="button" data-add-receta-linea>Añadir medicamento</button></div>
+        <div class="space-y-3" data-receta-lineas>
+          {% for form in lineas_formset %}<div class="grid gap-3 rounded-lg bg-slate-50 p-3 sm:grid-cols-2">{% for field in form %}<div><label class="text-xs font-medium text-slate-600" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<p class="mt-1 text-xs text-red-700">{{ error }}</p>{% endfor %}</div>{% endfor %}</div>{% endfor %}
+        </div>
+        <template data-receta-linea-vacia>
+          <div class="grid gap-3 rounded-lg bg-slate-50 p-3 sm:grid-cols-2">{% for field in lineas_formset.empty_form %}<div><label class="text-xs font-medium text-slate-600" for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}</div>{% endfor %}</div>
+        </template>
+      </div>
+      {% for error in lineas_formset.non_form_errors %}<p class="text-sm text-red-700">{{ error }}</p>{% endfor %}
+      <button class="btn-primary" type="submit">Asignar receta al curso</button>
+    </form>
+  </section>
+</div>
+
+<section class="mt-8">
+  <div class="mb-3"><h2 class="text-lg font-semibold text-slate-900">Historial de recetas</h2><p class="text-sm text-slate-600">Últimas 30 recetas del ámbito de acceso actual, incluidas pendientes, parciales y completas.</p></div>
+  <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white" role="region" aria-label="Historial de recetas desplazable" tabindex="0">
+    <table class="w-full min-w-[860px] text-left text-sm">
+      <thead class="border-b border-slate-200 bg-brand-50 text-brand-800"><tr><th scope="col" class="p-3">Número</th><th scope="col" class="p-3">Alias ficticio</th><th scope="col" class="p-3">Creada</th><th scope="col" class="p-3">Estado</th><th scope="col" class="p-3">Entrega más reciente</th><th scope="col" class="p-3">Acción</th></tr></thead>
+      <tbody class="divide-y divide-slate-200">
+        {% for item in historial %}
+          <tr><td class="p-3"><a class="font-medium text-brand-700 underline" href="?numero={{ item.numero|urlencode }}">{{ item.numero }}</a><span class="ml-2 rounded-full bg-sky-100 px-2 py-0.5 text-xs text-sky-800">Simulada</span>{% if item.sospecha_falsificacion %}<span class="ml-1 rounded-full bg-red-100 px-2 py-0.5 text-xs text-red-800">Sospechosa</span>{% endif %}</td><td class="p-3">{{ item.persona_ficticia }}</td><td class="p-3">{{ item.creado_en|date:"d/m/Y" }}</td><td class="p-3">{% if item.estado == 'ENTREGADA' %}Completa{% elif item.estado == 'PARCIAL' %}Parcial{% elif item.vence_el < today %}Vencida{% else %}Pendiente{% endif %}</td><td class="p-3">{% if item.entregado_en %}{{ item.entregado_en|date:"d/m/Y H:i" }}{% else %}—{% endif %}</td><td class="p-3">{% if item.tiene_respuestas or item.tiene_dispensaciones or item.tiene_unidades_entregadas or item.estado != 'PENDIENTE' or item.entregado_en or item.entregado_por_id %}<span class="inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700" title="Las respuestas y datos de entrega se conservan como historial.">Historial protegido</span>{% else %}<form method="post" action="{% url 'farmatef:eliminar_receta' item.id %}" onsubmit="return confirm('¿Eliminar esta receta? No se puede deshacer y dejará de aparecer en la práctica del curso.');">{% csrf_token %}<button class="btn-danger" type="submit" aria-label="Eliminar receta {{ item.numero }}">Eliminar</button></form>{% endif %}</td></tr>
+        {% empty %}<tr><td colspan="6" class="p-8 text-center text-slate-600">Aún no hay recetas en este historial.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock content_main %}
+{% block javascript %}{{ block.super }}<script defer src="{% static 'js/recetas-formset.js' %}"></script>{% endblock javascript %}

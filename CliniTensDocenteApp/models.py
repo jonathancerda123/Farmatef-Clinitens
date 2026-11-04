@@ -206,6 +206,12 @@ class Curso(models.Model):
         blank=True,
     )
 
+    docentes_colaboradores = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="cursos_clinitens_colaborados",
+        blank=True,
+    )
+
     creado_en = models.DateTimeField(auto_now_add=True)
     actualizado_en = models.DateTimeField(auto_now=True)
 

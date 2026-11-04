@@ -16,7 +16,7 @@ La [spec 001](specs/001-linea-base-clinitens/spec.md) conserva el escaneo del 20
 - Excel valida identidad y crea cuentas por transacción. Credenciales entregadas una vez, durante diez minutos; contraseña inicial caduca a las 24 horas y obliga cambio.
 - Seguimiento cada 30 segundos en pestaña visible, actividad y métricas reales. Portadas distinguen módulos pendientes.
 
-FarmaTEF inició su primer incremento: el personal docente puede registrar medicamentos y lotes simulados, consultar existencias y ver alertas calculadas por stock mínimo/vencimiento. Recetas, dispensación, etiquetas, comprobantes y el acceso de práctica estudiantil siguen pendientes. Kardex y laboratorio independiente también permanecen como trabajo futuro.
+FarmaTEF permite gestionar inventario y lotes simulados, asignar recetas a cursos, consultar historiales y practicar la decisión de dispensar o rechazar con estudiantes inscritos. El responsable del curso puede asignar docentes colaboradores para compartir solo las recetas FarmaTEF de ese curso. La clave docente no se muestra antes de la respuesta. Una dispensación válida descuenta stock FEFO atómicamente; rechazos y decisiones incorrectas no lo alteran. Las recetas sin actividad se pueden eliminar desde el historial; las que tienen respuestas o dispensaciones se conservan. Comprobantes, etiquetas y Kardex siguen pendientes.
 
 La interfaz comparte marca, barra lateral, colores, tipografía, formularios y estados. La [guía visual](docs/PERSONALIZACION_VISUAL.md) explica cómo mantener la coherencia con Tailwind 4 y tokens centrales.
 
@@ -33,15 +33,15 @@ Python 3.12 evaluado, Django **5.2.18 LTS**, SQLite, allauth **65.19.7** con MFA
 | homeApp/ | Portadas y actividad |
 | CliniTensDocenteApp/ | Catálogo, cursos, importación, rúbrica, PDF y seguimiento |
 | CliniTensFichaApp/ | Ficha JSON, esquema, versiones y editor |
-| FarmaTEFApp/ | Inventario docente inicial de medicamentos y lotes; sin receta/dispensación aún |
+| FarmaTEFApp/ | Inventario, recetas simuladas, historial y dispensación parcial por lotes |
 | templates/, theme/, static/ | Django, Tailwind 4 y recursos locales |
 | docs/, specs/, prompts/ | Contexto, trazabilidad y flujo SDD |
 
-**Entorno de esta sesión:** dependencias nuevas instaladas en `.test-artifacts/dependencias-004/target`; `.venv` original conservado con versiones anteriores. Usar el intérprete nuevo para revisar con datos ficticios. Antes de ejecutar la aplicación normal, instalar requirements actuales en un entorno con runtime parcheado y revisar migraciones de proveedores sobre copia respaldada. No se alteró la base recibida. [Comandos y recuperación](docs/ENTORNO_Y_VERIFICACION.md).
+**Entorno de esta sesión:** el target de dependencias documentado no arranca en este equipo; las comprobaciones se realizaron con `.venv` y `core.test_settings`. Migraciones FarmaTEF 0003–0007 están aplicadas en la base local tras respaldos específicos; la base no se comparte por Git. Antes de usar otro equipo, aplicar las migraciones allí con respaldo. No se modificó una base de producción. [Comandos y recuperación](docs/ENTORNO_Y_VERIFICACION.md).
 
 ## Verificación
 
-La línea base 004 registró 47 pruebas Django y 4 JavaScript, check/dry-run/pip check/build e integración con datos ficticios. El nuevo incremento 005 aún no se ha validado: el ejecutable Python del target referenciado en la documentación no arranca en este equipo y apunta a una instalación inexistente; no se ejecutaron pruebas para este cambio. [Inventario completo](docs/INVENTARIO_DEPENDENCIAS.md). Evidencia y límites en [VERIFICACION](docs/VERIFICACION.md), [observaciones](docs/OBSERVACIONES_PROYECTO.md) y [estado](docs/ESTADO_PROYECTO.md).
+La línea base 004 registró su propia suite. Para el flujo de recetas 008–012 pasaron `manage.py check`, el cotejo de migraciones y la carga de plantillas/rutas con `core.test_settings`. La migración de colaboración se aplicó a la base local tras respaldo; no se ejecutaron pruebas funcionales ni revisión de navegador. [Inventario completo](docs/INVENTARIO_DEPENDENCIAS.md). Evidencia y límites en [VERIFICACION](docs/VERIFICACION.md), [observaciones](docs/OBSERVACIONES_PROYECTO.md) y [estado](docs/ESTADO_PROYECTO.md).
 
 Migraciones de 002 incluidas; SQLite, medios y secretos ignorados. Retirar base/medios del índice conserva archivos locales y no purga versiones históricas. 003 no cambia persistencia ni dependencias y no se desplegó ni se hizo commit/push durante el rediseño.
 

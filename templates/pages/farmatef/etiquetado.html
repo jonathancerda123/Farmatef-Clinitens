@@ -1,0 +1,253 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block head_title %}Etiquetado | FarmaTEF{% endblock head_title %}
+{% block page_title %}Etiquetado de medicamentos{% endblock page_title %}
+{% block content_main %}
+<div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+  <div>
+    <a class="text-sm font-medium text-brand-700 hover:underline" href="{% url 'farmatef' %}">← Volver a FarmaTEF</a>
+    <p class="section-description mt-2">Prepara etiquetas de medicamentos y lotes de simulación. El medicamento identifica el producto; el lote es el código de una partida específica, con vencimiento y stock propios. No se modifica el inventario.</p>
+  </div>
+</div>
+
+<form method="post" id="etiquetado-form" class="label-editor-grid">
+  {% csrf_token %}
+  <section class="label-panel label-data-panel" aria-labelledby="label-data-title">
+    <div class="mb-5">
+      <h2 id="label-data-title" class="text-lg font-semibold text-slate-900">Datos de la etiqueta</h2>
+      <p class="mt-1 text-sm text-slate-600">Elige un medicamento y un lote para cargar sus datos de inventario.</p>
+    </div>
+
+    <div class="label-fields-grid">
+      <div class="label-field label-field-wide">
+        <label for="{{ form.medicamento.id_for_label }}">Nombre del medicamento</label>
+        {{ form.medicamento }}
+        {% for error in form.medicamento.errors %}<p class="field-errors">{{ error }}</p>{% endfor %}
+      </div>
+      <div class="label-field">
+        <label for="{{ form.lote.id_for_label }}">Número de lote</label>
+        {{ form.lote }}
+        {% for error in form.lote.errors %}<p class="field-errors">{{ error }}</p>{% endfor %}
+      </div>
+      <div class="label-field">
+        <label>Stock del lote</label>
+        <div class="label-readonly" id="stock-summary">{% if etiqueta %}{{ etiqueta.lote.unidades }} unidades{% else %}Se muestra al elegir un lote{% endif %}</div>
+      </div>
+      <div class="label-field">
+        <label>Principio activo</label>
+        <div class="label-readonly" id="ingredient-summary">{% if etiqueta %}{{ etiqueta.medicamento.principio_activo|default:"Sin dato en catálogo" }}{% else %}Se muestra al elegir un medicamento{% endif %}</div>
+      </div>
+      <div class="label-field">
+        <label>Concentración</label>
+        <div class="label-readonly" id="strength-summary">{% if etiqueta %}{{ etiqueta.medicamento.concentracion|default:"Sin dato en catálogo" }}{% else %}Se muestra al elegir un medicamento{% endif %}</div>
+      </div>
+      <div class="label-field">
+        <label>Forma farmacéutica</label>
+        <div class="label-readonly" id="form-summary">{% if etiqueta %}{{ etiqueta.medicamento.forma_farmaceutica|default:"Sin dato en catálogo" }}{% else %}Se muestra al elegir un medicamento{% endif %}</div>
+      </div>
+      <div class="label-field">
+        <label>Vencimiento del lote</label>
+        <div class="label-readonly" id="expiry-summary">{% if etiqueta %}{{ etiqueta.lote.vence_el|date:"d/m/Y" }}{% else %}Se muestra al elegir un lote{% endif %}</div>
+      </div>
+    </div>
+
+    {% if form.non_field_errors %}<div class="error-summary mt-4">{% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}</div>{% endif %}
+    <p class="mt-5 rounded-lg bg-slate-50 p-3 text-sm text-slate-600">La etiqueta muestra solo información disponible en el catálogo y el lote. Marca educativa: <strong>FarmaTEF · Simulación educativa</strong>.</p>
+    <button class="btn-primary mt-5" type="submit">Actualizar vista previa</button>
+  </section>
+
+  <aside class="label-tools-column" aria-label="Vista previa y tamaño de etiqueta">
+    <section class="label-panel" aria-labelledby="label-preview-title">
+      <h2 id="label-preview-title" class="text-lg font-semibold text-slate-900">Vista previa</h2>
+      <p class="mt-1 text-sm text-slate-600">Escala real: <strong id="preview-size">{% if etiqueta %}{{ etiqueta.ancho_mm }} × {{ etiqueta.alto_mm }}{% else %}55 × 44{% endif %} mm</strong></p>
+      <div class="label-preview-stage">
+        {% if etiqueta %}
+          <div class="label-screen-list">
+            {% for copia in copias %}
+              <article class="label-page" style="--label-width: {{ etiqueta.ancho_mm }}mm; --label-height: {{ etiqueta.alto_mm }}mm" aria-label="Etiqueta {{ copia }}">
+                <strong>{{ etiqueta.medicamento.nombre }}</strong>
+                {% if etiqueta.medicamento.principio_activo %}<span>{{ etiqueta.medicamento.principio_activo }}</span>{% endif %}
+                {% if etiqueta.medicamento.concentracion %}<span>{{ etiqueta.medicamento.concentracion }}</span>{% endif %}
+                {% if etiqueta.medicamento.forma_farmaceutica %}<span>{{ etiqueta.medicamento.forma_farmaceutica }}</span>{% endif %}
+                <span>Lote: {{ etiqueta.lote.numero_lote }}</span>
+                <span>Vence: {{ etiqueta.lote.vence_el|date:"d/m/Y" }}</span>
+                <small>Stock simulado: {{ etiqueta.lote.unidades }}</small>
+                <small class="label-simulation">FarmaTEF · Simulación educativa</small>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="label-blank" aria-label="Espacio de vista previa"></div>
+        {% endif %}
+      </div>
+      {% if etiqueta %}
+        <p class="mt-3 text-sm text-slate-600">{{ etiqueta.copias }} copia{{ etiqueta.copias|pluralize:"s" }} · una etiqueta por página.</p>
+        <button class="btn-primary mt-4 w-full" type="button" data-print-button onclick="window.print()">Imprimir / Guardar como PDF</button>
+        <p class="mt-2 text-xs text-slate-500" data-stale-note hidden>Actualiza la vista previa antes de imprimir los cambios.</p>
+      {% else %}
+        <p class="mt-3 text-sm text-slate-600">Selecciona los datos y actualiza la vista previa.</p>
+      {% endif %}
+    </section>
+
+    <section class="label-panel" aria-labelledby="label-size-title">
+      <h2 id="label-size-title" class="text-lg font-semibold text-slate-900">Tamaño de la etiqueta</h2>
+      <p class="mt-1 text-sm text-slate-600">Elige un formato o escribe las medidas. Ancho: 40–150 mm; alto: 30–150 mm.</p>
+      <div class="label-presets" role="group" aria-label="Tamaños predefinidos">
+        <button type="button" class="label-preset" data-width="55" data-height="44">55 × 44 mm</button>
+        <button type="button" class="label-preset" data-width="40" data-height="30">40 × 30 mm</button>
+        <button type="button" class="label-preset" data-width="60" data-height="40">60 × 40 mm</button>
+        <button type="button" class="label-preset" data-width="100" data-height="50">100 × 50 mm</button>
+      </div>
+      <div class="label-size-fields">
+        <div class="label-field">
+          <label for="{{ form.ancho_mm.id_for_label }}">Ancho (mm)</label>
+          {{ form.ancho_mm }}
+          {% for error in form.ancho_mm.errors %}<p class="field-errors">{{ error }}</p>{% endfor %}
+        </div>
+        <div class="label-field">
+          <label for="{{ form.alto_mm.id_for_label }}">Alto (mm)</label>
+          {{ form.alto_mm }}
+          {% for error in form.alto_mm.errors %}<p class="field-errors">{{ error }}</p>{% endfor %}
+        </div>
+      </div>
+      <div class="label-field mt-4">
+        <label for="{{ form.copias.id_for_label }}">Cantidad de copias</label>
+        {{ form.copias }}
+        {% for error in form.copias.errors %}<p class="field-errors">{{ error }}</p>{% endfor %}
+      </div>
+      <p class="mt-4 rounded-lg bg-amber-50 p-3 text-sm text-amber-900">Al imprimir, usa tamaño real o escala 100%, desactiva «Ajustar a página» y encabezados/pies. Verifica una copia con regla; cada impresora puede tener márgenes no imprimibles.</p>
+    </section>
+  </aside>
+</form>
+
+{% if etiqueta %}<style>
+  @page { size: {{ etiqueta.ancho_mm }}mm {{ etiqueta.alto_mm }}mm; margin: 0; }
+  .label-screen-list { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+  .label-page { box-sizing: border-box; display: flex; flex: 0 0 auto; flex-direction: column; justify-content: center; gap: 1mm; width: var(--label-width); height: var(--label-height); overflow: hidden; border: 1px solid #d3e0e2; background: white; padding: 2mm; color: #172f35; box-shadow: 0 1px 4px #19363c20; font: 7pt/1.1 Arial, sans-serif; }
+  .label-page > * { width: 100%; min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+  .label-page strong { font-size: 8pt; line-height: 1.1; }
+  .label-page small { font-size: 6.5pt; }
+  .label-simulation { margin-top: auto; font-weight: 700; }
+  @media print {
+    html, body { margin: 0 !important; padding: 0 !important; background: white !important; }
+    body * { visibility: hidden !important; }
+    .label-screen-list, .label-screen-list * { visibility: visible !important; }
+    .label-screen-list { position: fixed; top: 0; left: 0; display: block; margin: 0; padding: 0; }
+    .label-page { width: {{ etiqueta.ancho_mm }}mm; height: {{ etiqueta.alto_mm }}mm; margin: 0; border: 0; box-shadow: none; page-break-after: always; break-after: page; }
+    .label-page:last-child { page-break-after: auto; break-after: auto; }
+  }
+</style>{% endif %}
+
+<style>
+  .label-editor-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(19rem, .9fr); align-items: start; gap: 1.25rem; }
+  .label-panel { min-width: 0; border: 1px solid rgb(var(--color-border)); border-radius: var(--radius-panel); background: white; padding: clamp(1rem, 2vw, 1.5rem); box-shadow: 0 8px 20px #19363c0a; }
+  .label-fields-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem 1rem; }
+  .label-field { min-width: 0; }
+  .label-field label { display: block; margin-bottom: .35rem; font-size: .9rem; font-weight: 550; color: rgb(var(--color-ink)); }
+  .label-field-wide { grid-column: 1 / -1; }
+  .label-readonly { display: flex; min-height: 2.75rem; align-items: center; overflow-wrap: anywhere; border: 1px solid rgb(var(--color-border)); border-radius: var(--radius-control); background: #f8fbfb; padding: .6rem .8rem; color: rgb(var(--color-muted)); font-size: .875rem; }
+  .label-tools-column { display: grid; gap: 1.25rem; }
+  .label-preview-stage { display: grid; min-height: 15.5rem; place-items: center; overflow: auto; margin-top: 1rem; border-radius: .75rem; background: #e6f4f2; padding: 1rem; }
+  .label-blank { box-sizing: border-box; width: 55mm; height: 44mm; border: 1px solid #d3e0e2; background: white; }
+  .label-presets { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+  .label-preset { border: 1px solid rgb(var(--color-border)); border-radius: .6rem; background: #fbfdfd; padding: .5rem .7rem; color: rgb(var(--color-ink)); font-size: .82rem; box-shadow: 0 1px 3px #19363c12; }
+  .label-preset:hover,.label-preset[aria-pressed="true"] { border-color: #80c2be; background: #80c2be; color: white; }
+  .label-size-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin-top: 1rem; }
+  @media (max-width: 1023px) { .label-editor-grid { grid-template-columns: minmax(0, 1fr); } .label-tools-column { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
+  @media (max-width: 639px) { .label-fields-grid,.label-tools-column { grid-template-columns: minmax(0, 1fr); } .label-preview-stage { min-height: 13rem; } }
+  @media print {
+    .label-editor-grid > :not(.label-tools-column), .label-tools-column > :not(:first-child), .label-tools-column > :first-child > :not(.label-preview-stage), .label-preview-stage > :not(.label-screen-list) { display: none !important; }
+    .label-editor-grid,.label-tools-column,.label-tools-column > :first-child,.label-preview-stage { display: block !important; margin: 0 !important; padding: 0 !important; border: 0 !important; background: white !important; box-shadow: none !important; }
+    .label-screen-list { position: fixed; inset: 0 auto auto 0; }
+  }
+</style>
+
+<script>
+  (() => {
+    const form = document.getElementById('etiquetado-form');
+    if (!form) return;
+    const width = document.getElementById('{{ form.ancho_mm.id_for_label }}');
+    const height = document.getElementById('{{ form.alto_mm.id_for_label }}');
+    const medicationSelect = document.getElementById('{{ form.medicamento.id_for_label }}');
+    const lotSelect = document.getElementById('{{ form.lote.id_for_label }}');
+    const sizeText = document.getElementById('preview-size');
+    const labelPreviews = form.querySelectorAll('.label-page, .label-blank');
+    const printButton = form.querySelector('[data-print-button]');
+    const staleNote = form.querySelector('[data-stale-note]');
+    const setPresetState = () => {
+      form.querySelectorAll('[data-width][data-height]').forEach((button) => {
+        const active = button.dataset.width === width.value && button.dataset.height === height.value;
+        button.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+    };
+    const updatePreviewSize = () => {
+      labelPreviews.forEach((label) => {
+        label.style.setProperty('--label-width', `${width.value}mm`);
+        label.style.setProperty('--label-height', `${height.value}mm`);
+        if (label.classList.contains('label-blank')) {
+          label.style.width = `${width.value}mm`;
+          label.style.height = `${height.value}mm`;
+        }
+      });
+    };
+    const markPreviewStale = () => {
+      if (printButton) printButton.hidden = true;
+      if (staleNote) staleNote.hidden = false;
+    };
+    const updateMedicationSummary = () => {
+      const selected = medicationSelect.selectedOptions[0];
+      document.getElementById('ingredient-summary').textContent = selected?.dataset.principio || 'Sin dato en catálogo';
+      document.getElementById('strength-summary').textContent = selected?.dataset.concentracion || 'Sin dato en catálogo';
+      document.getElementById('form-summary').textContent = selected?.dataset.forma || 'Sin dato en catálogo';
+    };
+    const updateLotSummary = () => {
+      const selected = lotSelect.selectedOptions[0];
+      document.getElementById('stock-summary').textContent = selected?.dataset.stock ? `${selected.dataset.stock} unidades` : 'Se muestra al elegir un lote';
+      document.getElementById('expiry-summary').textContent = selected?.dataset.vence || 'Se muestra al elegir un lote';
+      const relationError = lotSelect.parentElement.querySelector('.field-errors');
+      if (relationError?.textContent.includes('Selecciona un lote del medicamento elegido.')) relationError.hidden = true;
+    };
+    const filterLots = (clearSelection = false) => {
+      const medicationId = medicationSelect.value;
+      let selectedLotAllowed = false;
+      Array.from(lotSelect.options).forEach((option) => {
+        if (!option.value) return;
+        const belongsToMedication = Boolean(medicationId) && option.dataset.medicamentoId === medicationId;
+        option.hidden = !belongsToMedication;
+        option.disabled = !belongsToMedication;
+        if (option.selected && belongsToMedication) selectedLotAllowed = true;
+      });
+      if (clearSelection || (lotSelect.value && !selectedLotAllowed)) lotSelect.value = '';
+      lotSelect.disabled = !medicationId;
+      updateLotSummary();
+    };
+    medicationSelect.addEventListener('change', () => {
+      updateMedicationSummary();
+      filterLots(true);
+      markPreviewStale();
+    });
+    lotSelect.addEventListener('change', markPreviewStale);
+    lotSelect.addEventListener('change', updateLotSummary);
+    filterLots();
+    updateMedicationSummary();
+    form.querySelectorAll('[data-width][data-height]').forEach((button) => {
+      button.setAttribute('aria-pressed', 'false');
+      button.addEventListener('click', () => {
+        width.value = button.dataset.width;
+        height.value = button.dataset.height;
+        setPresetState();
+        updatePreviewSize();
+        if (sizeText) sizeText.textContent = `${width.value} × ${height.value} mm`;
+        markPreviewStale();
+      });
+    });
+    [width, height].forEach((field) => field.addEventListener('input', () => {
+      setPresetState();
+      updatePreviewSize();
+      if (sizeText) sizeText.textContent = `${width.value || '—'} × ${height.value || '—'} mm`;
+      markPreviewStale();
+    }));
+    form.addEventListener('change', markPreviewStale);
+    form.addEventListener('input', markPreviewStale);
+  })();
+</script>
+{% endblock content_main %}

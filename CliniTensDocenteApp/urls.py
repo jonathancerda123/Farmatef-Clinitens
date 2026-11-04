@@ -111,6 +111,16 @@ urlpatterns = [
         name="curso_quitar_estudiante",
     ),
     path(
+        "cursos/<int:pk>/docentes/agregar/",
+        views.CursoAgregarColaboradorView.as_view(),
+        name="curso_agregar_colaborador",
+    ),
+    path(
+        "cursos/<int:pk>/docentes/<int:usuario_pk>/quitar/",
+        views.CursoQuitarColaboradorView.as_view(),
+        name="curso_quitar_colaborador",
+    ),
+    path(
         "cursos/<int:pk>/eliminar/",
         views.CursoDeleteView.as_view(),
         name="curso_eliminar",

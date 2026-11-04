@@ -1,5 +1,9 @@
 from CliniTensFichaApp.validation import seccion_completa
-from core.permissions import es_administrador, es_docente, objetos_del_docente
+from core.permissions import (
+    es_administrador,
+    es_docente,
+    objetos_del_docente,
+)
 from core.mixins import PropietarioMixin, FormularioDocenteMixin
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.contrib.auth.decorators import login_required
@@ -24,6 +28,7 @@ from .forms import (
     PacienteForm,
     ResultadoDiagnosticoForm,
     CursoForm,
+    CursoColaboradorForm,
     ImportarEstudiantesExcelForm,
 )
 from .models import (
@@ -309,6 +314,12 @@ class CursoDetalleView(PermitsPositionMixin, DetailView):
         context.update(
             {
                 "form_importacion": ImportarEstudiantesExcelForm(),
+                "form_colaborador": kwargs.get(
+                    "form_colaborador", CursoColaboradorForm(curso=self.object)
+                ),
+                "docentes_colaboradores": self.object.docentes_colaboradores.select_related(
+                    "profile", "profile__position_FK"
+                ).order_by("first_name", "last_name", "username"),
                 "estudiantes_curso": estudiantes_curso,
                 "estudiantes_disponibles": estudiantes_disponibles[:30],
                 "termino_busqueda": termino_busqueda,
@@ -354,6 +365,41 @@ class CursoQuitarEstudianteView(PermitsPositionMixin, View):
             f"{estudiante.get_full_name() or estudiante.username} fue quitado del curso.",
         )
 
+        return redirect("clinitensdocente:curso_detalle", pk=curso.pk)
+
+
+class CursoAgregarColaboradorView(PermitsPositionMixin, View):
+    def post(self, request, pk):
+        curso = get_object_or_404(
+            objetos_del_docente(Curso.objects.all(), request.user), pk=pk
+        )
+        form = CursoColaboradorForm(request.POST, curso=curso)
+        if not form.is_valid():
+            messages.error(request, "Selecciona un docente activo disponible para colaborar.")
+            return redirect("clinitensdocente:curso_detalle", pk=curso.pk)
+        docente = form.cleaned_data["docente"]
+        curso.docentes_colaboradores.add(docente)
+        messages.success(
+            request,
+            f"{docente.get_full_name() or docente.username} ahora puede gestionar recetas FarmaTEF de este curso.",
+        )
+        return redirect("clinitensdocente:curso_detalle", pk=curso.pk)
+
+
+class CursoQuitarColaboradorView(PermitsPositionMixin, View):
+    def post(self, request, pk, usuario_pk):
+        curso = get_object_or_404(
+            objetos_del_docente(Curso.objects.all(), request.user), pk=pk
+        )
+        docente = get_object_or_404(
+            curso.docentes_colaboradores.all(),
+            pk=usuario_pk,
+        )
+        curso.docentes_colaboradores.remove(docente)
+        messages.success(
+            request,
+            f"Se retiró el acceso de {docente.get_full_name() or docente.username} a las recetas FarmaTEF de este curso.",
+        )
         return redirect("clinitensdocente:curso_detalle", pk=curso.pk)
 
 

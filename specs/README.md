@@ -10,8 +10,15 @@
 | 004 | Actualización de dependencias y revisión preproducción | [004-actualizacion-dependencias](004-actualizacion-dependencias/spec.md) | Implementada/verificada; pendientes operativos documentados | Sí, 2026-10-08 |
 | 005 | MVP FarmaTEF y preparación del Informe 2 | [005-farmatef-mvp-informe2](005-farmatef-mvp-informe2/spec.md) | Borrador de trabajo; alcance en desarrollo | Sí, solicitud explícita del equipo 2026-10-17; aceptación académica pendiente |
 | 006 | Compatibilidad de modales con Tailwind 4, transversal | [006-modales-tailwind4](006-modales-tailwind4/spec.md) | Implementada localmente; pruebas/build/navegador con límites; zoom/movimiento reducido y aceptación pendientes | Sí, después de revisión: «ya revisé, puedes implementar», 2026-10-21 |
+| 007 | Actualización de arsenal APS 2024–2026 | [007-arsenal-aps-2024-2026](007-arsenal-aps-2024-2026/spec.md) | Implementación y carga local autorizadas; revisión pendiente | Sí, confirmación de la usuaria |
+| 008 | Recetas y dispensación simulada | [008-recetas-dispensacion](008-recetas-dispensacion/spec.md) | Implementación local | Sí, solicitud explícita de la usuaria |
+| 009 | Historial y entrega parcial de recetas | [009-historial-entrega-parcial](009-historial-entrega-parcial/spec.md) | Implementación local | Sí, solicitud explícita de la usuaria |
+| 010 | Práctica estudiantil de validación y dispensación | [010-practica-estudiantil-recetas](010-practica-estudiantil-recetas/spec.md) | Implementada localmente; checks básicos; navegador y aceptación pendientes | Sí, «me gusta, hazlo», 2026-11-04 |
+| 011 | Eliminar recetas sin actividad desde el historial | [011-eliminar-recetas-sin-actividad](011-eliminar-recetas-sin-actividad/spec.md) | Implementación local; revisión navegador pendiente | Sí, petición explícita, 2026-11-04 |
+| 012 | Docentes colaboradores para recetas FarmaTEF | [012-docentes-colaboradores-farmatef](012-docentes-colaboradores-farmatef/spec.md) | Implementado localmente; migración aplicada con respaldo; revisión funcional pendiente | Sí, «sí», 2026-11-04 |
+| 013 | Etiquetado de lotes con impresión en milímetros | [013-etiquetado-farmatef](013-etiquetado-farmatef/spec.md) | Implementación local; revisión de impresión física pendiente | Sí, solicitud explícita, 2026-11-04 |
 
-La 001 describe la petición documental y el comportamiento observado, sin aprobar retrospectivamente reglas de negocio. Hallazgos en [observaciones](../docs/OBSERVACIONES_PROYECTO.md) e [informe preproducción](../docs/VALIDACION_PREPRODUCCION.md). 005 conserva su alcance y autorización. La petición actual se documenta en 006 por afectar patrones de varios módulos; no reabre ni reemplaza la evidencia histórica de 003/004. Siguiente número libre observado: 007.
+La 001 describe la petición documental y el comportamiento observado, sin aprobar retrospectivamente reglas de negocio. Hallazgos en [observaciones](../docs/OBSERVACIONES_PROYECTO.md) e [informe preproducción](../docs/VALIDACION_PREPRODUCCION.md). 005 conserva su alcance y autorización; 007–013 amplían FarmaTEF conforme a solicitudes posteriores. Siguiente número libre observado: 014.
 
 ## Organización
 

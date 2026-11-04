@@ -15,7 +15,7 @@
       <h2 class="mt-2 text-xl font-bold text-slate-900">{{ curso.nombre }}</h2>
 
       <p class="mt-1 text-sm text-slate-500">
-        Gestiona los estudiantes inscritos en este curso.
+        Gestiona estudiantes inscritos y docentes colaboradores de FarmaTEF.
       </p>
     </div>
 
@@ -122,6 +122,42 @@
       </div>
     </section>
   </div>
+
+  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-none">
+    <div class="border-b border-slate-200 pb-4">
+      <h3 class="font-bold text-brand-700">Docentes colaboradores de FarmaTEF</h3>
+      <p class="mt-1 text-sm text-slate-500">
+        Podrán crear y revisar recetas asignadas a este curso y ver las respuestas de práctica. Esta colaboración no da acceso a la matrícula ni a las fichas clínicas.
+      </p>
+    </div>
+
+    <form method="post" action="{% url 'clinitensdocente:curso_agregar_colaborador' curso.pk %}" class="mt-5 flex flex-wrap items-end gap-3">
+      {% csrf_token %}
+      <div class="min-w-[16rem] flex-1">
+        <label for="{{ form_colaborador.docente.id_for_label }}" class="text-sm font-semibold text-slate-700">Docente activo</label>
+        {{ form_colaborador.docente }}
+        {% if form_colaborador.docente.help_text %}<p class="mt-1 text-xs text-slate-500">{{ form_colaborador.docente.help_text }}</p>{% endif %}
+      </div>
+      <button class="btn-primary" type="submit">Agregar colaborador</button>
+    </form>
+
+    <ul class="mt-5 divide-y divide-slate-200 rounded-lg border border-slate-200">
+      {% for docente in docentes_colaboradores %}
+        <li class="flex flex-wrap items-center justify-between gap-3 p-3">
+          <div>
+            <p class="text-sm font-semibold text-slate-800">{{ docente.get_full_name|default:docente.username }}</p>
+            <p class="text-xs text-slate-500">@{{ docente.username }}{% if not docente.is_active %} · Cuenta inactiva{% endif %}</p>
+          </div>
+          <form method="post" action="{% url 'clinitensdocente:curso_quitar_colaborador' curso.pk docente.pk %}" onsubmit="return confirm('¿Quitar el acceso de este docente a las recetas FarmaTEF del curso?');">
+            {% csrf_token %}
+            <button class="btn-danger" type="submit" aria-label="Quitar colaborador {{ docente.username }}">Quitar acceso</button>
+          </form>
+        </li>
+      {% empty %}
+        <li class="p-5 text-center text-sm text-slate-500">Todavía no hay docentes colaboradores.</li>
+      {% endfor %}
+    </ul>
+  </section>
 
   <section class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-none">
     <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">

@@ -31,15 +31,16 @@ Los detalles de acceso y restricciones se encuentran en el código y las especif
 
 ## Alcance en desarrollo: FarmaTEF
 
-El primer incremento de FarmaTEF implementa una vista de gestión de inventario para usuarios autorizados. Permite registrar y consultar medicamentos y lotes, revisar existencias agregadas y mostrar alertas calculadas desde stock mínimo y vencimiento.
+FarmaTEF incluye gestión de inventario y recetas simuladas. El responsable del curso puede agregar docentes MANAGER activos como colaboradores para compartir la revisión y gestión de recetas FarmaTEF asignadas al curso. La colaboración no concede acceso a matrículas, fichas clínicas, resultados ni inventario ajeno. El docente puede asignar un caso al curso y configurar una pista visible y una clave reservada para evaluar la decisión estudiantil. Los estudiantes activos inscritos revisan la receta y eligen dispensar o rechazarla con motivo. Una decisión correcta de dispensación en un caso válido descuenta inventario simulado de forma atómica; los rechazos y errores no modifican el stock. El historial permite retirar recetas sin actividad; las respuestas y dispensaciones quedan protegidas.
 
 La siguiente entrega funcional propuesta debe completar y demostrar un recorrido coherente de inventario y dispensación con datos ficticios:
 
 1. Buscar o registrar un producto y sus lotes.
 2. Consultar disponibilidad, vencimiento y alertas.
-3. Validar una receta de simulación de acuerdo con reglas acordadas con el responsable operativo.
-4. Confirmar la dispensación y descontar stock de forma atómica.
-5. Consultar el resultado y generar un comprobante o etiqueta claramente identificado como simulado.
+3. Asignar una receta de práctica a un curso y entregar al estudiante pistas verificables sin revelar la respuesta esperada.
+4. Registrar la decisión y el motivo de rechazo; mostrar retroalimentación después de responder.
+5. Descontar de forma atómica solo cuando una respuesta válida corresponda a dispensar; preservar el stock en rechazos o respuestas incorrectas.
+6. Consultar el resultado; comprobante o etiqueta claramente identificado como simulado permanece pendiente.
 
 La secuencia, las reglas de sustitución, cantidades, vencimientos, permisos y comprobantes requieren revisión con las personas responsables del producto antes de considerarse aceptadas.
 
@@ -62,7 +63,7 @@ No incluir secretos, tokens, contraseñas, datos personales reales ni contenido 
 
 La aplicación usa Django 5.2.18 LTS, SQLite en el entorno local documentado y Tailwind 4.3.3 para estilos. El detalle de componentes, rutas, persistencia, permisos y límites de infraestructura se mantiene en [ARQUITECTURA_BASE.md](ARQUITECTURA_BASE.md).
 
-FarmaTEF dispone de una migración inicial escrita para el nuevo modelo, pero su cotejo automático está pendiente. No se ha aplicado a la base local recibida. El incremento actual tampoco tiene verificación automatizada debido a que el intérprete Python configurado apunta a una instalación inexistente en este equipo.
+FarmaTEF dispone de migraciones versionadas para inventario y recetas. Las migraciones 0003–0007 se aplicaron a la base local con respaldos documentados; no se aplicaron a producción. Los cambios 008–010 tienen checks básicos, pero falta verificar el recorrido funcional y visual con perfiles docentes y estudiantiles.
 
 ## Corrección transversal: modales
 
