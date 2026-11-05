@@ -1,0 +1,125 @@
+:root {
+  --dau-blue: #246bb5;
+  --dau-blue-dark: #185a9f;
+  --dau-ink: #202a38;
+  --dau-muted: #71839a;
+  --dau-border: #d6e0e9;
+  --dau-surface: #ffffff;
+  --dau-canvas: #f7f9fb;
+}
+
+body:has(.dau-shell), body:has(.dau-workspace) { background: var(--dau-canvas); color: var(--dau-ink); }
+.dau-shell, .dau-workspace { width: min(1400px, calc(100% - 48px)); margin: 0 auto; }
+.dau-entry-shell { width: min(560px, calc(100% - 32px)); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 42px 0; }
+.dau-entry-brand { display: grid; grid-template-columns: 60px 1fr; align-items: center; column-gap: 14px; margin: 0 auto 40px; text-align: center; }
+.dau-brand-icon, .dau-small-icon { display: grid; place-items: center; color: white; background: var(--dau-blue); border-radius: 15px; }
+.dau-brand-icon { width: 60px; height: 60px; }
+.dau-brand-icon svg { width: 30px; height: 30px; }
+.dau-entry-brand h1 { margin: 0; color: var(--dau-blue); font-size: clamp(24px, 4vw, 38px); font-weight: 700; line-height: 1.1; }
+.dau-eyebrow { margin: 5px 0 0; color: var(--dau-muted); font-size: 12px; letter-spacing: .08em; }
+.dau-entry-subtitle { grid-column: 1 / -1; margin: 13px 0 0; color: var(--dau-muted); }
+.dau-entry-card, .dau-panel { border: 1px solid var(--dau-border); border-radius: 11px; background: var(--dau-surface); box-shadow: 0 1px 3px #1e38500d; }
+.dau-entry-card { padding: 32px; }
+.dau-entry-card h2 { margin: 0 0 24px; font-size: 23px; }
+.dau-user-identification { display: grid; gap: 4px; margin-bottom: 22px; color: var(--dau-muted); font-size: 14px; }
+.dau-user-identification strong { color: var(--dau-ink); font-size: 16px; }
+.dau-user-identification small { color: var(--dau-muted); }
+.dau-entry-form { display: grid; gap: 12px; }
+.dau-entry-form label, .dau-form-field label { color: #263344; font-weight: 500; }
+.dau-entry-form input, .dau-form-field input, .dau-form-field select, .dau-form-field textarea { width: 100%; min-height: 50px; padding: 11px 13px; border: 1px solid var(--dau-border); border-radius: 8px; background: #f8fafc; color: var(--dau-ink); box-shadow: inset 0 1px 2px #1e385008; }
+.dau-entry-form input:focus, .dau-form-field input:focus, .dau-form-field select:focus, .dau-form-field textarea:focus { outline: 3px solid #246bb52b; border-color: var(--dau-blue); }
+.dau-entry-form .dau-button { margin-top: 5px; }
+.dau-button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; gap: 9px; padding: 10px 17px; border: 1px solid transparent; border-radius: 8px; font-weight: 600; text-decoration: none; cursor: pointer; }
+.dau-button-primary { background: var(--dau-blue); color: #fff; }
+.dau-button-primary:hover { background: var(--dau-blue-dark); color: white; }
+.dau-button-secondary { background: #fff; border-color: var(--dau-border); color: var(--dau-ink); }
+.dau-button-save { background: #079b70; color: #fff; }
+.dau-entry-links { display: flex; justify-content: center; gap: 24px; margin-top: 26px; }
+.dau-entry-links a, .dau-history-link { color: var(--dau-ink); text-decoration: none; }
+.dau-available { margin-top: 30px; }
+.dau-available h2 { font-size: 18px; }
+.dau-available-row, .dau-history-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 16px; border: 1px solid var(--dau-border); border-radius: 10px; background: white; }
+.dau-available-row + .dau-available-row, .dau-history-row + .dau-history-row { margin-top: 10px; }
+.dau-available-row div, .dau-history-row > div:first-child { display: grid; gap: 4px; }
+.dau-available-row span, .dau-history-row span, .dau-history-row small { color: var(--dau-muted); }
+.dau-disclaimer, .dau-footer-disclaimer { color: var(--dau-muted); text-align: center; font-size: 13px; }
+.dau-topbar { position: sticky; z-index: 4; top: 0; display: flex; min-height: 80px; align-items: center; justify-content: space-between; gap: 20px; padding: 12px max(24px, calc((100% - 1400px) / 2)); border-bottom: 1px solid var(--dau-border); background: #fff; }
+.dau-topbar-brand { display: flex; align-items: center; gap: 14px; color: var(--dau-blue); text-decoration: none; }
+.dau-small-icon { width: 50px; height: 50px; flex: 0 0 50px; font-size: 25px; }
+.dau-small-icon svg { width: 25px; height: 25px; }
+.dau-topbar-brand strong, .dau-topbar-brand small { display: block; }
+.dau-topbar-brand strong { font-size: 19px; }
+.dau-topbar-brand small { margin-top: 2px; color: var(--dau-muted); }
+.dau-topbar nav { display: flex; align-items: center; gap: 20px; }
+.dau-topbar-exit { color: var(--dau-ink); text-decoration: none; }
+.dau-workspace { padding: 20px 0 44px; }
+.dau-banner { margin: 0 0 18px; padding: 11px 14px; border: 1px solid #b9d5f4; border-radius: 8px; background: #edf5fd; color: #285782; font-size: 13px; }
+.dau-panel { margin-bottom: 20px; padding: 28px 30px; }
+.dau-panel h1, .dau-panel h2 { margin: 0; font-size: 20px; }
+.dau-section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; margin-bottom: 24px; }
+.dau-section-title p { margin: 0; color: var(--dau-muted); }
+.dau-sim-code { padding: 5px 10px; border-radius: 20px; background: #e8eef5; color: var(--dau-blue-dark); font-weight: 600; }
+.dau-patient-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 32px; margin: 0; }
+.dau-patient-grid > div { min-width: 0; }
+.dau-patient-grid dt { margin-bottom: 4px; color: #68809a; font-size: 13px; text-transform: uppercase; letter-spacing: .035em; }
+.dau-patient-grid dd { margin: 0; font-weight: 500; overflow-wrap: anywhere; }
+.dau-patient-history { grid-column: 1 / -1; }
+.dau-vitals-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px 15px; }
+.dau-form-field { display: grid; min-width: 0; gap: 5px; }
+.dau-form-field label { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+.dau-form-field label small { color: var(--dau-blue); font-size: 11px; }
+.dau-form-field input, .dau-form-field select { min-height: 49px; }
+.dau-form-field textarea { min-height: 84px; resize: vertical; }
+.dau-form-field input:disabled, .dau-form-field textarea:disabled { background: #f0f2f4; color: #5f6b78; }
+.dau-vitals-form > .dau-button { margin-top: 16px; }
+.dau-field-hint { color: var(--dau-muted); font-size: 13px; }
+.dau-procedure-form { display: grid; grid-template-columns: 1.2fr 1.2fr .9fr auto; align-items: end; gap: 12px; }
+.dau-procedure-form > button { margin-bottom: 1px; }
+.dau-procedure-list { padding: 0; list-style: none; }
+.dau-procedure-list li { display: flex; justify-content: space-between; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--dau-border); }
+.dau-procedure-list p { margin: 4px 0 0; color: var(--dau-muted); }
+.dau-procedure-list span { color: var(--dau-muted); font-size: 13px; text-align: right; }
+.dau-empty { padding: 28px 14px; color: var(--dau-muted); text-align: center; }
+.dau-finish-panel { border-color: #9fc5f5; }
+.dau-close-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.dau-field-wide { grid-column: 1 / -1; }
+.dau-action-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--dau-border); }
+.dau-status { color: #167651; font-size: 14px; }
+.dau-history-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; font-weight: 500; }
+.dau-history-list { margin-top: 22px; }
+.dau-history-row > div:last-child { display: flex; flex-wrap: wrap; gap: 8px; }
+.dau-field-error { margin: 0; color: #bd2f2f; font-size: 13px; }
+
+@media (max-width: 900px) {
+  .dau-vitals-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dau-procedure-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .dau-shell, .dau-workspace { width: min(100% - 24px, 1400px); }
+  .dau-entry-shell { width: min(100% - 24px, 560px); }
+  .dau-entry-brand { grid-template-columns: 48px 1fr; gap: 10px; margin-bottom: 26px; }
+  .dau-brand-icon { width: 48px; height: 48px; border-radius: 12px; }
+  .dau-entry-brand h1 { font-size: 24px; }
+  .dau-entry-subtitle { font-size: 14px; }
+  .dau-entry-card, .dau-panel { padding: 20px 16px; }
+  .dau-topbar { position: static; align-items: flex-start; padding: 12px; }
+  .dau-topbar-brand { gap: 9px; }
+  .dau-small-icon { width: 40px; height: 40px; flex-basis: 40px; }
+  .dau-topbar-brand strong { font-size: 15px; }
+  .dau-topbar-brand small { font-size: 12px; }
+  .dau-topbar nav { gap: 8px; }
+  .dau-topbar nav .dau-button { padding: 8px; font-size: 12px; }
+  .dau-topbar-exit { font-size: 13px; }
+  .dau-patient-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .dau-vitals-grid, .dau-close-grid, .dau-procedure-form { grid-template-columns: 1fr; }
+  .dau-field-wide { grid-column: auto; }
+  .dau-section-title { align-items: flex-start; flex-direction: column; margin-bottom: 18px; }
+  .dau-available-row, .dau-history-row, .dau-procedure-list li { align-items: flex-start; flex-direction: column; }
+  .dau-entry-links { flex-direction: column; align-items: center; gap: 12px; }
+}
+@media print {
+  body:has(.dau-workspace) { background: white; }
+  .dau-topbar, .dau-banner, .dau-vitals-form button, .dau-procedure-form, .dau-action-row, .dau-history-link, .dau-field-hint { display: none !important; }
+  .dau-workspace { width: 100%; padding: 0; }
+  .dau-panel { break-inside: avoid; box-shadow: none; }
+}

@@ -1,0 +1,62 @@
+{% extends 'components/Layout/base.html' %}
+{% load static %}
+{% block head_title %}DAU simulado · {{ caso.paciente_codigo }}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dau.css' %}">{% endblock %}
+{% block javascript %}<script defer src="{% static 'js/dau-calculos.js' %}"></script>{% endblock %}
+{% block content %}
+{% include 'pages/clinitens/simulacion/dau_header.html' %}
+<main class="dau-workspace">
+  <p class="dau-banner">SIMULACIÓN EDUCATIVA · No es un registro de atención real. No ingresar información de pacientes reales.</p>
+
+  <section class="dau-panel dau-patient-panel" aria-labelledby="dau-patient-title">
+    <div class="dau-section-title"><h1 id="dau-patient-title">Identificación del paciente</h1><span class="dau-sim-code">{{ caso.paciente_codigo }}</span></div>
+    <dl class="dau-patient-grid">
+      <div><dt>Nombre completo</dt><dd>{{ caso.paciente_nombre }}</dd></div>
+      <div><dt>Código simulado</dt><dd>{{ caso.paciente_codigo }}</dd></div>
+      <div><dt>Sexo</dt><dd>{{ caso.get_paciente_sexo_display|default:"—" }}</dd></div>
+      <div><dt>Edad</dt><dd>{% if caso.paciente_edad is not None %}{{ caso.paciente_edad }} años{% else %}—{% endif %}</dd></div>
+      <div><dt>Fecha de nacimiento</dt><dd>{{ caso.paciente_fecha_nacimiento|date:"d-m-Y"|default:"—" }}</dd></div>
+      <div><dt>Comuna de residencia</dt><dd>{{ caso.paciente_comuna|default:"—" }}</dd></div>
+      <div class="dau-patient-history"><dt>Antecedentes crónicos ficticios</dt><dd>{{ caso.paciente_antecedentes|default:"Sin antecedentes indicados en este caso." }}</dd></div>
+    </dl>
+  </section>
+
+  <section class="dau-panel" aria-labelledby="dau-vitals-title">
+    <div class="dau-section-title"><h2 id="dau-vitals-title">Signos vitales</h2><p>Cálculos automáticos: PAM e IMC · No entregan interpretación clínica.</p></div>
+    <form method="post" class="dau-vitals-form">
+      {% csrf_token %}<input type="hidden" name="action" value="guardar_signos">
+      <div class="dau-vitals-grid">
+        {% for field in signos_form %}<div class="dau-form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<p class="dau-field-error">{{ error }}</p>{% endfor %}</div>{% endfor %}
+        <div class="dau-form-field"><label for="dau-pam">PAM (mmHg) <small>Auto</small></label><input id="dau-pam" type="text" value="{% if pam is not None %}{{ pam }}{% endif %}" readonly aria-describedby="dau-auto-note"></div>
+        <div class="dau-form-field"><label for="dau-imc">IMC (kg/m²) <small>Auto</small></label><input id="dau-imc" type="text" value="{% if imc is not None %}{{ imc }}{% endif %}" readonly aria-describedby="dau-auto-note"></div>
+      </div>
+      <p class="dau-field-hint" id="dau-auto-note">PAM e IMC son cálculos aritméticos para el ejercicio; el sistema no clasifica los valores.</p>
+      {% if not atencion.finalizada %}<button class="dau-button dau-button-primary" type="submit">Guardar signos del escenario</button>{% endif %}
+    </form>
+  </section>
+
+  <section class="dau-panel" aria-labelledby="dau-procedures-title">
+    <div class="dau-section-title"><h2 id="dau-procedures-title">Registro de procedimientos</h2><p>Entradas acumuladas; no se reemplazan al editar el cierre.</p></div>
+    {% if not atencion.finalizada %}<form method="post" class="dau-procedure-form">
+      {% csrf_token %}<input type="hidden" name="action" value="agregar_procedimiento">
+      {% for field in procedimiento_form %}<div class="dau-form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<p class="dau-field-error">{{ error }}</p>{% endfor %}</div>{% endfor %}
+      <button class="dau-button dau-button-secondary" type="submit">Agregar registro</button>
+    </form>{% endif %}
+    <ol class="dau-procedure-list">{% for item in procedimientos %}<li><div><strong>{{ item.procedimiento }}</strong><p>{{ item.observaciones|default:"Sin observación" }}</p></div><span>{{ item.get_responsable_display }} · {{ item.registrado_en|date:"d-m-Y H:i" }}</span></li>{% empty %}<li class="dau-empty">No hay procedimientos registrados todavía.</li>{% endfor %}</ol>
+  </section>
+
+  <section class="dau-panel dau-finish-panel" aria-labelledby="dau-finish-title">
+    <div class="dau-section-title"><h2 id="dau-finish-title">Finalización de la atención — Documento de Atención de Urgencia (DAU)</h2>{% if atencion.finalizada %}<span class="dau-status">Finalizado · {{ atencion.finalizada_en|date:"d-m-Y H:i" }}</span>{% endif %}</div>
+    <form method="post" class="dau-close-form">
+      {% csrf_token %}
+      <div class="dau-close-grid">
+      {% for field in cierre_form %}<div class="dau-form-field{% if field.name == 'evaluacion_realizada' %} dau-field-wide{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<p class="dau-field-error">{{ error }}</p>{% endfor %}</div>{% endfor %}
+      </div>
+      {% if not atencion.finalizada %}<div class="dau-action-row"><button class="dau-button dau-button-save" type="submit" name="action" value="guardar_cierre">Guardar borrador</button><button class="dau-button dau-button-primary" type="submit" name="action" value="finalizar">Finalizar DAU</button></div>{% else %}<div class="dau-action-row"><a class="dau-button dau-button-primary" href="{% url 'clinitens_simulacion:dau_pdf' atencion.pk %}">Descargar DAU (PDF)</a><a class="dau-button dau-button-secondary" href="{% url 'clinitens_simulacion:dau_pdf' atencion.pk %}?inline=1" target="_blank" rel="noopener">Imprimir DAU</a></div>{% endif %}
+    </form>
+    <a class="dau-history-link" href="{% url 'clinitens_simulacion:dau_historial' %}"><span aria-hidden="true">◷</span> Historial de DAU</a>
+    <p class="dau-field-hint">Los DAU se almacenan como registros educativos asociados a tu cuenta.</p>
+  </section>
+  <p class="dau-footer-disclaimer">SIMULACIÓN EDUCATIVA · Datos ficticios · No válido para atención clínica.</p>
+</main>
+{% endblock %}

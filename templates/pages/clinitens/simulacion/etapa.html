@@ -1,0 +1,21 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block head_title %}{{ titulo_etapa }} | CliniTENS{% endblock %}
+{% block page_title %}{{ titulo_etapa }}{% endblock %}
+{% block content_main %}
+<p><a href="{% url 'clinitens_simulacion:estudiante_casos' %}">← Volver a mis casos</a></p>
+<section class="form-sheet"><h2>{{ caso.titulo }}</h2><p>{{ caso.resumen }}</p>
+  {% if etapa == 'dau' %}<h3>Escenario ficticio</h3><p>{{ caso.escenario_dau }}</p>
+  <form method="post">{% csrf_token %}{% for field in form %}<div class="ui-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>{% endfor %}<button class="btn-primary" type="submit">Guardar registro educativo</button></form>
+  {% elif etapa == 'laboratorio' %}
+    <p class="sim-module-readonly">{{ caso.escenario_laboratorio }}</p><h3>Órdenes y registro tubo a tubo</h3>
+    <p>Cada tarjeta reúne los exámenes que comparten muestra y tubo. Marca cada tubo al completar el paso de la simulación.</p>
+    <div class="sim-tube-list">{% for tubo in tubos %}<article class="sim-tube-card"><h4>{{ tubo.tubo }}</h4><p>Muestra: {{ tubo.muestra }}</p><ul>{% for examen in tubo.examenes %}<li>{{ examen }}</li>{% endfor %}</ul>
+      {% if tubo.recolectado %}<p class="sim-review-status">Tubo registrado para esta práctica.</p>{% else %}<form method="post">{% csrf_token %}<input type="hidden" name="tubo_id" value="{{ tubo.id }}"><button class="btn-primary" type="submit">Registrar tubo</button></form>{% endif %}
+    </article>{% empty %}<p class="form-sheet">Este caso aún no tiene órdenes de laboratorio configuradas.</p>{% endfor %}</div>
+    {% if etiquetas_url %}<a class="btn-secondary" href="{{ etiquetas_url }}">Ver e imprimir etiquetas de tubos registrados</a>{% endif %}
+  {% elif etapa == 'diagnostico' %}
+    <h3>Resultados del Centro de Apoyo Diagnóstico</h3><p>Revisa cada elemento y registra tu revisión. Las imágenes son representaciones textuales ficticias, sin imágenes de pacientes.</p>
+    {% for tipo, etiqueta, documentos in documentos_por_tipo %}<section class="sim-diagnostic-group"><h4>{{ etiqueta }}</h4>{% for documento in documentos %}<article class="sim-diagnostic-card"><h5>{{ documento.titulo }}</h5><p>{{ documento.contenido }}</p>{% if documento.tipo == 'imagen' %}<div class="sim-imaging-placeholder" role="img" aria-label="Representación educativa ficticia, no imagen de paciente">Representación educativa · sin imagen de paciente</div>{% endif %}{% if documento.revisado %}<p class="sim-review-status">Revisado en tu práctica</p>{% else %}<form method="post">{% csrf_token %}<input type="hidden" name="documento_id" value="{{ documento.id }}"><button class="btn-primary" type="submit">Marcar como revisado</button></form>{% endif %}</article>{% endfor %}</section>{% empty %}<p class="form-sheet">Este caso aún no tiene resultados de apoyo diagnóstico.</p>{% endfor %}
+  {% endif %}
+</section><p class="form-sheet">Simulación educativa · Datos ficticios. No corresponde a una atención real.</p>
+{% endblock %}

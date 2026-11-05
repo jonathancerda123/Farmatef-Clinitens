@@ -16,9 +16,10 @@ La arquitectura descrita aquí refleja el código y la configuración del reposi
 | `core/media.py` | Entrega de archivos privados luego de comprobar autorización sobre el objeto relacionado |
 | `UsuarioApp` | Cuentas, cargos, perfiles, cambio de contraseña inicial e integración de autenticación |
 | `homeApp` | Portadas, navegación y actualización de actividad |
-| `CliniTensDocenteApp` | Actividades, cursos, participantes, importación de planillas, revisión y publicación de resultados |
+| `CliniTensDocenteApp` | Actividades, cursos, colaboradores de FarmaTEF por curso, participantes, importación de planillas, revisión y publicación de resultados |
 | `CliniTensFichaApp` | Fichas estructuradas, validación de esquema, estados y control de versiones |
-| `FarmaTEFApp` | Inventario inicial de medicamentos y lotes, con acceso por rol y propiedad |
+| `FarmaTEFApp` | Inventario, recetas simuladas, dispensación docente, casos por curso, respuestas estudiantiles privadas, consumo FEFO atómico y eliminación acotada de recetas sin actividad |
+| `CliniTensSimulacionApp` | Casos educativos DAU/laboratorio/Centro de Apoyo Diagnóstico, preparación por módulo, órdenes y tubos por intento, resultados categorizados/revisión individual, atención DAU y PDF ficticio; conserva modelos Kardex legados |
 | `theme/static_src/` | Fuentes de estilos, configuración y proceso de compilación de CSS |
 
 ## Flujo de solicitudes
@@ -29,15 +30,15 @@ La arquitectura descrita aquí refleja el código y la configuración del reposi
 4. El modelo persiste los cambios y la plantilla presenta el resultado.
 5. Los archivos privados se entregan a través de una vista autorizada; el servidor web no debe exponer `MEDIA_ROOT` como directorio público.
 
-No hay una API REST pública, una SPA, workers asíncronos ni WebSockets. La actividad visible se actualiza mediante solicitudes periódicas. La operación de inventario comienza en `/farmatef/inventario/`; las rutas de receta y dispensación aún no existen.
+No hay una API REST pública, una SPA, workers asíncronos ni WebSockets. La actividad visible se actualiza mediante solicitudes periódicas. El inventario comienza en `/farmatef/inventario/`; docentes administran casos en `/farmatef/recetas/`, y estudiantes inscritos acceden a `/farmatef/practica/recetas/`. Desde el historial, un POST en `/farmatef/recetas/<id>/eliminar/` solo retira una receta sin respuestas ni dispensaciones. Las simulaciones CliniTENS se preparan en `/clinitens/simulaciones/docente/casos/` y se practican en rutas `/clinitens/simulaciones/practica/`; cada curso separa material y resultados por estudiante.
 
 ## Persistencia y modelos existentes
 
 La aplicación utiliza modelos Django y SQLite en el entorno local documentado. Entre las estructuras existentes se encuentran cuentas/perfiles, actividades, cursos, fichas, rúbricas, resultados y archivos asociados.
 
-Las fichas usan versiones para detectar escrituras obsoletas. La publicación de una evaluación conserva el resultado vigente hasta que se completa la nueva publicación. La relación entre actividad y curso condiciona el acceso de participantes cuando hay matrícula configurada.
+Las fichas usan versiones para detectar escrituras obsoletas. La publicación de una evaluación conserva el resultado vigente hasta que se completa la nueva publicación. La relación entre actividad y curso condiciona el acceso de participantes cuando hay matrícula configurada. En `CliniTensSimulacionApp`, las rutas docentes DAU/laboratorio/CAD editan por separado bloques de casos borrador. Las órdenes de laboratorio se agrupan por muestra y tipo de tubo; el avance y las etiquetas pertenecen al intento de cada alumno. Los resultados CAD distinguen laboratorio, imagen, ECG e informe y guardan revisiones por estudiante. `AtencionDAU` conserva registros por alumno/caso y `ProcedimientoDAU` entradas cronológicas. Las tablas Kardex no se borran ni se reutilizan como CAD.
 
-FarmaTEF añade `Medicamento` y `LoteInventario`. El total se calcula a partir de las unidades de los lotes y las alertas se derivan del mínimo y de la proximidad del vencimiento. El umbral de vencimiento tiene un valor predeterminado configurable. La migración inicial es aditiva, fue escrita manualmente y aún requiere cotejo automático; no se ha aplicado a una base persistente recibida.
+FarmaTEF incluye `Medicamento`, `LoteInventario`, `Receta`, `RecetaLinea`, `Dispensacion`, `DispensacionLote` y `RespuestaReceta`. Cada receta de práctica se asigna a un curso; cada estudiante inscrito tiene un intento independiente. El curso conserva un responsable y puede tener MANAGER colaboradores mediante `Curso.docentes_colaboradores`. La relación concede acceso a recetas/respuestas FarmaTEF del curso, no a matrícula, fichas, resultados ni catálogo/lotes ajenos. La clave docente se omite de las consultas/cargas presentadas al alumno, quien recibe la pista definida y la respuesta explicativa después de enviar. Solo una decisión correcta de dispensación en un caso válido consume todos los medicamentos mediante lotes FEFO dentro de una transacción; intentos inválidos no alteran stock. Las recetas antiguas sin curso permanecen docentes. Las migraciones 0006/0007 y 0008, aplicada localmente con respaldo y no aplicada a producción, se documentan en las specs 009/010/012.
 
 Antes de aplicar migraciones a un entorno con datos, se requiere generar/cotejar migraciones con el runtime previsto, respaldar la base y documentar recuperación. Las pruebas deben usar datos ficticios y una base aislada.
 
@@ -51,6 +52,7 @@ Los nombres técnicos de cargos son RESTRICTED, MANAGER y ADMIN. El superusuario
 | Actividades, catálogo y cursos | Sin gestión | Gestiona los elementos propios | Acceso global |
 | Fichas y resultados | Acceso a sus propios elementos permitidos | Acceso según responsabilidad y propiedad | Acceso global |
 | Inventario FarmaTEF | Sin gestión en el incremento actual | Gestiona y consulta inventario propio | Consulta y gestión global |
+| Práctica de recetas | Estudiante activo inscrito en el curso; una respuesta propia por receta | Gestiona casos y revisa respuestas de cursos propios | Gestión global; sin respuesta como alumno |
 | Archivos privados | Solo si la regla del objeto lo permite | Solo asociados a objetos propios/autorizados | Acceso global según las reglas del sistema |
 
 La matriz resume el diseño actual y no sustituye las comprobaciones de cada vista. El servidor debe denegar accesos directos no autorizados aunque el usuario conozca la URL.
@@ -62,7 +64,9 @@ La matriz resume el diseño actual y no sustituye las comprobaciones de cada vis
 - Las escrituras de ficha y rúbrica incluyen una versión y estado esperado. Una versión obsoleta no debe sobrescribir cambios más recientes.
 - La publicación de evaluación valida los indicadores requeridos y persiste la actualización de forma consistente.
 - Los formularios de FarmaTEF deben validar tipos, cantidades, fechas y relaciones en servidor, y asignar el responsable desde la sesión autenticada.
-- La dispensación todavía no está implementada. Su diseño requiere reservar/seleccionar lotes y actualizar stock de forma atómica, sin comprobante de éxito si la operación falla.
+- Las cantidades, IDs de línea, decisión y permisos se validan en servidor; la clave docente no aparece en la respuesta HTML estudiantil antes de enviar.
+- Las ejecuciones se guardan por estudiante; una respuesta en una cohorte no cierra el caso para las demás. El stock es compartido y debe alcanzar para la cantidad de dispensaciones correctas esperada.
+- Los casos simulados CliniTENS requieren curso, publicación y matrícula; cada intento se aísla por estudiante/caso. El laboratorio valida IDs de orden/tubo en servidor y sus etiquetas son educativas. CAD registra revisiones individuales sin evaluación clínica automática. Los eventos Kardex ya existentes se conservan, pero el módulo visible fue reemplazado por CAD.
 
 ## Archivos, contenido y credenciales
 
@@ -97,7 +101,7 @@ Ver [ENTORNO_Y_VERIFICACION.md](ENTORNO_Y_VERIFICACION.md), [VALIDACION_PREPRODU
 
 ## Límites actuales
 
-- Receta, dispensación, comprobante y etiqueta no están implementados.
+- Comprobante y etiqueta no están implementados. La recepción de una receta se representa solo con datos sintéticos; el prototipo no determina legalmente autenticidad.
 - FarmaTEF no se integra con farmacias ni con sistemas clínicos reales; sus transacciones son simuladas.
 - La integración de IA no está implementada.
 - La migración inicial de FarmaTEF requiere cotejo automático y verificación sobre base ficticia aislada.

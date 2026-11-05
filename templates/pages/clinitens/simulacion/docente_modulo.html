@@ -1,0 +1,44 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% load static %}
+{% block head_title %}{{ config.titulo }} | CliniTENS{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/simulacion-docente.css' %}">{% endblock %}
+{% block page_title %}{{ config.titulo }}{% endblock %}
+{% block content_main %}
+<main class="sim-module-page sim-module-{{ config.clase }}">
+  <div class="sim-module-intro"><p>{{ config.descripcion }}</p><span>SIMULACIÓN EDUCATIVA · Solo casos ficticios</span></div>
+  <div class="sim-module-actions"><a class="btn-primary" href="{{ crear_caso_url }}">Crear caso base para mis cursos</a><a href="{{ resultados_url }}">Revisar resultados de estudiantes →</a></div>
+  <section class="sim-module-cases" aria-labelledby="casos-modulo-title">
+    <div class="sim-cases-heading"><div><span class="sim-step">{% if modulo == 'dau' %}1{% elif modulo == 'laboratorio' %}2{% else %}3{% endif %}</span><h2 id="casos-modulo-title">Casos de {{ config.seccion|lower }}</h2></div><p>Los borradores se pueden editar aquí. El contenido publicado queda bloqueado para proteger las prácticas.</p></div>
+    <div class="sim-module-case-list">
+      {% for fila in filas %}
+        <article class="sim-module-case-card">
+          <header class="sim-case-card-heading"><div><h3>{{ fila.caso.titulo }}</h3><p>{{ fila.caso.curso }}</p></div><span class="sim-case-status{% if fila.caso.publicado %} is-published{% endif %}">{% if fila.caso.publicado %}Publicado · solo lectura{% else %}Borrador editable{% endif %}</span></header>
+          <p class="sim-case-summary">{{ fila.caso.resumen }}</p>
+          {% if fila.caso.publicado %}
+            {% if modulo == 'dau' %}<dl class="sim-patient-summary"><div><dt>Paciente SIM</dt><dd>{{ fila.caso.paciente_nombre }} · {{ fila.caso.paciente_codigo }}</dd></div><div><dt>Comuna</dt><dd>{{ fila.caso.paciente_comuna|default:'—' }}</dd></div></dl><p class="sim-module-readonly">{{ fila.caso.escenario_dau }}</p>
+            {% elif modulo == 'laboratorio' %}<p class="sim-module-readonly">{{ fila.caso.escenario_laboratorio }}</p><h4>Órdenes de exámenes</h4><ul class="sim-module-results">{% for orden in fila.caso.ordenes_laboratorio %}<li><strong>{{ orden.examen }}</strong> · {{ orden.muestra }} · {{ orden.tubo }}</li>{% empty %}<li>Sin órdenes configuradas.</li>{% endfor %}</ul>
+            {% else %}<ul class="sim-module-results">{% for documento in fila.caso.documentos_diagnosticos %}<li><strong>{{ documento.get_tipo_display|default:documento.tipo|title }}</strong> · {{ documento.titulo }}<p>{{ documento.contenido }}</p></li>{% empty %}<li>No hay resultados o informes configurados.</li>{% endfor %}</ul>{% endif %}
+          {% else %}
+            <form method="post" class="sim-module-edit-form">{% csrf_token %}<input type="hidden" name="caso_id" value="{{ fila.caso.pk }}">
+              {% if modulo == 'dau' %}
+                <div class="sim-module-section"><h4>Paciente ficticio</h4><div class="sim-fields-grid sim-dau-patient-fields">
+                  {% for field in fila.form %}{% if field.name == 'paciente_codigo' or field.name == 'paciente_nombre' or field.name == 'paciente_sexo' or field.name == 'paciente_edad' or field.name == 'paciente_fecha_nacimiento' or field.name == 'paciente_comuna' or field.name == 'paciente_antecedentes' %}<div class="sim-field{% if field.name == 'paciente_antecedentes' %} sim-field-wide{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<p class="sim-help">{{ field.help_text }}</p>{% endif %}{% for error in field.errors %}<p class="sim-error">{{ error }}</p>{% endfor %}</div>{% endif %}{% endfor %}
+                </div></div>
+                <div class="sim-module-section"><h4>Proceso de atención DAU</h4>{% for field in fila.form %}{% if field.name == 'escenario_dau' %}<div class="sim-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<p class="sim-help">{{ field.help_text }}</p>{% endif %}{% for error in field.errors %}<p class="sim-error">{{ error }}</p>{% endfor %}</div>{% endif %}{% endfor %}</div>
+              {% elif modulo == 'laboratorio' %}
+                {% for field in fila.form %}<div class="sim-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<p class="sim-help">{{ field.help_text }}</p>{% endif %}{% for error in field.errors %}<p class="sim-error">{{ error }}</p>{% endfor %}</div>{% endfor %}
+              {% else %}
+                {% for field in fila.form %}<div class="sim-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<p class="sim-help">{{ field.help_text }}</p>{% endif %}{% for error in field.errors %}<p class="sim-error">{{ error }}</p>{% endfor %}</div>{% endfor %}
+              {% endif %}
+              <div class="sim-module-form-actions"><button class="btn-primary" type="submit">Guardar contenido de {{ modulo }}</button></div>
+            </form>
+          {% endif %}
+        </article>
+      {% empty %}
+        <div class="sim-cases-empty"><h3>Aún no hay casos para este módulo</h3><p>Primero crea un caso base y luego completa el contenido de este módulo.</p><a class="btn-primary" href="{{ crear_caso_url }}">Crear caso base</a></div>
+      {% endfor %}
+    </div>
+  </section>
+  <p class="sim-module-footnote">Cada módulo tiene una práctica propia: DAU registra signos y procedimientos; laboratorio organiza órdenes y tubos; el Centro de Apoyo Diagnóstico entrega resultados e informes simulados.</p>
+</main>
+{% endblock %}

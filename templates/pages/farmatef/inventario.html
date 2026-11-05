@@ -4,7 +4,7 @@
 {% block content_main %}
 <div class="mb-6">
   <a class="text-sm font-medium text-brand-700 hover:underline" href="{% url 'farmatef' %}">← Volver a FarmaTEF</a>
-  <p class="section-description mt-2">Medicamentos y lotes ficticios para preparar actividades de simulación.</p>
+  <p class="section-description mt-2">Medicamentos y lotes ficticios para preparar actividades de simulación. El arsenal APS incluye inventario simulado; las cantidades y fechas no representan existencias reales.</p>
 </div>
 
 <div class="grid gap-6 xl:grid-cols-2">
@@ -55,17 +55,18 @@
   <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white" role="region" aria-label="Inventario desplazable" tabindex="0">
     <table class="w-full min-w-[760px] text-left text-sm">
       <thead class="border-b border-slate-200 bg-brand-50 text-brand-800">
-        <tr><th class="p-3">Medicamento</th><th class="p-3">Stock</th><th class="p-3">Mínimo</th><th class="p-3">Lotes</th><th class="p-3">Estado</th></tr>
+        <tr><th class="p-3">Medicamento</th><th class="p-3">Clasificación</th><th class="p-3">Stock</th><th class="p-3">Mínimo</th><th class="p-3">Lotes</th><th class="p-3">Estado</th></tr>
       </thead>
       <tbody class="divide-y divide-slate-200">
         {% for medicamento in medicamentos %}
           <tr>
-            <td class="p-3 font-medium text-slate-900">{{ medicamento.nombre }}<span class="block text-xs font-normal text-slate-500">{{ medicamento.concentracion }} {{ medicamento.forma_farmaceutica }}</span></td>
+            <td class="p-3 font-medium text-slate-900">{{ medicamento.nombre }}<span class="block text-xs font-normal text-slate-500">{{ medicamento.concentracion }} {{ medicamento.forma_farmaceutica }}</span>{% if medicamento.observaciones %}<span class="block text-xs font-normal text-slate-500">{{ medicamento.observaciones }}</span>{% endif %}</td>
+            <td class="p-3">{{ medicamento.clasificacion|default:"—" }}</td>
             <td class="p-3">{{ medicamento.stock_total }}</td>
             <td class="p-3">{{ medicamento.stock_minimo }}</td>
             <td class="p-3">
               {% for lote in medicamento.lotes.all %}
-                <span class="mb-1 block">{{ lote.numero_lote }} · {{ lote.unidades }} un. · vence {{ lote.vence_el|date:"d/m/Y" }}</span>
+                <span class="mb-1 block">{{ lote.numero_lote }} · {{ lote.unidades }} un. · vence {{ lote.vence_el|date:"d/m/Y" }}{% if lote.es_simulado %} · Simulado{% endif %}</span>
               {% empty %}<span class="text-slate-500">Sin lotes</span>{% endfor %}
             </td>
             <td class="p-3">
@@ -76,7 +77,7 @@
             </td>
           </tr>
         {% empty %}
-          <tr><td class="p-8 text-center text-slate-600" colspan="5">Aún no hay medicamentos en este inventario.</td></tr>
+          <tr><td class="p-8 text-center text-slate-600" colspan="6">Aún no hay medicamentos en este inventario.</td></tr>
         {% endfor %}
       </tbody>
     </table>

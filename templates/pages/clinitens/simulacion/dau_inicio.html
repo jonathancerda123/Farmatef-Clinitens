@@ -1,0 +1,35 @@
+{% extends 'components/Layout/base.html' %}
+{% load static %}
+{% block head_title %}Registro de Atención de Urgencia | CliniTENS{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dau.css' %}">{% endblock %}
+{% block content %}
+<main class="dau-shell dau-entry-shell">
+  <header class="dau-entry-brand">
+    <span class="dau-brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v5M16 3v5M5 8h14M7 8v4a5 5 0 0 0 10 0V8M12 17v4"/><circle cx="12" cy="12" r="1"/></svg></span>
+    <div><h1>Registro de Atención de Urgencia</h1><p class="dau-eyebrow">SISTEMA DE REGISTRO CLÍNICO · SIMULACIÓN</p></div>
+    <p class="dau-entry-subtitle">Acceso al módulo de registro y atención de pacientes ficticios</p>
+  </header>
+
+  <section class="dau-entry-card" aria-labelledby="dau-access-title">
+    <h2 id="dau-access-title">Acceso al sistema</h2>
+    <div class="dau-user-identification"><span>Funcionario (cuenta autenticada)</span><strong>{{ funcionario }}</strong><small>Tu identidad se obtiene de la sesión de CliniTENS.</small></div>
+    <form method="post" class="dau-entry-form">
+      {% csrf_token %}
+      <label for="{{ form.codigo.id_for_label }}">{{ form.codigo.label }}</label>
+      {{ form.codigo }}
+      {% for error in form.codigo.errors %}<p class="dau-field-error">{{ error }}</p>{% endfor %}
+      {% for error in form.non_field_errors %}<p class="dau-field-error">{{ error }}</p>{% endfor %}
+      <p class="dau-field-hint">Busca solo pacientes inventados por el docente, con código SIM. No ingreses RUT ni datos reales.</p>
+      <button class="dau-button dau-button-primary" type="submit"><span aria-hidden="true">⌕</span> Buscar paciente de práctica</button>
+    </form>
+    <div class="dau-entry-links"><a href="{% url 'clinitens_simulacion:dau_historial' %}">Ver historial de DAU</a><a href="{% url 'clinitens' %}">← Volver al inicio</a></div>
+  </section>
+
+  <section class="dau-available" aria-labelledby="dau-available-title">
+    <h2 id="dau-available-title">Pacientes de práctica disponibles</h2>
+    {% for caso in casos %}<article class="dau-available-row"><div><strong>{{ caso.paciente_nombre }}</strong><span>{{ caso.paciente_codigo }} · {{ caso.curso }}</span></div><form method="post">{% csrf_token %}<input type="hidden" name="codigo" value="{{ caso.paciente_codigo }}"><button class="dau-button dau-button-secondary" type="submit">Abrir registro</button></form></article>
+    {% empty %}<p class="dau-empty">Todavía no hay pacientes SIM publicados en tus cursos.</p>{% endfor %}
+  </section>
+  <p class="dau-disclaimer">SIMULACIÓN EDUCATIVA · Los nombres y datos de esta práctica son ficticios.</p>
+</main>
+{% endblock %}

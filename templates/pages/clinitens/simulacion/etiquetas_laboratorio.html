@@ -1,0 +1,16 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% load static %}
+{% block head_title %}Etiquetas de laboratorio | CliniTENS{% endblock %}
+{% block page_title %}Etiquetas de laboratorio{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/simulacion-docente.css' %}"><style>
+@media print { @page { size: 60mm 40mm; margin: 0; } body * { visibility: hidden !important; } .sim-label-sheet,.sim-label-sheet * { visibility: visible !important; } .sim-label-sheet { position: absolute; inset: 0; width: 60mm; } .sim-tube-label { width: 60mm; height: 40mm; margin: 0; border: 0; border-radius: 0; page-break-after: always; break-after: page; box-shadow: none; } .sim-tube-label:last-child { page-break-after: auto; break-after: auto; } .sim-label-actions { display: none !important; } }
+</style>{% endblock %}
+{% block content_main %}
+<main class="sim-module-page sim-module-laboratorio">
+  <p class="page-intro">{{ caso.titulo }} · Etiquetas educativas para tubos registrados en tu propia práctica.</p>
+  <div class="sim-label-actions"><a class="btn-secondary" href="{% url 'clinitens_simulacion:etapa' caso.pk 'laboratorio' %}">← Volver al laboratorio</a>{% if tubos %}<button class="btn-primary" type="button" onclick="window.print()">Imprimir etiquetas</button>{% endif %}<p>En impresión, conserva escala 100 % y tamaño de papel 60 × 40 mm.</p></div>
+  <section class="sim-label-sheet" aria-label="Etiquetas ficticias por tubo">
+    {% for tubo in tubos %}<article class="sim-tube-label"><strong>SIMULACIÓN EDUCATIVA</strong><h2>{{ caso.paciente_codigo }}</h2><p><b>Tubo:</b> {{ tubo.tubo }}</p><p><b>Muestra:</b> {{ tubo.muestra }}</p><p><b>Exámenes:</b> {% for examen in tubo.examenes %}{{ examen }}{% if not forloop.last %}; {% endif %}{% endfor %}</p></article>{% empty %}<p class="form-sheet">Aún no hay tubos registrados para imprimir. Vuelve a la práctica y registra un tubo primero.</p>{% endfor %}
+  </section>
+</main>
+{% endblock %}

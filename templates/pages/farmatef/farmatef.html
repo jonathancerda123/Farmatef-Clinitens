@@ -2,27 +2,51 @@
 {% block head_title %}FarmaTEF | CliniTENS{% endblock head_title %}
 {% block page_title %}FarmaTEF{% endblock page_title %}
 {% block content_main %}
-<section class="home-intro">
+<section class="home-intro" aria-labelledby="farmatef-intro">
   <div>
-    <h2>Practica la gestión de farmacia.</h2>
-    <p class="section-description">Construye un inventario simulado con medicamentos, lotes y vencimientos. Los datos de esta plataforma son ficticios y se usan con fines educativos.</p>
+    <h2 id="farmatef-intro">Practica la gestión de farmacia.</h2>
+    <p class="section-description">Organiza medicamentos y lotes, busca recetas ficticias y practica entregas con inventario simulado.</p>
   </div>
-  {% if puede_gestionar %}
-    <div class="clinical-guide">
-      <h3>Gestión docente</h3>
-      <p class="section-description">Registra medicamentos y prepara sus lotes para futuras actividades de dispensación.</p>
-      <a class="btn-primary mt-5" href="{% url 'farmatef:inventario' %}">Abrir inventario</a>
+  <div class="clinical-guide">
+    <h3>Flujo de farmacia</h3>
+    <div class="guide-step">
+      {% include 'components/design/icon.html' with icon='clipboard' %}
+      <div><strong>Inventario</strong><p>Consulta medicamentos, lotes y vencimientos.</p></div>
     </div>
-  {% else %}
-    <div class="pending-note">
-      <h3 class="text-xl font-semibold">Práctica estudiantil en preparación</h3>
-      <p class="section-description">El inventario simulado está en su primer incremento. La práctica de recetas y dispensación se incorporará en una próxima etapa.</p>
-      <a class="btn-secondary mt-5" href="{% url 'clinitens' %}">Abrir área clínica</a>
+    <div class="guide-step">
+      {% include 'components/design/icon.html' with icon='patient' %}
+      <div><strong>Receta simulada</strong><p>Busca el número y revisa las líneas indicadas.</p></div>
     </div>
-  {% endif %}
+    <div class="guide-step">
+      {% include 'components/design/icon.html' with icon='result' %}
+      <div><strong>Entrega</strong><p>Registra una entrega completa con descuento de stock.</p></div>
+    </div>
+  </div>
 </section>
-<section class="pending-modules">
-  <h2 class="text-lg font-semibold">Flujo formativo planificado</h2>
-  <ul><li>Inventario por medicamentos y lotes</li><li>Validación de recetas ficticias</li><li>Dispensación simulada con descuento de stock</li><li>Etiquetas y comprobantes simulados</li></ul>
-</section>
+
+<div class="section-heading">
+  <div><h2>¿Qué necesitas hacer?</h2><p class="section-description">Cada herramienta tiene su propio espacio.</p></div>
+</div>
+
+{% if puede_gestionar %}
+  <div class="module-list">
+    <article class="module-entry">
+      <span class="module-symbol">{% include 'components/design/icon.html' with icon='clipboard' %}</span>
+      <div><h3>Inventario</h3><p>Revisa el catálogo APS, administra lotes ficticios y consulta alertas de stock y vencimiento.</p><a href="{% url 'farmatef:inventario' %}">Abrir inventario</a></div>
+    </article>
+    <article class="module-entry">
+      <span class="module-symbol">{% include 'components/design/icon.html' with icon='result' %}</span>
+      <div><h3>Recetas</h3><p>Registra una receta ficticia, búscala por su número único y gestiona su entrega simulada.</p><a href="{% url 'farmatef:recetas' %}">Abrir recetas</a></div>
+    </article>
+    <article class="module-entry">
+      <span class="module-symbol">{% include 'components/design/icon.html' with icon='clipboard' %}</span>
+      <div><h3>Etiquetado</h3><p>Prepara etiquetas de lotes con dimensiones configurables en milímetros.</p><a href="{% url 'farmatef:etiquetado' %}">Diseñar etiquetas</a></div>
+    </article>
+  </div>
+{% else %}
+  <section class="pending-modules">
+    <h2 class="text-lg font-semibold">Práctica estudiantil en preparación</h2>
+    <p class="section-description">El acceso estudiantil a recetas requiere asociarlas a un curso o actividad. Los datos disponibles son ficticios y tienen fines educativos.</p>
+  </section>
+{% endif %}
 {% endblock content_main %}
