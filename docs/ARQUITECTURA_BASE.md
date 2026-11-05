@@ -19,6 +19,7 @@ La arquitectura descrita aquí refleja el código y la configuración del reposi
 | `CliniTensDocenteApp` | Actividades, cursos, colaboradores de FarmaTEF por curso, participantes, importación de planillas, revisión y publicación de resultados |
 | `CliniTensFichaApp` | Fichas estructuradas, validación de esquema, estados y control de versiones |
 | `FarmaTEFApp` | Inventario, recetas simuladas, dispensación docente, casos por curso, respuestas estudiantiles privadas, consumo FEFO atómico y eliminación acotada de recetas sin actividad |
+| `CliniTensSimulacionApp` | Casos educativos DAU/laboratorio/Centro de Apoyo Diagnóstico, preparación por módulo, órdenes y tubos por intento, resultados categorizados/revisión individual, atención DAU y PDF ficticio; conserva modelos Kardex legados |
 | `theme/static_src/` | Fuentes de estilos, configuración y proceso de compilación de CSS |
 
 ## Flujo de solicitudes
@@ -29,13 +30,13 @@ La arquitectura descrita aquí refleja el código y la configuración del reposi
 4. El modelo persiste los cambios y la plantilla presenta el resultado.
 5. Los archivos privados se entregan a través de una vista autorizada; el servidor web no debe exponer `MEDIA_ROOT` como directorio público.
 
-No hay una API REST pública, una SPA, workers asíncronos ni WebSockets. La actividad visible se actualiza mediante solicitudes periódicas. El inventario comienza en `/farmatef/inventario/`; docentes administran casos en `/farmatef/recetas/`, y estudiantes inscritos acceden a `/farmatef/practica/recetas/`. Desde el historial, un POST en `/farmatef/recetas/<id>/eliminar/` solo retira una receta sin respuestas ni dispensaciones.
+No hay una API REST pública, una SPA, workers asíncronos ni WebSockets. La actividad visible se actualiza mediante solicitudes periódicas. El inventario comienza en `/farmatef/inventario/`; docentes administran casos en `/farmatef/recetas/`, y estudiantes inscritos acceden a `/farmatef/practica/recetas/`. Desde el historial, un POST en `/farmatef/recetas/<id>/eliminar/` solo retira una receta sin respuestas ni dispensaciones. Las simulaciones CliniTENS se preparan en `/clinitens/simulaciones/docente/casos/` y se practican en rutas `/clinitens/simulaciones/practica/`; cada curso separa material y resultados por estudiante.
 
 ## Persistencia y modelos existentes
 
 La aplicación utiliza modelos Django y SQLite en el entorno local documentado. Entre las estructuras existentes se encuentran cuentas/perfiles, actividades, cursos, fichas, rúbricas, resultados y archivos asociados.
 
-Las fichas usan versiones para detectar escrituras obsoletas. La publicación de una evaluación conserva el resultado vigente hasta que se completa la nueva publicación. La relación entre actividad y curso condiciona el acceso de participantes cuando hay matrícula configurada.
+Las fichas usan versiones para detectar escrituras obsoletas. La publicación de una evaluación conserva el resultado vigente hasta que se completa la nueva publicación. La relación entre actividad y curso condiciona el acceso de participantes cuando hay matrícula configurada. En `CliniTensSimulacionApp`, las rutas docentes DAU/laboratorio/CAD editan por separado bloques de casos borrador. Las órdenes de laboratorio se agrupan por muestra y tipo de tubo; el avance y las etiquetas pertenecen al intento de cada alumno. Los resultados CAD distinguen laboratorio, imagen, ECG e informe y guardan revisiones por estudiante. `AtencionDAU` conserva registros por alumno/caso y `ProcedimientoDAU` entradas cronológicas. Las tablas Kardex no se borran ni se reutilizan como CAD.
 
 FarmaTEF incluye `Medicamento`, `LoteInventario`, `Receta`, `RecetaLinea`, `Dispensacion`, `DispensacionLote` y `RespuestaReceta`. Cada receta de práctica se asigna a un curso; cada estudiante inscrito tiene un intento independiente. El curso conserva un responsable y puede tener MANAGER colaboradores mediante `Curso.docentes_colaboradores`. La relación concede acceso a recetas/respuestas FarmaTEF del curso, no a matrícula, fichas, resultados ni catálogo/lotes ajenos. La clave docente se omite de las consultas/cargas presentadas al alumno, quien recibe la pista definida y la respuesta explicativa después de enviar. Solo una decisión correcta de dispensación en un caso válido consume todos los medicamentos mediante lotes FEFO dentro de una transacción; intentos inválidos no alteran stock. Las recetas antiguas sin curso permanecen docentes. Las migraciones 0006/0007 y 0008, aplicada localmente con respaldo y no aplicada a producción, se documentan en las specs 009/010/012.
 
@@ -65,6 +66,7 @@ La matriz resume el diseño actual y no sustituye las comprobaciones de cada vis
 - Los formularios de FarmaTEF deben validar tipos, cantidades, fechas y relaciones en servidor, y asignar el responsable desde la sesión autenticada.
 - Las cantidades, IDs de línea, decisión y permisos se validan en servidor; la clave docente no aparece en la respuesta HTML estudiantil antes de enviar.
 - Las ejecuciones se guardan por estudiante; una respuesta en una cohorte no cierra el caso para las demás. El stock es compartido y debe alcanzar para la cantidad de dispensaciones correctas esperada.
+- Los casos simulados CliniTENS requieren curso, publicación y matrícula; cada intento se aísla por estudiante/caso. El laboratorio valida IDs de orden/tubo en servidor y sus etiquetas son educativas. CAD registra revisiones individuales sin evaluación clínica automática. Los eventos Kardex ya existentes se conservan, pero el módulo visible fue reemplazado por CAD.
 
 ## Archivos, contenido y credenciales
 

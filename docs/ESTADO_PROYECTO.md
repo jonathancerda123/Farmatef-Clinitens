@@ -1,5 +1,11 @@
 # Estado y punto de reanudación — CliniTENS
 
+## Petición actual — DAU, laboratorio y Centro de Apoyo Diagnóstico / 2026-11-05
+
+La solicitud 017 distingue procesos. DAU conserva signos vitales, procedimientos y cierre. Laboratorio permite órdenes con muestra/tubo, registro tubo a tubo y etiquetas educativas imprimibles. Centro de Apoyo Diagnóstico reemplaza el Kardex en la experiencia vigente y separa resultados ficticios de laboratorio, imagen, ECG e informes; el historial/modelos Kardex anteriores se conservan sin reutilizarlos. Migración 0005 creada y aplicada solo a memoria mediante `core.test_settings`; la base habitual no se migró. `manage.py check` y `makemigrations --check --dry-run` pasan. Navegador, impresión física, matriz de permisos y revisión docente/estudiante siguen pendientes. Ver [spec 017](../specs/017-flujos-dau-laboratorio-cad/spec.md).
+
+La solicitud 018 amplía el laboratorio a un flujo de tres pasos (paciente SIM, exámenes y resumen), emisión de orden con snapshot, PDF, etiquetas por tubo e historial propio. La migración 0006 se aplicó en la base local tras crear y verificar el respaldo `.test-artifacts/lab-018/db.sqlite3.before-20261105`; la base recibida/producción no se modificó. Los checks técnicos pasan; revisión visual, docente y de impresión pendiente. Ver [spec 018](../specs/018-flujo-laboratorio-por-pasos/spec.md).
+
 ## Colaboración con GitHub — 2026-11-03
 
 El usuario solicita subir el proyecto a `jonathancerda123/Farmatef-Clinitens` para trabajar desde dos equipos. Quedan autorizados la inicialización de Git, el primer commit y su publicación en ese repositorio; sin despliegue ni operación sobre la base recibida. Se comprobó que el remoto está vacío y es público. La carpeta local ya se inicializó con rama `main`; las menciones posteriores a ausencia de `.git` conservan el contexto histórico de 006.
@@ -21,6 +27,22 @@ Se creó el commit inicial local `ae32dfa`. El primer intento de push quedó esp
 | Entorno de desarrollo | El intérprete Python configurado para las dependencias actuales apunta a una instalación inexistente en este equipo. |
 | Datos | Las pruebas y demostraciones deben usar registros ficticios. No se inspeccionaron ni modificaron `.env`, la base de datos recibida o los archivos de `media/`. |
 | Siguiente hito | Completar un recorrido demostrable de inventario y dispensación simulada, validar reglas y permisos con usuarios responsables y registrar su aceptación y los pendientes. |
+
+## Petición actual — DAU según referencia visual / 2026-11-04
+
+Se reorganizó la pantalla DAU para aproximar las capturas compartidas: entrada por código ficticio, ficha de paciente, cuadrícula de signos, procedimientos cronológicos, cierre DAU, historial e impresión/PDF. Identidad del funcionario proviene de la sesión. PAM e IMC se recalculan en servidor; los datos permanecen marcados como simulación. [Spec 015](../specs/015-dau-flujo-visual/spec.md).
+
+La migración `CliniTensSimulacionApp.0003` se generó y aplicó únicamente en la base SQLite en memoria de `core.test_settings`. **No se aplicó a la base local normal**; antes de usar el formulario DAU allí, revisar el plan, crear respaldo en `.test-artifacts/backups/` y ejecutar la migración. Pasaron `manage.py check`, cotejo de migraciones y carga de cuatro plantillas/resolución de rutas en settings aislados. No se ejecutaron pruebas funcionales, no se generó/revisó PDF ni se usó navegador; aceptación visual y pedagógica pendiente.
+
+## Petición actual — accesos docentes diferenciados por módulo / 2026-11-04
+
+Las tarjetas docentes ya no llevan a una misma ruta: DAU, laboratorio y Kardex tienen páginas de preparación distintas. Cada página permite editar únicamente su bloque en casos borrador de cursos visibles; los casos publicados se muestran en solo lectura. La DAU docente permite mantener identidad sintética SIM y escenario; laboratorio mantiene contexto de solicitud; Kardex mantiene actividades por línea. No se cambió el esquema. Pasaron `manage.py check`, cotejo de migraciones y carga/reverse de páginas/rutas con `core.test_settings`. No se corrieron pruebas funcionales, no se verificaron accesos por petición HTTP ni se revisó navegador. Aceptación visual/funcional pendiente. Ver [spec 016](../specs/016-modulos-clinicos-separados/spec.md).
+
+## Petición actual — DAU, laboratorio y Kardex / 2026-11-04
+
+La usuaria pidió implementar los tres módulos pendientes de la portada. Se añadió `CliniTensSimulacionApp`, con casos ficticios vinculados a cursos, preparación docente, práctica por etapas DAU/laboratorio/Kardex, intentos aislados por estudiante e historial de eventos Kardex. La cuarta tarjeta de administración de módulos permanece pendiente. [Spec 014](../specs/014-simuladores-clinicos/spec.md), [plan](../specs/014-simuladores-clinicos/plan.md), [tareas](../specs/014-simuladores-clinicos/tasks.md), [validación](../specs/014-simuladores-clinicos/validation.md).
+
+Pasaron `manage.py check`, `makemigrations --check --dry-run`, carga de plantillas y resolución de rutas. Las migraciones se probaron en memoria y después se aplicaron a la base local tras guardar una copia en `.test-artifacts/backups/db.sqlite3.pre-simulaciones-20261104.bak`; `showmigrations` confirma ambas. No se inspeccionaron los registros. No se ejecutaron pruebas funcionales ni revisión de navegador. Próximo: actualizar la página de gestión y confirmar el flujo; luego revisar con la docente.
 
 ## Petición actual — 006, modales / 2026-10-21
 

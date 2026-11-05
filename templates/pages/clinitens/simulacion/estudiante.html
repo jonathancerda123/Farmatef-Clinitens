@@ -1,0 +1,8 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block head_title %}Práctica clínica simulada | CliniTENS{% endblock %}
+{% block page_title %}Práctica clínica simulada{% endblock %}
+{% block content_main %}
+<p class="page-intro">{{ titulo_etapa }} · Solo casos ficticios asignados a tus cursos. No uses datos de personas reales.</p>
+<div class="module-list">{% for caso in casos %}<article class="module-entry"><div><h2>{{ caso.titulo }}</h2><p>{{ caso.curso }} · {{ caso.resumen }}</p>{% if etapa == 'dau' %}<a href="{% url 'clinitens_simulacion:dau_inicio' %}">Abrir registro DAU</a>{% elif etapa == 'laboratorio' %}<a href="{% url 'clinitens_simulacion:solicitud_laboratorio' caso.pk %}">Abrir órdenes y tubos</a>{% elif etapa == 'diagnostico' %}<a href="{% url 'clinitens_simulacion:etapa' caso.pk 'diagnostico' %}">Abrir resultados diagnósticos</a>{% else %}<div class="sim-module-actions"><a class="btn-primary" href="{% url 'clinitens_simulacion:dau_inicio' %}">Atención de urgencia (DAU)</a><a href="{% url 'clinitens_simulacion:solicitud_laboratorio' caso.pk %}">Laboratorio clínico</a><a href="{% url 'clinitens_simulacion:etapa' caso.pk 'diagnostico' %}">Centro de Apoyo Diagnóstico</a></div>{% endif %}</div></article>{% empty %}<p class="form-sheet">No tienes casos publicados en tus cursos por ahora.</p>{% endfor %}</div>
+<p class="form-sheet">Simulación educativa · Los pacientes, resultados e indicaciones son ficticios.</p>
+{% endblock %}

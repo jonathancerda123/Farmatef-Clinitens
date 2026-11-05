@@ -1,0 +1,3 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block page_title %}Historial de laboratorio{% endblock %}
+{% block content_main %}<p><a href="{% url 'clinitens_simulacion:estudiante_casos' %}">← Volver a mis casos</a></p><section class="form-sheet"><h2>Mis órdenes emitidas</h2>{% for orden in ordenes %}<article class="module-entry"><h3>{{ orden.codigo }}</h3><p>{{ orden.caso.titulo }} · {{ orden.emitida_en|date:'d-m-Y H:i' }} · {{ orden.examenes|length }} exámenes</p><a href="{% url 'clinitens_simulacion:solicitud_laboratorio' orden.caso_id %}?orden={{ orden.pk }}">Abrir orden</a> · <a href="{% url 'clinitens_simulacion:orden_laboratorio_pdf' orden.pk %}">PDF</a></article>{% empty %}<p>Aún no hay órdenes emitidas.</p>{% endfor %}</section>{% endblock %}

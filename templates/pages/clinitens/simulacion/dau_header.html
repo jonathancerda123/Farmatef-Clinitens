@@ -1,0 +1,5 @@
+{% load static %}
+<header class="dau-topbar">
+  <a class="dau-topbar-brand" href="{% url 'clinitens_simulacion:dau_inicio' %}"><span class="dau-small-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h4l2-6 4 12 2-6h4"/></svg></span><span><strong>Registro de Atención de Urgencia</strong><small>Funcionario: {{ funcionario }}</small></span></a>
+  <nav aria-label="Acciones DAU"><a class="dau-button dau-button-secondary" href="{% url 'clinitens_simulacion:dau_inicio' %}"><span aria-hidden="true">↻</span> Nuevo paciente</a><a class="dau-topbar-exit" href="{% url 'clinitens' %}"><span aria-hidden="true">←</span> Salir</a></nav>
+</header>

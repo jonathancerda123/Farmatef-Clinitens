@@ -26,6 +26,7 @@ Los nombres técnicos de cargos existentes son RESTRICTED, MANAGER y ADMIN. Los 
 - Acceso a resultados y archivos condicionado por propiedad, rol, publicación y asociación con la actividad.
 - Importación de participantes desde planillas y seguimiento de actividad en la aplicación.
 - Interfaz común para los módulos CliniTENS y FarmaTEF.
+- Simuladores educativos separados por curso: DAU (signos y procedimientos), Laboratorio (órdenes y etiquetas tubo a tubo) y Centro de Apoyo Diagnóstico (resultados de laboratorio, imágenes ficticias, ECG e informes). Validación docente pendiente; el Kardex permanece solo como historial legado.
 
 Los detalles de acceso y restricciones se encuentran en el código y las especificaciones. La existencia de estas capacidades no certifica su preparación para una operación productiva.
 
