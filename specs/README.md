@@ -35,3 +35,7 @@ Cada alcance concreto contiene spec.md, plan.md, tasks.md y validation.md. Una s
 Identificadores RF-NNN-XX y T-NNN-XX permanecen estables. Requisitos → archivos/tareas → evidencia se relacionan en [TRAZABILIDAD](../docs/TRAZABILIDAD.md). La spec 017 extiende el recorrido de la 016 y sustituye la presentación funcional de Kardex por CAD, preservando su historia almacenada. La 018 añade solicitudes de laboratorio inmutables y con historial propio.
 
 Flujo: documento → revisión → autorización explícita de tareas de código → implementación → verificación → aceptación humana. Para una petición solo documental no se inicia implementación. Un checklist terminado no sustituye la aceptación del usuario ni permite desplegar.
+
+021 — [Datos originales y acceso local](021-base-original-acceso-local/spec.md): restauración respaldada local y cuentas de prueba autorizadas el 2026-11-10; 0007 aplicada solo al destino de trabajo y al ensayo, fuente intacta. Validación en su paquete; no commit/push automático.
+
+022 — [Inicio por áreas y buscador de medicamentos](022-inicio-selector-medicamentos/spec.md): implementado localmente en jonathan por solicitud del 2026-11-10 y elección de buscador integrado; 70 Django/build/navegador, aceptación pendiente. Sin migraciones/commit/push.

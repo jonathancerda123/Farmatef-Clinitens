@@ -3,22 +3,11 @@
 {% block head_title %}Inicio | FarmaTEF y CliniTENS{% endblock head_title %}
 {% block page_title %}Tu espacio de aprendizaje{% endblock page_title %}
 {% block content_main %}
-<section class="home-intro" aria-labelledby="inicio-titulo">
-  <div><h2 id="inicio-titulo">Aprender cuidando.</h2><p class="section-description">Cada caso es una oportunidad para observar, registrar y tomar decisiones. Reúne tu práctica clínica en un mismo espacio.</p>
-    <div class="intro-actions"><a href="{% url 'clinitens' %}" class="btn-primary">Abrir área clínica {% include 'components/design/icon.html' with icon='arrow' %}</a>
-    {% if request.user.is_superuser or request.user.profile.position_FK.permission_code == 'ADMIN' or request.user.profile.position_FK.permission_code == 'MANAGER' %}<a class="btn-secondary" href="{% url 'clinitensdocente:dashboard' %}">Panel docente</a>{% else %}<a class="btn-secondary" href="{% url 'clinitensficha:ingreso' %}">Ingresar a una actividad</a>{% endif %}</div>
-  </div>
-  <div class="clinical-guide"><h3>Del caso a la práctica</h3>
-    <div class="guide-step">{% include 'components/design/icon.html' with icon='case' %}<div><strong>Observa el caso</strong><p>Contexto, paciente y apoyo diagnóstico.</p></div></div>
-    <div class="guide-step">{% include 'components/design/icon.html' with icon='clipboard' %}<div><strong>Completa la ficha</strong><p>13 secciones para ordenar la atención.</p></div></div>
-    <div class="guide-step">{% include 'components/design/icon.html' with icon='result' %}<div><strong>Revisa la evaluación</strong><p>Rúbrica y retroalimentación docente.</p></div></div>
-  </div>
-</section>
 <section aria-labelledby="plataformas-titulo">
-  <div class="section-heading"><div><h2 id="plataformas-titulo">Áreas de formación</h2><p class="section-description">Elige el entorno para tu próxima práctica.</p></div></div>
-  <div class="module-list">
-    <article class="module-entry"><span class="module-symbol">{% include 'components/design/icon.html' with icon='clipboard' %}</span><div><h3>CliniTENS</h3><p>Casos clínicos, registro de atención y evaluación para Técnicos en Enfermería.</p><a href="{% url 'clinitens' %}">Explorar área clínica</a></div></article>
-    <article class="module-entry"><span class="module-symbol">{% include 'components/design/icon.html' with icon='result' %}</span><div><h3>FarmaTEF</h3><p>Inventario docente inicial para prácticas simuladas de Técnico en Farmacia.</p><a href="{% url 'farmatef' %}">Abrir área de farmacia</a></div></article>
+  <div class="section-heading"><div><h2 id="plataformas-titulo">¿Dónde quieres trabajar?</h2><p class="section-description">Elige un área para comenzar tu práctica.</p></div></div>
+  <div class="area-launch-grid">
+    <a class="area-launch" href="{% if request.user.profile.position_FK.permission_code == 'RESTRICTED' and not request.user.is_superuser %}{% url 'farmatef:practica_recetas' %}{% else %}{% url 'farmatef' %}{% endif %}"><span class="module-symbol">{% include 'components/design/icon.html' with icon='result' %}</span><h3>FarmaTEF</h3><p>Práctica de farmacia: medicamentos, recetas y dispensación simulada.</p><span class="area-launch-action">Abrir área de farmacia {% include 'components/design/icon.html' with icon='arrow' %}</span></a>
+    <a class="area-launch" href="{% url 'clinitens' %}"><span class="module-symbol">{% include 'components/design/icon.html' with icon='clipboard' %}</span><h3>CliniTENS</h3><p>Práctica clínica: pacientes, atención de enfermería y apoyo diagnóstico.</p><span class="area-launch-action">Abrir área clínica {% include 'components/design/icon.html' with icon='arrow' %}</span></a>
   </div>
 </section>
 <section class="panel mt-8" aria-labelledby="usuarios-recientes">
