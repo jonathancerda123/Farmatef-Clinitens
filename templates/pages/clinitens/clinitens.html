@@ -2,15 +2,30 @@
 {% block head_title %}Área clínica | CliniTENS{% endblock head_title %}
 {% block page_title %}Área clínica{% endblock page_title %}
 {% block content_main %}
-<section class="home-intro"><div><h2>Una práctica. Todo el proceso.</h2><p class="section-description">Prepara el escenario, registra la atención y acompaña el aprendizaje. Trabaja con casos simulados para la formación en Enfermería.</p><div class="intro-actions"><a class="btn-primary" href="{% url 'clinitensficha:ingreso' %}">Ingresar a una actividad {% include 'components/design/icon.html' with icon='arrow' %}</a></div></div>
-  <div class="clinical-guide"><h3>Ficha clínica electrónica</h3><div class="guide-step">{% include 'components/design/icon.html' with icon='patient' %}<div><strong>Identificación del paciente</strong><p>El punto de partida de tu registro.</p></div></div><div class="guide-step">{% include 'components/design/icon.html' with icon='clipboard' %}<div><strong>Atención y evolución</strong><p>Tratamientos, signos vitales y cuidados.</p></div></div><div class="guide-step">{% include 'components/design/icon.html' with icon='result' %}<div><strong>Evaluación del aprendizaje</strong><p>Entrega la ficha y revisa tu resultado.</p></div></div></div>
+<section class="home-intro">
+  <div><h2>Una práctica. Todo el proceso.</h2><p class="section-description">Ficha clínica, atención de urgencia, cuidados de enfermería y apoyo diagnóstico. Selecciona el apartado para trabajar con tus casos simulados.</p><div class="intro-actions"><a class="btn-primary" href="#modulos-clinicos">Explorar los apartados {% include 'components/design/icon.html' with icon='arrow' %}</a></div></div>
+  <div class="clinical-guide"><h3>¿Cómo empiezo?</h3><div class="guide-step">{% include 'components/design/icon.html' with icon='patient' %}<div><strong>Prepara un paciente ficticio</strong><p>El docente crea un caso para su curso y completa los datos del paciente.</p></div></div><div class="guide-step">{% include 'components/design/icon.html' with icon='clipboard' %}<div><strong>Realiza la práctica</strong><p>El estudiante abre el caso publicado de su curso y registra su atención.</p></div></div><div class="guide-step">{% include 'components/design/icon.html' with icon='result' %}<div><strong>Conserva el registro</strong><p>Guarda tu avance y consulta el historial del apartado correspondiente.</p></div></div></div>
 </section>
-<div class="section-heading"><div><h2>¿Qué necesitas hacer?</h2><p class="section-description">Accesos a las herramientas disponibles para tu cuenta.</p></div></div>
-<div class="module-list">
-  <article class="module-entry"><span class="module-symbol">{% include 'components/design/icon.html' with icon='clipboard' %}</span><div><h3>Registrar una actividad</h3><p>Ingresa con el código de tu actividad para revisar el caso y completar tu ficha.</p><a href="{% url 'clinitensficha:ingreso' %}">Abrir ficha clínica</a></div></article>
-  {% if request.user.is_superuser or request.user.profile.position_FK.permission_code == 'ADMIN' or request.user.profile.position_FK.permission_code == 'MANAGER' %}
-  <article class="module-entry"><span class="module-symbol">{% include 'components/design/icon.html' with icon='course' %}</span><div><h3>Preparar y evaluar</h3><p>Organiza cursos y casos, comparte códigos y revisa las fichas de tus estudiantes.</p><a href="{% url 'clinitensdocente:dashboard' %}">Abrir panel docente</a></div></article>
-  {% endif %}
-</div>
-<section class="pending-modules"><h2 class="text-lg font-semibold">Más herramientas, en desarrollo</h2><p class="section-description">Estos módulos todavía no están disponibles.</p><ul><li>Atención de urgencia (DAU)</li><li>Laboratorio clínico</li><li>Kardex de enfermería</li><li>Perfil administrador de módulos</li></ul></section>
+<section aria-labelledby="modulos-clinicos">
+  <div class="section-heading"><div><h2 id="modulos-clinicos" tabindex="-1">Selecciona un apartado para comenzar</h2><p class="section-description">Los accesos se adaptan a tu perfil. Las prácticas usan solo pacientes y datos ficticios.</p></div></div>
+  <div class="clinical-module-grid">
+    {% for modulo in modulos_clinicos %}
+    <article class="module-entry clinical-module">
+      <div class="clinical-module-header"><span class="module-symbol">{% include 'components/design/icon.html' with icon=modulo.icono %}</span><span class="clinical-module-audience">{{ modulo.publico }}</span></div>
+      <div><h3>{{ modulo.titulo }}</h3><p>{{ modulo.descripcion }}</p></div>
+      <div class="clinical-module-action">{% if modulo.url %}<a href="{{ modulo.url }}">{{ modulo.accion }} {% include 'components/design/icon.html' with icon='arrow' %}</a>{% else %}<span>{% include 'components/design/icon.html' with icon='lock' %} {{ modulo.restriccion }}</span>{% endif %}</div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% if puede_gestionar %}
+<section class="clinical-start-guide" aria-labelledby="preparar-pacientes">
+  <h2 id="preparar-pacientes">¿Dónde agrego un paciente?</h2>
+  <p class="section-description">Para DAU, enfermería, laboratorio y apoyo diagnóstico, crea un caso de simulación, completa el paciente con un código inventado SIM y configura sus módulos antes de publicarlo. Los estudiantes matriculados podrán abrirlo desde su cuenta.</p>
+  <div class="intro-actions"><a class="btn-primary" href="{% url 'clinitens_simulacion:docente_casos' %}#nuevo-caso">Crear caso de simulación</a><a class="btn-secondary" href="{% url 'clinitens_simulacion:docente_enfermeria' %}">Completar paciente SIM</a></div>
+  <p class="section-description">El panel docente también tiene un catálogo de pacientes de referencia para preparar las actividades de ficha clínica electrónica.</p><div class="intro-actions"><a class="btn-secondary" href="{% url 'clinitensdocente:pacientes' %}">Gestionar pacientes de ficha clínica</a><a class="btn-secondary" href="{% url 'clinitensdocente:cursos' %}">Gestionar cursos y estudiantes</a></div>
+</section>
+{% else %}
+<p class="pending-note mt-8">Los pacientes de práctica los prepara tu docente. Si no aparece un paciente, solicita que publique el caso y compruebe tu matrícula en el curso.</p>
+{% endif %}
 {% endblock content_main %}

@@ -1,0 +1,68 @@
+{
+  "viewports": [
+    {
+      "label": "portada-1440",
+      "viewport": 1440,
+      "document": 1440,
+      "h1": 1,
+      "columns": 3
+    },
+    {
+      "label": "portada-768",
+      "viewport": 768,
+      "document": 768,
+      "h1": 1,
+      "columns": 2
+    },
+    {
+      "label": "portada-390",
+      "viewport": 390,
+      "document": 390,
+      "h1": 1,
+      "columns": 1
+    },
+    {
+      "label": "preparacion-docente-1440",
+      "viewport": 1440,
+      "document": 1440,
+      "h1": 1,
+      "columns": null
+    },
+    {
+      "label": "registro-1440",
+      "viewport": 1440,
+      "document": 1440,
+      "h1": 1,
+      "columns": null
+    },
+    {
+      "label": "registro-768",
+      "viewport": 768,
+      "document": 768,
+      "h1": 1,
+      "columns": null
+    },
+    {
+      "label": "registro-390",
+      "viewport": 390,
+      "document": 390,
+      "h1": 1,
+      "columns": null
+    },
+    {
+      "label": "historial-390",
+      "viewport": 390,
+      "document": 390,
+      "h1": 1,
+      "columns": null
+    }
+  ],
+  "flow": [
+    "Orden de siete apartados y navegación de ancla/Tab correctos.",
+    "Docente completó el paciente de un caso borrador desde la preparación de enfermería.",
+    "Búsqueda inválida conserva código; finalizar vacío conserva observaciones; guardado y conflicto entre pestañas preservan texto.",
+    "Finalizada queda de solo lectura, aparece en historial y una nueva atención inicia borrador separado.",
+    "Se respeta movimiento reducido; historial móvil desplaza solo la tabla."
+  ],
+  "errors": []
+}

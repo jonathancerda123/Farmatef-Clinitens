@@ -1,0 +1,8 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block head_title %}Resultados de simulación | CliniTENS{% endblock %}
+{% block page_title %}Resultados de simulación{% endblock %}
+{% block content_main %}
+<p>Revisa los registros educativos de tus cursos. No son datos clínicos.</p>
+{% for caso in casos %}<section class="form-sheet"><h2>{{ caso.titulo }} · {{ caso.curso }}</h2>{% for intento in intentos %}{% if intento.caso_id == caso.pk %}<article class="border-b py-4"><h3>Estudiante: {{ intento.estudiante.get_username }}</h3><h4>Atención de urgencia (DAU)</h4><p>Signos guardados: {{ intento.datos_dau|default:'Sin registro' }}</p><h4>Laboratorio</h4><p>Tubos registrados:</p><ul>{% for tubo in intento.tubos_resumen %}<li>{{ tubo }}</li>{% empty %}<li>Aún no registra tubos.</li>{% endfor %}</ul><h4>Centro de Apoyo Diagnóstico</h4><p>Documentos revisados:</p><ul>{% for titulo in intento.documentos_revisados_resumen %}<li>{{ titulo }}</li>{% empty %}<li>Aún no registra revisiones.</li>{% endfor %}</ul><details><summary>Historial Kardex legado</summary><ul>{% for evento in intento.eventos_kardex.all %}<li>{{ evento.get_estado_display }} · {{ evento.registrado_en }}{% if evento.observacion %} — {{ evento.observacion }}{% endif %}</li>{% empty %}<li>Sin registros históricos.</li>{% endfor %}</ul></details></article>{% endif %}{% empty %}<p>Sin intentos por ahora.</p>{% endfor %}</section>{% empty %}<p class="form-sheet">No hay casos en tus cursos.</p>{% endfor %}
+<p class="form-sheet">Simulación educativa · Datos ficticios.</p>
+{% endblock %}

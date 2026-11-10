@@ -1,0 +1,46 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% load static %}
+{% block head_title %}Preparar simulaciones | CliniTENS{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/simulacion-docente.css' %}">{% endblock %}
+{% block page_title %}Preparar simulaciones educativas{% endblock %}
+{% block content_main %}
+<div class="page-intro sim-page-intro">
+  <p>Prepara casos ficticios para tus cursos. Los contenidos no son indicaciones clínicas reales.</p>
+</div>
+
+<section class="sim-case-form-card" aria-labelledby="nuevo-caso">
+  <div class="sim-card-heading"><div><span class="sim-step">1</span><h2 id="nuevo-caso">Crear un caso de práctica</h2></div><p>Elige el curso y describe la práctica. Después te guiaremos paso a paso.</p></div>
+  <form method="post" class="sim-case-form">{% csrf_token %}
+    <div class="sim-form-section">
+      <h3>Datos generales</h3>
+      <div class="sim-fields-grid">
+        {% for field in form %}{% if field.name == 'curso' or field.name == 'titulo' or field.name == 'resumen' %}
+          <div class="sim-field{% if field.name == 'resumen' %} sim-field-wide{% endif %}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}
+            {% if field.help_text %}<p class="sim-help">{{ field.help_text }}</p>{% endif %}
+            {% for error in field.errors %}<p class="sim-error">{{ error }}</p>{% endfor %}
+          </div>
+        {% endif %}{% endfor %}
+      </div>
+    </div>
+
+    <div class="sim-form-actions"><p>El caso quedará como borrador. Al guardar, te guiaremos para preparar el paciente, la atención, los exámenes y los resultados.</p><button class="btn-primary" type="submit">Crear caso y preparar paciente</button></div>
+  </form>
+</section>
+
+<section class="sim-cases-section" aria-labelledby="casos-titulo">
+  <div class="sim-cases-heading"><div><h2 id="casos-titulo">Casos de tus cursos</h2></div><a href="{% url 'clinitens_simulacion:docente_resultados' %}">Revisar resultados de práctica →</a></div>
+  <div class="sim-cases-list">
+    {% for preparacion in preparaciones %}{% with caso=preparacion.caso %}
+      <article class="sim-case-card">
+        <div class="sim-case-card-heading"><div><h3>{{ caso.titulo }}</h3><p>{{ caso.curso }}</p></div><span class="sim-case-status{% if caso.publicado %} is-published{% endif %}">{% if caso.publicado %}Publicado{% else %}Borrador{% endif %}</span></div>
+        <p class="sim-case-summary">{{ caso.resumen }}</p>
+        {% if caso.paciente_codigo %}<p class="sim-case-patient">Paciente SIM: <strong>{{ caso.paciente_nombre }}</strong> · {{ caso.paciente_codigo }}</p>{% endif %}
+        <p class="sim-progress">{{ preparacion.completados }} de 4 apartados preparados</p>
+        {% if caso.publicado %}<p class="sim-help">Disponible para estudiantes inscritos. Contenido de solo lectura.</p><a class="btn-secondary" href="{{ preparacion.revision_url }}">Ver preparación del caso</a>
+        {% else %}<p class="sim-help">Siguiente paso: {{ preparacion.siguiente_nombre }}.</p><a class="btn-primary" href="{{ preparacion.continuar_url }}">{% if preparacion.listo %}Revisar y publicar{% else %}Continuar preparación{% endif %}</a>{% endif %}
+      </article>{% endwith %}
+    {% empty %}<p class="sim-cases-empty">Todavía no hay casos de simulación en tus cursos.</p>{% endfor %}
+  </div>
+</section>
+{% endblock %}

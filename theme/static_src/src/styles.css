@@ -7,6 +7,7 @@
 @source "../../../UsuarioApp";
 @source "../../../CliniTensDocenteApp";
 @source "../../../CliniTensFichaApp";
+@source "../../../CliniTensSimulacionApp";
 @source "../../../core";
 
 @theme inline {
@@ -112,6 +113,26 @@
   .module-entry h3 { font-size: 1.2rem; font-weight: 700; }
   .module-entry p { color: rgb(var(--color-muted)); font-size: .875rem; margin: .5rem 0 1rem; max-width: 48ch; }
   .module-entry a { color: rgb(var(--color-primary-hover)); font-size: .9rem; font-weight: 650; text-decoration: underline; text-underline-offset: .25em; }
+  .clinical-module-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1.25rem; }
+  .clinical-module { flex-direction: column; align-items: stretch; min-width: 0; border-top: 4px solid rgb(var(--color-primary)); }
+  .clinical-module-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+  .clinical-module-audience { color: rgb(var(--color-muted)); background: rgb(var(--color-canvas)); border-radius: var(--radius-control); padding: .3rem .55rem; font-size: .75rem; }
+  .clinical-module-action { border-top: 1px solid rgb(var(--color-border)); margin-top: auto; padding-top: 1rem; }
+  .clinical-module-action a,.clinical-module-action > span { display: flex; gap: .6rem; align-items: center; min-height: 2.75rem; }
+  .clinical-module-action a { justify-content: space-between; }
+  .clinical-module-action > span { font-size: .8rem; color: rgb(var(--color-muted)); }
+  .clinical-start-guide { border-top: 1px solid rgb(var(--color-border)); margin-top: 2rem; padding-top: 1.5rem; }
+  .clinical-start-guide h2 { font-size: 1.35rem; font-weight: 700; }
+  .rae-heading { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+  .rae-patient { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1.25rem; margin-top: 1rem; }
+  .rae-patient dt { color: rgb(var(--color-muted)); font-size: .8rem; }
+  .rae-patient dd { font-weight: 600; overflow-wrap: anywhere; }
+  .rae-notes { margin-top: 1.5rem; }
+  .rae-case-context { border-top: 1px solid rgb(var(--color-border)); margin-top: 1.5rem; padding-top: 1.25rem; }
+  .rae-case-context h3 { font-weight: 650; }
+  .rae-writing-guide { margin-bottom: 1.5rem; }
+  .rae-notes h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; }
+  .rae-text { white-space: pre-wrap; overflow-wrap: anywhere; margin: .5rem 0 1.5rem; }
   .pending-modules { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid rgb(var(--color-border)); }
   .pending-modules ul { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1rem; }
   .pending-modules li { padding: .5rem .75rem; border: 1px solid rgb(var(--color-border)); border-radius: .4rem; color: rgb(var(--color-muted)); font-size: .8rem; }
@@ -166,7 +187,9 @@
   .section-navigation { position: sticky; top: 7rem; max-height: calc(100dvh - 8rem); overflow-y: auto; }
 }
 @media (max-width:1100px) { .metric-strip { grid-template-columns: repeat(3,minmax(0,1fr)); } .metric-strip > div { border-bottom: 1px solid rgb(var(--color-border)); } }
+@media (min-width:1280px) { .clinical-module-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
 @media (max-width:767px) {
+  .clinical-module-grid,.rae-patient { grid-template-columns: minmax(0,1fr); }
   .home-intro,.module-list,.auth-layout { grid-template-columns: minmax(0,1fr); }
   .home-intro { gap: 1.5rem; }
   .auth-story { padding: 1.5rem; }

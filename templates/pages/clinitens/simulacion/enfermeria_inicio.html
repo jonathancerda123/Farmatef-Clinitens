@@ -1,0 +1,24 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block head_title %}Registro de Atención de Enfermería | CliniTENS{% endblock %}
+{% block workspace_name %}Área clínica · Enfermería{% endblock %}
+{% block page_title %}Registro de Atención de Enfermería{% endblock %}
+{% block content_main %}
+<div class="rae-heading"><p class="section-description">Abre la ficha de un paciente simulado para registrar los cuidados de tu práctica.</p><a class="btn-secondary" href="{% url 'clinitens_simulacion:enfermeria_historial' %}">Mi historial de enfermería</a></div>
+<section class="form-sheet" aria-labelledby="buscar-paciente">
+  <h2 id="buscar-paciente" class="text-xl font-bold">Buscar paciente de práctica</h2>
+  <p class="section-description">Funcionario: <strong>{{ funcionario }}</strong>. Usamos la identidad de tu cuenta.</p>
+  <form method="post" class="space-y-5 mt-6">{% csrf_token %}{% include 'components/design/form_errors.html' %}
+    {% include 'components/design/field.html' with field=form.codigo %}
+    <p class="section-description">Tu docente prepara los pacientes de tus cursos. Busca su código SIM; no ingreses RUT ni datos de personas reales.</p>
+    <button class="btn-primary w-full" type="submit">Buscar paciente y abrir atención</button>
+  </form>
+</section>
+<section class="mt-8" aria-labelledby="pacientes-disponibles">
+  <div class="section-heading"><h2 id="pacientes-disponibles">Pacientes de práctica disponibles</h2></div>
+  <div class="module-list">
+    {% for caso in casos %}<article class="panel"><h3 class="text-lg font-semibold">{{ caso.paciente_nombre }}</h3><p class="section-description">{{ caso.paciente_codigo }} · {{ caso.curso }}</p><p class="section-description">{{ caso.titulo }}</p><form method="post" class="mt-4">{% csrf_token %}<input type="hidden" name="codigo" value="{{ caso.paciente_codigo }}"><button type="submit" class="btn-secondary">Abrir atención de {{ caso.paciente_nombre }}</button></form></article>
+    {% empty %}<p class="pending-note">No hay pacientes SIM publicados en tus cursos. Pide a tu docente que publique el caso y compruebe tu matrícula.</p>{% endfor %}
+  </div>
+</section>
+<div class="intro-actions"><a class="btn-secondary" href="{% url 'clinitens' %}">Volver al área clínica</a></div>
+{% endblock %}

@@ -1,9 +1,9 @@
 {% extends 'components/Layout/base.html' %}
-{% block head_title %}CliniTENS{% endblock head_title %}
+{% block head_title %}FarmaTEF y CliniTENS{% endblock head_title %}
 {% block content %}
 <a href="#contenido-principal" class="skip-link">Ir al contenido principal</a>
 <div class="app-shell">
-  <aside class="app-sidebar" aria-label="Navegación de CliniTENS">
+  <aside class="app-sidebar" aria-label="Navegación de FarmaTEF y CliniTENS">
     {% include 'components/design/brand.html' %}
     <details class="app-navigation" data-disclosure open>
       <summary>Menú de navegación <span aria-hidden="true">☰</span></summary>
@@ -11,7 +11,11 @@
         <nav aria-label="Plataforma" class="nav-group">
           {% url 'Home' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Inicio' icon='home' exact=True %}
           {% url 'clinitens' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Área clínica' icon='case' exact=True %}
-          {% url 'farmatef' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Área farmacia' icon='course' exact=True %}
+          {% if request.user.is_superuser or request.user.profile.position_FK.permission_code == 'ADMIN' or request.user.profile.position_FK.permission_code == 'MANAGER' %}
+            {% url 'farmatef' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Área farmacia' icon='course' exact=True %}
+          {% elif request.user.profile.position_FK.permission_code == 'RESTRICTED' %}
+            {% url 'farmatef:practica_recetas' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Práctica de farmacia' icon='course' %}
+          {% endif %}
         </nav>
         {% block workspace_navigation %}
           {% if request.user.is_superuser or request.user.profile.position_FK.permission_code == 'ADMIN' or request.user.profile.position_FK.permission_code == 'MANAGER' %}
@@ -42,7 +46,7 @@
       {% include 'components/mensajes.html' %}
       {% block workspace_content %}{% endblock workspace_content %}
     </main>
-    <footer class="app-footer"><span>CliniTENS</span><span>Formación en Técnico en Enfermería</span></footer>
+    <footer class="app-footer"><span>FarmaTEF y CliniTENS</span><span>Formación en Técnico en Enfermería</span></footer>
   </div>
 </div>
 {% endblock content %}

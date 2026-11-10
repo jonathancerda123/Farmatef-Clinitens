@@ -4,11 +4,18 @@ Este documento describe cómo preparar un entorno aislado, verificar cambios y p
 
 ## Estado del entorno actual
 
+Actualización 019, copia de trabajo del 2026-11-09: el target anterior y `.venv` no están presentes. Se creó `.test-artifacts/clinica-019-env` con Python 3.12.0 y las versiones exactas de `requirements.txt`. Las verificaciones 019 usan su `Scripts/python.exe` con `core.test_settings`. La fixture de navegador es `.test-artifacts/clinica-019.sqlite3`; no se debe sustituir por la base habitual. 0007 de simulación se aplicó solo a memoria/fixture. Checks, 61 Django/4 JS y build correctos; [evidencia y límites](../specs/019-apartados-area-clinica/validation.md). Las menciones siguientes a entornos y migraciones locales describen sesiones anteriores, no una base transferida a esta copia.
+
 - La línea base 004 registró Django 5.2.18, allauth 65.19.7, Tailwind 4.3.3 y una suite de 47 pruebas Django y 4 pruebas JavaScript. Es evidencia de esa línea base, no de los cambios de FarmaTEF.
 - El entorno de dependencias actual está en `.test-artifacts/dependencias-004/target`; el `.venv` anterior se conserva con dependencias antiguas.
-- El ejecutable Python del entorno target no inicia en este equipo: busca una instalación bajo `C:\Users\Fernando\...` que no existe. No se han ejecutado `manage.py check`, pruebas ni cotejo de migraciones para FarmaTEF.
-- `FarmaTEFApp.0001_initial` fue escrita manualmente para las tablas de medicamentos y lotes. El cotejo automático está pendiente y no se aplicó a la base recibida ni a otro entorno persistente.
-- No se leyeron `.env`, `db.sqlite3` ni contenido de `media/`. La base y los medios recibidos no se modificaron.
+- El ejecutable Python del entorno target no inicia en este equipo; las comprobaciones recientes usaron `.venv/Scripts/python.exe` con `core.test_settings` para aislar la base ficticia en memoria.
+- Las migraciones FarmaTEF 0003–0007 existen; `0007` incorpora cursos, claves docentes e intentos individuales. La migración 0007 se aplicó a la base local tras copia verificada en `.test-artifacts/recetas-010/db.sqlite3.before-student-flow-20261104`.
+- La migración `CliniTensDocenteApp.0008` agrega la relación curso-docentes colaboradores; en spec 012 se aplicó a la base local después del respaldo consistente `.test-artifacts/recetas-012/db.sqlite3.before` (823296 bytes). No se aplicó a producción.
+- Las migraciones `CliniTensSimulacionApp.0003` y `0005` agregan identidad SIM/DAU y órdenes/tubos/CAD. En la verificación del 2026-11-05, `showmigrations` confirmó las migraciones 0001–0005 aplicadas en la base local habitual, así como los ensayos previos en memoria.
+- La migración `CliniTensSimulacionApp.0006` agrega órdenes de laboratorio emitidas con instantáneas de exámenes; se ensayó en memoria y luego se aplicó a la base local habitual por petición explícita de la usuaria, después de crear/verificar `.test-artifacts/lab-018/db.sqlite3.before-20261105` (942080 bytes; `quick_check=ok`). `showmigrations` confirma 0001–0006. No se leyeron filas.
+- No se abrió `.env` ni contenido de `media/`. Con autorización limitada para crear demos, en una sesión anterior se consultaron solo el usuario `valita` y el catálogo activo; respaldos de cada escritura constan en specs 009/010. No se inspeccionaron otros datos de la base.
+
+Los checks Django y el cotejo automático de migraciones pasan con `core.test_settings`. No se ejecutó la suite funcional ni se validó el flujo estudiante/docente en navegador; esto no certifica permisos ni comportamiento de stock.
 
 ## Preparación de entorno aislado
 

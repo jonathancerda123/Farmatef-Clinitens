@@ -20,6 +20,7 @@ urlpatterns = [
         include("CliniTensFichaApp.urls", namespace="clinitensficha"),
     ),
     path("farmatef/", include("FarmaTEFApp.urls", namespace="farmatef")),
+    path("clinitens/simulaciones/", include("CliniTensSimulacionApp.urls", namespace="clinitens_simulacion")),
 ]
 
 if settings.DEBUG:

@@ -36,6 +36,7 @@ LOCAL_APPS = [
     "CliniTensDocenteApp",
     "CliniTensFichaApp",
     "FarmaTEFApp",
+    "CliniTensSimulacionApp",
 ]
 
 THIRD_APPS = [

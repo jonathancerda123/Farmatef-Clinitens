@@ -1,0 +1,17 @@
+{% extends 'components/Layout/base_extendido.html' %}{% load static %}
+{% block head_title %}Revisar caso | CliniTENS{% endblock %}
+{% block page_title %}Revisar y publicar el caso{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/simulacion-docente.css' %}">{% endblock %}
+{% block content_main %}
+{% include 'pages/clinitens/simulacion/pasos_preparacion.html' %}
+<section class="panel sim-review">
+  <h2>Resumen de la práctica</h2><p>{{ preparacion.caso.resumen }}</p>
+  <h3>Paciente</h3><p>{{ preparacion.caso.paciente_nombre|default:'Nombre pendiente' }} · {{ preparacion.caso.paciente_codigo|default:'Código SIM pendiente' }}</p>
+  <h3>Escenario de urgencia</h3><p class="rae-text">{{ preparacion.caso.escenario_dau|default:'Pendiente de preparar.' }}</p>
+  <h3>Exámenes de laboratorio</h3><ul>{% for orden in preparacion.caso.ordenes_laboratorio %}<li>{{ orden.examen }} · {{ orden.muestra }} · {{ orden.tubo }}</li>{% empty %}<li>No has agregado exámenes.</li>{% endfor %}</ul>
+  <h3>Apoyo diagnóstico</h3><ul>{% for documento in preparacion.caso.documentos_diagnosticos %}<li>{{ documento.titulo }} — {{ documento.contenido }}</li>{% empty %}<li>No has agregado resultados o informes.</li>{% endfor %}</ul>
+  {% if preparacion.caso.publicado %}<p class="pending-note">Este caso ya está publicado para los estudiantes inscritos. Su contenido se conserva en modo lectura.</p>
+  {% elif preparacion.listo %}<p class="pending-note">El caso está preparado. Al publicarlo, los estudiantes inscritos en {{ preparacion.caso.curso }} podrán realizar la práctica y el contenido quedará en modo lectura.</p><form method="post" action="{% url 'clinitens_simulacion:publicar_caso' preparacion.caso.pk %}">{% csrf_token %}<input type="hidden" name="volver_preparacion" value="1"><button class="btn-primary" type="submit">Publicar caso para mi curso</button></form>
+  {% else %}<div class="pending-note"><h3>Antes de publicar, falta preparar</h3><ul>{% for paso in preparacion.pendientes %}<li><a href="{{ paso.url }}">{{ paso.nombre }}</a>: {{ paso.ayuda }}</li>{% endfor %}</ul></div><a class="btn-primary" href="{{ preparacion.continuar_url }}">Continuar con {{ preparacion.siguiente_nombre|lower }}</a>{% endif %}
+</section>
+{% endblock %}

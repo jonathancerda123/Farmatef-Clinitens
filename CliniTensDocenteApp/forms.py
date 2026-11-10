@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django_ckeditor_5.widgets import CKEditor5Widget
 
@@ -218,6 +219,40 @@ class CursoForm(forms.ModelForm):
                 }
             )
         }
+
+
+class DocenteColaboradorChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        nombre = obj.get_full_name() or obj.username
+        return f"{nombre} (@{obj.username})"
+
+
+class CursoColaboradorForm(forms.Form):
+    docente = DocenteColaboradorChoiceField(
+        queryset=get_user_model().objects.none(),
+        label="Docente colaborador",
+        empty_label="Selecciona un docente",
+    )
+
+    def __init__(self, *args, curso, **kwargs):
+        super().__init__(*args, **kwargs)
+        User = get_user_model()
+        ya_asignados = curso.docentes_colaboradores.values_list("pk", flat=True)
+        self.fields["docente"].queryset = (
+            User.objects.filter(
+                is_active=True,
+                profile__position_FK__permission_code="MANAGER",
+            )
+            .exclude(pk=curso.creado_por_id)
+            .exclude(pk__in=ya_asignados)
+            .select_related("profile", "profile__position_FK")
+            .order_by("first_name", "last_name", "username")
+        )
+        self.fields["docente"].widget.attrs["class"] = INPUT
+        if not self.fields["docente"].queryset.exists():
+            self.fields["docente"].help_text = (
+                "No hay otros docentes activos disponibles para agregar."
+            )
 
 
 class ImportarEstudiantesExcelForm(forms.Form):

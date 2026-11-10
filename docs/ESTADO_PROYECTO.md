@@ -1,5 +1,29 @@
 # Estado y punto de reanudación — CliniTENS
 
+## Comprobación de módulos y claridad de textos — ampliación 020
+
+Por petición de conservar módulos existentes se compararon ramas remotas actualizadas y copia OneDrive. Los apartados tradicionales ya están implementados y se mantienen intactos. La prueba adicional en memoria creó curso/caso/código/paciente/resultado, consultó fichas y seguimiento y comprobó aislamiento; 66 regresiones correctas. Los contadores tradicionales no incluyen casos RAE/DAU/lab/CAD de simulación, por lo que Juan no incrementa esas métricas. No se conectaron ambos historiales. Se ordenó solo el paciente RAE y la guía de preparación: fieldsets, situación/antecedentes separados y “Falta preparar” en lugar de “Pendiente” ambiguo. Sin módulos/archivos funcionales nuevos ni migraciones. Evidencia y límites en validación 020; próximo: revisión del usuario, con los módulos tradicionales protegidos.
+
+## Preparación clínica guiada — 020 / 2026-11-09
+
+Tras el reporte de confusión en tarjetas, se sustituyeron enlaces dispersos por avance, siguiente paso y «Continuar preparación» por caso. Alta abre paciente; cada guardado continúa a Urgencia → Laboratorio → Apoyo diagnóstico → revisión/publicación, manteniendo un único caso autorizado. Publicados permanecen solo lectura, con instrucciones acordes. Se conservan requisitos de publicación actuales. Sin migraciones nuevas ni commit/push; cambios 019 intactos en `jonathan`. [Validación 020](../specs/020-preparacion-clinica-guiada/validation.md): 66 Django, cuatro JS, build y navegador con fixture/puente. Próximo: el usuario prueba el recorrido con su caso; aceptación pendiente.
+
+## Petición actual — apartados clínicos y RAE / 2026-11-09
+
+Se trabaja en `jonathan`, que ya sigue `origin/jonathan`; base `df23932`, árbol inicialmente limpio. No se cambió de rama ni se hizo staging, commit o push. La portada presenta, en el orden solicitado, Ficha Clínica Electrónica, Registro de Atención de Urgencia, Registro de Atención de Enfermería, Laboratorio Clínico, Centro de Apoyo Diagnóstico, Perfil Docente y Perfil Administrador. Reutiliza los módulos y accesos existentes, incluida la ficha para demostración docente; no se crearon ingresos paralelos.
+
+El usuario confirmó una primera versión propia de RAE: búsqueda de paciente SIM publicado de un curso matriculado, cuidados y observaciones, borrador parcial, finalización de solo lectura e historial propio paginado. `AtencionEnfermeria` conserva registros separados de DAU/Kardex, un borrador por alumno/caso y guardados condicionales por versión. El paciente y la publicación se comparten con el caso existente. La portada explica dónde crear casos y completar pacientes; la preparación RAE reutiliza validación SIM y conserva los demás bloques.
+
+Pasaron check/cotejo, 61 pruebas Django (14 RAE), cuatro JS y build Tailwind. Matriz de portada: 35 opciones/25 destinos permitidos, cinco perfiles ficticios. Navegador Chrome a 1440/768/390: orden, ancho, búsqueda/errores, guardado, dos pestañas, cierre, historial y nueva atención; transporte por puente de pruebas stdio porque loopback estaba bloqueado. No se valida red HTTP real, zoom 200%, otros motores ni aceptación clínica. [Spec/alcance](../specs/019-apartados-area-clinica/spec.md), [validación](../specs/019-apartados-area-clinica/validation.md), [capturas y reporte](evidencias/019-apartados/navegador.json).
+
+En esta copia no están `.venv` ni el target anterior. Se instaló `requirements.txt` sin cambiar versiones en `.test-artifacts/clinica-019-env` con Python 3.12.0. La migración nueva `CliniTensSimulacionApp.0007` solo se aplicó a memoria y a una fixture nueva en `.test-artifacts`; no se abrió `.env`, base habitual ni medios. **Para usar RAE en la instalación habitual falta revisar/aplicar 0007 con respaldo y autorización para ese destino.** Próximo paso: revisión del usuario y preparación de ese entorno; commit/push quedan para su solicitud posterior.
+
+## Petición actual — DAU, laboratorio y Centro de Apoyo Diagnóstico / 2026-11-05
+
+La solicitud 017 distingue procesos. DAU conserva signos vitales, procedimientos y cierre. Laboratorio permite órdenes con muestra/tubo, registro tubo a tubo y etiquetas educativas imprimibles. Centro de Apoyo Diagnóstico reemplaza el Kardex en la experiencia vigente y separa resultados ficticios de laboratorio, imagen, ECG e informes; el historial/modelos Kardex anteriores se conservan sin reutilizarlos. Migración 0005 creada y aplicada solo a memoria mediante `core.test_settings`; la base habitual no se migró. `manage.py check` y `makemigrations --check --dry-run` pasan. Navegador, impresión física, matriz de permisos y revisión docente/estudiante siguen pendientes. Ver [spec 017](../specs/017-flujos-dau-laboratorio-cad/spec.md).
+
+La solicitud 018 amplía el laboratorio a un flujo de tres pasos (paciente SIM, exámenes y resumen), emisión de orden con snapshot, PDF, etiquetas por tubo e historial propio. La migración 0006 se aplicó en la base local tras crear y verificar el respaldo `.test-artifacts/lab-018/db.sqlite3.before-20261105`; la base recibida/producción no se modificó. Los checks técnicos pasan; revisión visual, docente y de impresión pendiente. Ver [spec 018](../specs/018-flujo-laboratorio-por-pasos/spec.md).
+
 ## Colaboración con GitHub — 2026-11-03
 
 El usuario solicita subir el proyecto a `jonathancerda123/Farmatef-Clinitens` para trabajar desde dos equipos. Quedan autorizados la inicialización de Git, el primer commit y su publicación en ese repositorio; sin despliegue ni operación sobre la base recibida. Se comprobó que el remoto está vacío y es público. La carpeta local ya se inicializó con rama `main`; las menciones posteriores a ausencia de `.git` conservan el contexto histórico de 006.
@@ -14,13 +38,29 @@ Se creó el commit inicial local `ae32dfa`. El primer intento de push quedó esp
 | Fase | Desarrollo de un prototipo funcional para revisión de usuarios y responsables del negocio. |
 | Alcance técnico | El alcance vigente está descrito en la [especificación de FarmaTEF](../specs/005-farmatef-mvp-informe2/spec.md). |
 | Capacidades existentes | Cuentas, perfiles, permisos, actividades, registros estructurados, revisión y publicación de resultados. |
-| FarmaTEF implementado | Primer incremento para registrar y consultar medicamentos y lotes ficticios, calcular existencias y mostrar alertas por stock mínimo y vencimiento. |
-| FarmaTEF pendiente | Validación de recetas, dispensación, descuento atómico de stock, comprobantes, etiquetas e historial de movimientos. |
+| FarmaTEF implementado | Inventario ficticio, recetas multimed, casos asignados a curso, respuestas individuales y despacho FEFO simulado con stock atómico. |
+| FarmaTEF pendiente | Comprobantes, etiquetas, pruebas funcionales y revisión visual/educativa del flujo estudiantil. |
 | Integración externa | No implementada. No hay conexión con farmacias, sistemas clínicos, proveedores de identidad ni servicios de IA. |
-| Verificación del incremento actual | Pendiente: no se ejecutaron `manage.py check` ni pruebas para FarmaTEF. La migración inicial se escribió manualmente y requiere cotejo automático. |
+| Verificación del incremento actual | `check` y cotejo de migraciones limpios con settings de prueba; no se ejecutaron pruebas funcionales ni navegador para el recorrido estudiante. |
 | Entorno de desarrollo | El intérprete Python configurado para las dependencias actuales apunta a una instalación inexistente en este equipo. |
 | Datos | Las pruebas y demostraciones deben usar registros ficticios. No se inspeccionaron ni modificaron `.env`, la base de datos recibida o los archivos de `media/`. |
 | Siguiente hito | Completar un recorrido demostrable de inventario y dispensación simulada, validar reglas y permisos con usuarios responsables y registrar su aceptación y los pendientes. |
+
+## Petición actual — DAU según referencia visual / 2026-11-04
+
+Se reorganizó la pantalla DAU para aproximar las capturas compartidas: entrada por código ficticio, ficha de paciente, cuadrícula de signos, procedimientos cronológicos, cierre DAU, historial e impresión/PDF. Identidad del funcionario proviene de la sesión. PAM e IMC se recalculan en servidor; los datos permanecen marcados como simulación. [Spec 015](../specs/015-dau-flujo-visual/spec.md).
+
+La migración `CliniTensSimulacionApp.0003` se generó y aplicó únicamente en la base SQLite en memoria de `core.test_settings`. **No se aplicó a la base local normal**; antes de usar el formulario DAU allí, revisar el plan, crear respaldo en `.test-artifacts/backups/` y ejecutar la migración. Pasaron `manage.py check`, cotejo de migraciones y carga de cuatro plantillas/resolución de rutas en settings aislados. No se ejecutaron pruebas funcionales, no se generó/revisó PDF ni se usó navegador; aceptación visual y pedagógica pendiente.
+
+## Petición actual — accesos docentes diferenciados por módulo / 2026-11-04
+
+Las tarjetas docentes ya no llevan a una misma ruta: DAU, laboratorio y Kardex tienen páginas de preparación distintas. Cada página permite editar únicamente su bloque en casos borrador de cursos visibles; los casos publicados se muestran en solo lectura. La DAU docente permite mantener identidad sintética SIM y escenario; laboratorio mantiene contexto de solicitud; Kardex mantiene actividades por línea. No se cambió el esquema. Pasaron `manage.py check`, cotejo de migraciones y carga/reverse de páginas/rutas con `core.test_settings`. No se corrieron pruebas funcionales, no se verificaron accesos por petición HTTP ni se revisó navegador. Aceptación visual/funcional pendiente. Ver [spec 016](../specs/016-modulos-clinicos-separados/spec.md).
+
+## Petición actual — DAU, laboratorio y Kardex / 2026-11-04
+
+La usuaria pidió implementar los tres módulos pendientes de la portada. Se añadió `CliniTensSimulacionApp`, con casos ficticios vinculados a cursos, preparación docente, práctica por etapas DAU/laboratorio/Kardex, intentos aislados por estudiante e historial de eventos Kardex. La cuarta tarjeta de administración de módulos permanece pendiente. [Spec 014](../specs/014-simuladores-clinicos/spec.md), [plan](../specs/014-simuladores-clinicos/plan.md), [tareas](../specs/014-simuladores-clinicos/tasks.md), [validación](../specs/014-simuladores-clinicos/validation.md).
+
+Pasaron `manage.py check`, `makemigrations --check --dry-run`, carga de plantillas y resolución de rutas. Las migraciones se probaron en memoria y después se aplicaron a la base local tras guardar una copia en `.test-artifacts/backups/db.sqlite3.pre-simulaciones-20261104.bak`; `showmigrations` confirma ambas. No se inspeccionaron los registros. No se ejecutaron pruebas funcionales ni revisión de navegador. Próximo: actualizar la página de gestión y confirmar el flujo; luego revisar con la docente.
 
 ## Petición actual — 006, modales / 2026-10-21
 
@@ -33,6 +73,16 @@ Esta carpeta no contiene `.git`: no hay rama/commit ni limpieza verificables; se
 Resultados: check, 35 pruebas Django, 9 JS y build Tailwind 4.3.3 correctos; 21 GET/cuatro POST de permisos con resultados esperados. Navegador 1440/768/390, cierre/foco y scroll interno; regresión móvil de portadas, ingreso a ficha e inventario. T-006-06 parcial: quedan zoom real 200% y emulación de movimiento reducido. Próximo paso: completar esas comprobaciones y revisión funcional del usuario. El alcance/autorización y pendientes de FarmaTEF 005 siguen separados.
 
 ## Estado de FarmaTEF
+
+Recetas incorpora búsqueda, historial, líneas múltiples (hasta 10), despacho parcial docente y práctica estudiantil asignada a cursos. La clave de falsificación/vencimiento se reserva a docentes; el estudiante recibe pistas y retroalimentación después de responder. Solo una respuesta correcta de dispensar en receta válida descuenta stock por FEFO atómicamente; otras respuestas no cambian existencias. El historial ofrece eliminar recetas sin actividad; las que tienen respuestas o dispensaciones se conservan. La spec 012 añade docentes colaboradores por curso con acceso limitado a recetas FarmaTEF; migración 0008 aplicada a la base local después de un respaldo. `manage.py check`, el cotejo de migraciones, carga de plantillas y rutas pasan con `core.test_settings`; la revisión de navegador y pruebas funcionales siguen pendientes. Detalles: [spec 009](../specs/009-historial-entrega-parcial/validation.md), [spec 010](../specs/010-practica-estudiantil-recetas/validation.md), [spec 011](../specs/011-eliminar-recetas-sin-actividad/validation.md) y [spec 012](../specs/012-docentes-colaboradores-farmatef/validation.md).
+
+El 2026-11-03 se añadieron cinco recetas técnicas no clínicas multimed a la base local (`DEMO-MULTI-*`), dos medicamentos y una unidad por línea, sin alterar lotes ni existencias. Respaldo previo: `.test-artifacts/recetas-011/db.sqlite3.before`.
+
+La spec 011 agrega eliminación docente de recetas sin respuestas ni datos de entrega. No cambió el esquema ni se eliminaron registros de la base durante la implementación; la revisión del botón en navegador sigue pendiente.
+
+La spec 012 agrega asignación y revocación de colaboradores para que Alexandra pueda acceder a las recetas del curso autorizado por su responsable. La migración `CliniTensDocenteApp.0008` se aplicó después del respaldo `.test-artifacts/recetas-012/db.sqlite3.before`. Próximo paso: agregar a Alexandra desde el detalle del curso y revisar su historial.
+
+La spec 013 agrega Etiquetado desde la portada FarmaTEF. La vista prepara una etiqueta de un lote accesible, con dimensiones y copias acotadas; no persiste ni modifica stock y no requiere migración. La pantalla se ajustó a la referencia aportada: formulario y datos a la izquierda, vista previa y controles a la derecha, cuatro presets y medidas editables. Tras las capturas de la usuaria se aclaró que medicamento es el producto y lote la partida; el selector destaca número de lote, vencimiento y stock y filtra las partidas según el medicamento seleccionado. Un reporte de selectores vacíos identificó que los widgets personalizados habían perdido sus `choices`; se restableció la vinculación campo/widget y se comprobó sin consultar los registros de inventario. La relación también se valida en servidor. Los mínimos son 40×30 mm para evitar recortes. `manage.py check`, cotejo de migraciones, vínculo de opciones y resolución de plantilla/ruta pasan tras esta corrección. No se ejecutaron pruebas funcionales ni se pudo completar la revisión visual automatizada porque la herramienta no identificó con confianza la URL activa; no se interactuó con páginas. Pendiente calibrar con impresora; se solicita imprimir al 100% y medir una copia antes de usar el tamaño.
 
 El primer incremento permite a usuarios autorizados registrar medicamentos y lotes de demostración, consultar existencias y ver alertas calculadas desde el stock mínimo y las fechas de vencimiento almacenadas.
 
@@ -95,3 +145,7 @@ Plan, recuperación, preparación y manifiesto con IDs/páginas/notas: `output/f
 Comandos ejecutados mediante bloques Python por stdin con `C:/Users/jonat/AppData/Local/Programs/Python/Python312/python.exe`, paquetes del target por sys.path: inspección acotada SQLite en modo lectura; `settings.configure` mínimo para auth/contenttypes/FarmaTEFApp sin importar settings normales ni core.test_settings; `full_clean` de los 109 modelos; respaldo SQLite e integrity_check; ensayo de las 109 altas en transaction.atomic con rollback obligatorio; carga atómica; reapertura y comparación de campos/autor/valores predeterminados; cotejo de lotes antes/después mediante instantánea y SHA-256; integrity_check final. Resultados correctos, 109 altas, 0 actualizaciones, lotes 0 antes/0 después. Python 3.12.0, Django 5.2.18. Launcher target sigue roto; no se reparó.
 
 Límites: no se ejecutó navegador, URLs ni suite funcional completa; esta verificación respalda la carga de datos, no certifica permisos de vistas ni dispensación/descuento. No hubo migraciones, despliegue, commit/push. Próximo paso: revisar catálogo visible con valita; antes de cargar otro PDF comparar los cuatro campos y reportar nuevos/existentes/diferencias, sin sobrescritura automática ni cambios de lotes/existencias. Crear lotes o probar descuentos requiere una solicitud posterior.
+
+2026-11-10: por petición del usuario se cambió la marca compartida, su etiqueta accesible, el pie y el título de Inicio a «FarmaTEF y CliniTENS». Sin cambios en nombres funcionales/rutas de módulos. Check Django y prueba existente homeApp correctos; Chrome ficticio a 1440/390 sin desbordamiento y captura móvil inspeccionada. Sin migraciones ni commit/push.
+
+2026-11-10: el usuario autorizó explícitamente crear el commit y publicar este avance en origin/jonathan, con el mensaje «Agrega registro de enfermería y preparación guiada de casos clínicos». El merge a main queda pendiente de revisión. Se verificaron nuevamente 66 pruebas Django, cuatro JavaScript y cotejo de migraciones. La publicación de código no aplica la migración 0007 a otras instalaciones ni comparte la base ficticia de prueba; preparar respaldo y migración allí antes de usar RAE. Las menciones previas a ausencia de commit/push describen los cierres anteriores a esta autorización.
