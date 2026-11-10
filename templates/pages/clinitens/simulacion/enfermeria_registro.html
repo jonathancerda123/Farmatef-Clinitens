@@ -1,0 +1,30 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block head_title %}Atención de enfermería {{ atencion.pk }} | CliniTENS{% endblock %}
+{% block workspace_name %}Área clínica · Enfermería{% endblock %}
+{% block page_title %}Atención de enfermería{% endblock %}
+{% block content_main %}
+<div class="rae-heading"><div><h2 class="text-xl font-bold">Registro RAE #{{ atencion.pk }}</h2><p class="section-description">{% if atencion.finalizada %}Finalizada el {{ atencion.finalizada_en|date:'d/m/Y H:i' }} · Solo lectura{% else %}Borrador · Guarda tus cambios antes de salir{% endif %}</p></div><a class="btn-secondary" href="{% url 'clinitens_simulacion:enfermeria_historial' %}">Mi historial de enfermería</a></div>
+<section class="panel" aria-labelledby="paciente-title">
+  <h2 id="paciente-title" class="text-xl font-bold">{{ caso.paciente_nombre }}</h2>
+  <dl class="rae-patient"><div><dt>Código ficticio</dt><dd>{{ caso.paciente_codigo }}</dd></div><div><dt>Edad / sexo</dt><dd>{{ caso.paciente_edad|default_if_none:'—' }} años / {{ caso.get_paciente_sexo_display|default:'—' }}</dd></div><div><dt>Curso</dt><dd>{{ caso.curso }}</dd></div><div><dt>Fecha de nacimiento ficticia</dt><dd>{{ caso.paciente_fecha_nacimiento|date:'d/m/Y'|default:'—' }}</dd></div><div><dt>Comuna</dt><dd>{{ caso.paciente_comuna|default:'—' }}</dd></div><div><dt>Funcionario</dt><dd>{{ funcionario }}</dd></div></dl>
+  <div class="rae-case-context"><h3>Situación de la práctica</h3><p class="rae-text">{{ caso.resumen }}</p><h3>Antecedentes disponibles</h3><p class="rae-text">{{ caso.paciente_antecedentes|default:'Sin antecedentes registrados.' }}</p><p class="section-description">Caso: {{ caso.titulo }}</p></div>
+</section>
+<section class="panel rae-notes" aria-labelledby="cuidados-title">
+  <h2 id="cuidados-title">Cuidados y observaciones de la práctica</h2>
+  {% if not atencion.finalizada %}<p class="section-description rae-writing-guide">Registra qué hiciste durante la simulación en «Cuidados realizados» y lo que observaste en «Observaciones». Puedes guardar un borrador y continuar después.</p>{% endif %}
+  {% if atencion.finalizada and not conflicto %}
+    <h3 class="font-semibold">Cuidados realizados</h3><p class="rae-text">{{ atencion.cuidados }}</p><h3 class="font-semibold">Observaciones</h3><p class="rae-text">{{ atencion.observaciones|default:'Sin observaciones.' }}</p><p class="pending-note">Esta atención está finalizada. Puedes consultarla en tu historial o iniciar otra práctica.</p>
+  {% else %}
+    <form method="post" class="space-y-5">{% csrf_token %}{% include 'components/design/form_errors.html' %}
+      {{ form.version }}{% for error in form.version.errors %}<p class="field-errors" role="alert">Versión del registro: {{ error }} Recarga la página antes de guardar.</p>{% endfor %}
+      {% for error in form.accion.errors %}<p class="field-errors" role="alert">Acción: {{ error }}</p>{% endfor %}
+      {% include 'components/design/field.html' with field=form.cuidados %}
+      {% include 'components/design/field.html' with field=form.observaciones %}
+      {% if conflicto %}<p class="pending-note">Conservamos tu texto para que puedas copiarlo. Recarga el registro para revisar el contenido vigente antes de volver a editar.</p><a class="btn-secondary" href="{% url 'clinitens_simulacion:enfermeria_registro' atencion.pk %}">Recargar registro vigente</a>
+      {% else %}<p class="section-description">Guardar borrador permite continuar después. Finalizar exige registrar los cuidados y deja esta atención en modo lectura.</p><div class="intro-actions"><button class="btn-secondary" type="submit" name="accion" value="guardar">Guardar borrador</button><button class="btn-primary" type="submit" name="accion" value="finalizar">Finalizar atención</button></div>{% endif %}
+    </form>
+  {% endif %}
+</section>
+<div class="intro-actions"><a class="btn-secondary" href="{% url 'clinitens_simulacion:enfermeria_inicio' %}">Buscar paciente / nueva atención</a><a class="btn-secondary" href="{% url 'clinitens' %}">Volver al área clínica</a></div>
+<p class="section-description mt-6">Simulación educativa · Solo datos ficticios.</p>
+{% endblock %}

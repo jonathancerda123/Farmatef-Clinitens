@@ -4,6 +4,8 @@ Este documento describe cómo preparar un entorno aislado, verificar cambios y p
 
 ## Estado del entorno actual
 
+Actualización 019, copia de trabajo del 2026-11-09: el target anterior y `.venv` no están presentes. Se creó `.test-artifacts/clinica-019-env` con Python 3.12.0 y las versiones exactas de `requirements.txt`. Las verificaciones 019 usan su `Scripts/python.exe` con `core.test_settings`. La fixture de navegador es `.test-artifacts/clinica-019.sqlite3`; no se debe sustituir por la base habitual. 0007 de simulación se aplicó solo a memoria/fixture. Checks, 61 Django/4 JS y build correctos; [evidencia y límites](../specs/019-apartados-area-clinica/validation.md). Las menciones siguientes a entornos y migraciones locales describen sesiones anteriores, no una base transferida a esta copia.
+
 - La línea base 004 registró Django 5.2.18, allauth 65.19.7, Tailwind 4.3.3 y una suite de 47 pruebas Django y 4 pruebas JavaScript. Es evidencia de esa línea base, no de los cambios de FarmaTEF.
 - El entorno de dependencias actual está en `.test-artifacts/dependencias-004/target`; el `.venv` anterior se conserva con dependencias antiguas.
 - El ejecutable Python del entorno target no inicia en este equipo; las comprobaciones recientes usaron `.venv/Scripts/python.exe` con `core.test_settings` para aislar la base ficticia en memoria.

@@ -1,0 +1,212 @@
+[
+  {
+    "perfil_ficticio": "docente-demo019",
+    "apartado": "Ficha Clínica Electrónica",
+    "ruta": "/ficha-clinica/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "docente-demo019",
+    "apartado": "Registro de Atención de Urgencia",
+    "ruta": "/clinitens/simulaciones/docente/dau/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "docente-demo019",
+    "apartado": "Registro de Atención de Enfermería",
+    "ruta": "/clinitens/simulaciones/docente/enfermeria/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "docente-demo019",
+    "apartado": "Laboratorio Clínico",
+    "ruta": "/clinitens/simulaciones/docente/laboratorio/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "docente-demo019",
+    "apartado": "Centro de Apoyo Diagnóstico",
+    "ruta": "/clinitens/simulaciones/docente/centro-diagnostico/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "docente-demo019",
+    "apartado": "Perfil Docente",
+    "ruta": "/clinitensdocente/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "docente-demo019",
+    "apartado": "Perfil Administrador",
+    "ruta": null,
+    "status": null
+  },
+  {
+    "perfil_ficticio": "alumno-demo019",
+    "apartado": "Ficha Clínica Electrónica",
+    "ruta": "/ficha-clinica/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "alumno-demo019",
+    "apartado": "Registro de Atención de Urgencia",
+    "ruta": "/clinitens/simulaciones/dau/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "alumno-demo019",
+    "apartado": "Registro de Atención de Enfermería",
+    "ruta": "/clinitens/simulaciones/enfermeria/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "alumno-demo019",
+    "apartado": "Laboratorio Clínico",
+    "ruta": "/clinitens/simulaciones/practica/laboratorio/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "alumno-demo019",
+    "apartado": "Centro de Apoyo Diagnóstico",
+    "ruta": "/clinitens/simulaciones/practica/diagnostico/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "alumno-demo019",
+    "apartado": "Perfil Docente",
+    "ruta": null,
+    "status": null
+  },
+  {
+    "perfil_ficticio": "alumno-demo019",
+    "apartado": "Perfil Administrador",
+    "ruta": null,
+    "status": null
+  },
+  {
+    "perfil_ficticio": "admin-demo019",
+    "apartado": "Ficha Clínica Electrónica",
+    "ruta": "/ficha-clinica/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "admin-demo019",
+    "apartado": "Registro de Atención de Urgencia",
+    "ruta": "/clinitens/simulaciones/docente/dau/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "admin-demo019",
+    "apartado": "Registro de Atención de Enfermería",
+    "ruta": "/clinitens/simulaciones/docente/enfermeria/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "admin-demo019",
+    "apartado": "Laboratorio Clínico",
+    "ruta": "/clinitens/simulaciones/docente/laboratorio/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "admin-demo019",
+    "apartado": "Centro de Apoyo Diagnóstico",
+    "ruta": "/clinitens/simulaciones/docente/centro-diagnostico/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "admin-demo019",
+    "apartado": "Perfil Docente",
+    "ruta": "/clinitensdocente/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "admin-demo019",
+    "apartado": "Perfil Administrador",
+    "ruta": "/usuarios/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "super-demo019",
+    "apartado": "Ficha Clínica Electrónica",
+    "ruta": "/ficha-clinica/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "super-demo019",
+    "apartado": "Registro de Atención de Urgencia",
+    "ruta": "/clinitens/simulaciones/docente/dau/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "super-demo019",
+    "apartado": "Registro de Atención de Enfermería",
+    "ruta": "/clinitens/simulaciones/docente/enfermeria/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "super-demo019",
+    "apartado": "Laboratorio Clínico",
+    "ruta": "/clinitens/simulaciones/docente/laboratorio/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "super-demo019",
+    "apartado": "Centro de Apoyo Diagnóstico",
+    "ruta": "/clinitens/simulaciones/docente/centro-diagnostico/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "super-demo019",
+    "apartado": "Perfil Docente",
+    "ruta": "/clinitensdocente/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "super-demo019",
+    "apartado": "Perfil Administrador",
+    "ruta": "/usuarios/",
+    "status": 200
+  },
+  {
+    "perfil_ficticio": "sin-perfil-demo019",
+    "apartado": "Ficha Clínica Electrónica",
+    "ruta": null,
+    "status": null
+  },
+  {
+    "perfil_ficticio": "sin-perfil-demo019",
+    "apartado": "Registro de Atención de Urgencia",
+    "ruta": null,
+    "status": null
+  },
+  {
+    "perfil_ficticio": "sin-perfil-demo019",
+    "apartado": "Registro de Atención de Enfermería",
+    "ruta": null,
+    "status": null
+  },
+  {
+    "perfil_ficticio": "sin-perfil-demo019",
+    "apartado": "Laboratorio Clínico",
+    "ruta": null,
+    "status": null
+  },
+  {
+    "perfil_ficticio": "sin-perfil-demo019",
+    "apartado": "Centro de Apoyo Diagnóstico",
+    "ruta": null,
+    "status": null
+  },
+  {
+    "perfil_ficticio": "sin-perfil-demo019",
+    "apartado": "Perfil Docente",
+    "ruta": null,
+    "status": null
+  },
+  {
+    "perfil_ficticio": "sin-perfil-demo019",
+    "apartado": "Perfil Administrador",
+    "ruta": null,
+    "status": null
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "viewports": [
+    {
+      "label": "casos-1440",
+      "viewport": 1440,
+      "document": 1440,
+      "h1": 1,
+      "columns": null
+    },
+    {
+      "label": "paciente-390",
+      "viewport": 390,
+      "document": 390,
+      "h1": 1,
+      "columns": null
+    },
+    {
+      "label": "revision-390",
+      "viewport": 390,
+      "document": 390,
+      "h1": 1,
+      "columns": null
+    },
+    {
+      "label": "revision-1440",
+      "viewport": 1440,
+      "document": 1440,
+      "h1": 1,
+      "columns": null
+    }
+  ],
+  "flow": [
+    "Paciente → Urgencia → Laboratorio → Apoyo diagnóstico → revisión → publicación; un solo caso, redirecciones y fecha preservada."
+  ],
+  "errors": []
+}

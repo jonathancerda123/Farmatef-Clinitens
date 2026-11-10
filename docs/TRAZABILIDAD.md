@@ -86,7 +86,21 @@ Relación con RF-004-02 y RF-003-03/05/06: corrección de compatibilidad e inter
 
 Paquete: [spec](../specs/006-modales-tailwind4/spec.md), [plan](../specs/006-modales-tailwind4/plan.md), [tareas](../specs/006-modales-tailwind4/tasks.md) y [validación](../specs/006-modales-tailwind4/validation.md). Implementación autorizada y realizada; aceptación final pendiente. Evidencias de permisos/interfaz/regresión y capturas en `docs/evidencias/006-modales/`.
 
+## Incremento 019 — apartados y RAE / 2026-11-09
+
+| Requisito | Tareas | Implementación | Evidencia y límites |
+|---|---|---|---|
+| RF-019-01/02 — orden/reutilización/accesos | T-019-01/02/04 | `homeApp/views.py`, portada clínica, destinos existentes | Siete apartados; matriz 35 opciones/25 destinos 200 para cinco perfiles ficticios; sin reconstruir FCE/DAU/lab/CAD/paneles |
+| RF-019-03 — identidad y adaptación | T-019-03/04 | Tokens/layout existentes, iconos, fuente CSS y build | Chrome 1440/768/390, 3/2/1 columnas, H1 único y sin overflow de documento; Tab/ancla y movimiento reducido; zoom y otros motores pendientes |
+| RF-019-04 — primera versión RAE autorizada | T-019-05 | Modelo/migración 0007, formularios, vistas y tres plantillas RAE en `CliniTensSimulacionApp` | 14 regresiones nuevas dentro de 61 Django correctas, flujo navegador con dos pestañas/cierre/historial/nuevo registro; concurrencia lógica, no carga; no hay validación clínica |
+| RF-019-05 — rama/datos | T-019-01/04 | `jonathan` con upstream existente, settings/fixture aislados | Sin commit/push ni acceso a base habitual; 0007 solo en pruebas, aplicación habitual pendiente |
+| RF-019-06 — preparar pacientes sin duplicarlos | T-019-06 | Guía en portada, `PacienteEnfermeriaDocenteForm`, preparación docente y enlace en casos | Hereda validación SIM; prueba de conservación de DAU/lab/órdenes/informes, bloqueo publicado y ajeno; creación/completado en navegador con identidades sintéticas |
+
+Detalles: [spec 019](../specs/019-apartados-area-clinica/spec.md) y [validación](../specs/019-apartados-area-clinica/validation.md). Aceptación humana pendiente; el navegador usa puente stdio con Django/CSRF reales por bloqueo de loopback, no una red HTTP/despliegue.
+
 ## Reglas de lectura
+
+RF-020-01/02 → `preparacion.py`, vistas docentes y tarjetas/pasos: cinco regresiones nuevas y recorrido paciente→publicación con un único caso. RF-020-03/04 → revisión, condiciones de publicación compartidas y filtrado de selección/POST: pendientes, manipulación, ajeno y solo lectura comprobados. RF-020-05 → CSS existente y capturas Chrome 1440/390 sin overflow; teclado completo/zoom/aceptación pendientes. [Evidencia 020](../specs/020-preparacion-clinica-guiada/validation.md). Sin cambios de esquema.
 
 - Durante el diseño, marcar rutas y pruebas como propuestas o no ejecutadas.
 - Tras implementar, registrar archivos y pruebas reales; incluir comando, entorno, resultado y límites en `validation.md`.
@@ -109,3 +123,5 @@ Paquete: [spec](../specs/006-modales-tailwind4/spec.md), [plan](../specs/006-mod
 ## Datos de catálogo autorizados — 2026-10-31
 
 RF-005-05 / inventario existente: 109 medicamentos del Vademécum 2023 cargados en base habitual bajo valita tras aprobación de tabla. Sin cambios de código/esquema; sin lotes ni stock cargado. Cantidades ficticias preparadas aparte. Evidencia, límites y recuperación en la sección de carga de `specs/005-farmatef-mvp-informe2/validation.md` y `output/farmatef/vademecum-2023-carga.json`. Los 11 suplementos siguen pendientes. No valida dispensación ni pruebas futuras.
+
+RF-020-06/07 → T-020-04/05: apps/plantillas tradicionales cotejadas en ramas y preservadas por SHA-256 (59 fuentes); integración ficticia en memoria, 66 regresiones; paciente RAE agrupado y estados docentes explícitos, capturas 1440/390. No se unen catálogos ni se cambian los módulos existentes. Evidencia en validation.md de 020.

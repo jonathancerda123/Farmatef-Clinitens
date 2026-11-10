@@ -22,6 +22,8 @@ CliniTENS incorpora tres recorridos educativos vinculados a cursos: DAU con paci
 
 La interfaz comparte marca, barra lateral, colores, tipografía, formularios y estados. La [guía visual](docs/PERSONALIZACION_VISUAL.md) explica cómo mantener la coherencia con Tailwind 4 y tokens centrales.
 
+La [spec 019](specs/019-apartados-area-clinica/spec.md) organiza siete apartados del área clínica en el orden de las referencias y añade una primera versión de Registro de Atención de Enfermería (RAE): paciente SIM del caso, cuidados, observaciones, borrador, finalización e historial propio. La portada incluye una guía para preparar pacientes. Implementado en `jonathan`, sin commit/push; migración `CliniTensSimulacionApp.0007` probada solo en bases ficticias y pendiente de aplicar en la instalación habitual con respaldo/autorización. [Validación: 61 Django, 4 JS, build, permisos y navegador con límites](specs/019-apartados-area-clinica/validation.md).
+
 El trabajo para el Informe 2 y las fechas EF2/ES2/EVS3/EVS4 está en la [spec 005](specs/005-farmatef-mvp-informe2/spec.md). El [borrador de preinforme](docs/borradores/PREINFORME_EVS2_FARMATEF_CLINITENS_2026.md) está preparado para retroalimentación y requiere revisión antes de pasarlo a la plantilla Word.
 
 ## Tecnología y estructura

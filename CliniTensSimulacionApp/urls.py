@@ -5,11 +5,18 @@ from .views import (
     DocenteResultadosView, EstudianteCasosView, EtapaView, PublicarCasoView,
     EtiquetasLaboratorioView, EtiquetasOrdenLaboratorioView, HistorialLaboratorioView,
     LaboratorioSolicitudView, OrdenLaboratorioPDFView, descargar_dau_pdf,
+    EnfermeriaInicioView, EnfermeriaRegistroView, EnfermeriaHistorialView,
+    PrepararCasoView,
 )
 
 app_name = "clinitens_simulacion"
 
 urlpatterns = [
+    path("docente/casos/<int:pk>/preparar/", PrepararCasoView.as_view(), name="preparar_caso"),
+    path("docente/enfermeria/", DocenteModuloView.as_view(modulo="enfermeria"), name="docente_enfermeria"),
+    path("enfermeria/", EnfermeriaInicioView.as_view(), name="enfermeria_inicio"),
+    path("enfermeria/historial/", EnfermeriaHistorialView.as_view(), name="enfermeria_historial"),
+    path("enfermeria/<int:pk>/", EnfermeriaRegistroView.as_view(), name="enfermeria_registro"),
     path("docente/casos/", DocenteCasosView.as_view(), name="docente_casos"),
     path("docente/dau/", DocenteModuloView.as_view(modulo="dau"), name="docente_dau"),
     path("docente/laboratorio/", DocenteModuloView.as_view(modulo="laboratorio"), name="docente_laboratorio"),

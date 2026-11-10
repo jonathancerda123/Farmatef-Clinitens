@@ -22,10 +22,13 @@
 | 016 | Preparación docente y recorridos diferenciados para DAU, laboratorio y Kardex | [016-modulos-clinicos-separados](016-modulos-clinicos-separados/spec.md) | Implementado localmente; checks, rutas y plantillas correctos; revisión de navegador/permisos pendiente | Sí, petición explícita de distinguir las tres funcionalidades, 2026-11-04 |
 | 017 | Flujos DAU, laboratorio tubo a tubo y Centro de Apoyo Diagnóstico | [017-flujos-dau-laboratorio-cad](017-flujos-dau-laboratorio-cad/spec.md) | Implementada localmente; migración 0005 aplicada solo en memoria; navegador/impresión y aceptación pendientes | Sí, petición explícita de diferenciar DAU, laboratorio y sustituir Kardex por CAD, 2026-11-05 |
 | 018 | Flujo de solicitud de laboratorio por pasos | [018-flujo-laboratorio-por-pasos](018-flujo-laboratorio-por-pasos/spec.md) | Implementación local; checks/rutas/plantillas correctos; 0006 aplicada a base local con respaldo; navegador y aceptación pendientes | Sí, petición explícita de adaptar laboratorio a referencias, 2026-11-05 |
+| 019 | Siete apartados del área clínica y primera versión RAE | [019-apartados-area-clinica](019-apartados-area-clinica/spec.md) | Implementada en `jonathan`; 61 Django/4 JS, build, matriz de accesos y navegador con puente ficticio; 0007 solo en pruebas; aceptación pendiente | Sí, petición del 2026-11-09 y confirmación de RAE con paciente SIM, cuidados, observaciones, borrador/cierre e historial |
 
 La 001 describe la petición documental y el comportamiento observado, sin aprobar retrospectivamente reglas de negocio. Hallazgos en [observaciones](../docs/OBSERVACIONES_PROYECTO.md) e [informe preproducción](../docs/VALIDACION_PREPRODUCCION.md). 005 conserva su alcance y autorización; 007–013 amplían FarmaTEF conforme a solicitudes posteriores. La spec 018 extiende el laboratorio de la 017 con un flujo de emisión e historial por estudiante.
 
 ## Organización
+
+020: [Preparación clínica guiada por caso](020-preparacion-clinica-guiada/spec.md), implementada localmente por reporte de usabilidad del 2026-11-09; cinco regresiones nuevas, recorrido navegador y aceptación humana pendiente. Sin migraciones nuevas.
 
 Cada alcance concreto contiene spec.md, plan.md, tasks.md y validation.md. Una spec puede afectar varias apps o ampliar una existente. Las plantillas de [_templates](_templates/spec.md) están adaptadas a CliniTENS, pero sus campos `<...>` deben completarse; no son requisitos aprobados.
 

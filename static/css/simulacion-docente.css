@@ -1,4 +1,25 @@
 .sim-page-intro { margin: 0 0 1.25rem; }
+.sim-preparation { margin-bottom: 1.5rem; padding: 1.25rem; background: rgb(var(--color-surface)); border: 1px solid rgb(var(--color-border)); border-radius: var(--radius-panel); }
+.sim-preparation h2 { font-size: 1.35rem; font-weight: 700; margin-top: .75rem; }
+.sim-preparation p { color: rgb(var(--color-muted)); }
+.sim-preparation .sim-preparation-help { font-size: .85rem; margin-top: 1rem; max-width: 75ch; }
+.sim-module-enfermeria fieldset.sim-module-section { min-width: 0; }
+.sim-module-enfermeria .sim-module-section legend { padding: 0 .35rem; font-weight: 650; color: rgb(var(--color-ink)); }
+.sim-module-enfermeria .sim-module-section > .sim-help { margin-bottom: 1rem; }
+.sim-preparation a { text-underline-offset: .2em; }
+.sim-preparation-steps { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: .5rem; list-style: none; padding: 0; margin: 1rem 0 0; }
+.sim-preparation-steps a { display: grid; gap: .35rem; height: 100%; padding: .75rem; border: 1px solid rgb(var(--color-border)); border-radius: var(--radius-control); }
+.sim-preparation-steps a[aria-current] { background: rgb(var(--color-primary-soft)); border-color: rgb(var(--color-primary)); }
+.sim-preparation-steps span { font-size: .8rem; color: rgb(var(--color-muted)); }
+.sim-progress { font-weight: 600; margin: 1rem 0 .5rem; }
+.sim-case-card > .btn-primary,.sim-case-card > .btn-secondary { margin-top: 1rem; }
+.sim-module-form-actions { gap: .75rem; flex-wrap: wrap; }
+.sim-review h2 { font-size: 1.3rem; font-weight: 700; }
+.sim-review h3 { font-weight: 650; margin-top: 1.25rem; }
+.sim-review .pending-note { margin: 1.5rem 0; }
+.sim-review ul { padding-left: 1.25rem; list-style: disc; }
+@media(max-width:900px) { .sim-preparation-steps { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:540px) { .sim-preparation-steps { grid-template-columns: 1fr; } }
 .sim-case-form-card, .sim-case-card { border: 1px solid rgb(var(--color-border)); border-radius: var(--radius-panel); background: rgb(var(--color-surface)); box-shadow: 0 2px 8px rgb(20 55 65 / 4%); }
 .sim-case-form-card { max-width: 76rem; margin: 0 auto; padding: clamp(1.25rem, 3vw, 2.25rem); }
 .sim-card-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; padding-bottom: 1.25rem; border-bottom: 1px solid rgb(var(--color-border)); }

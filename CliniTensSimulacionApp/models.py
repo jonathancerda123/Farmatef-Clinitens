@@ -110,6 +110,32 @@ class AtencionDAU(models.Model):
         ordering = ["-actualizada_en", "-pk"]
 
 
+class AtencionEnfermeria(models.Model):
+    """Registro RAE educativo propio, independiente de DAU y Kardex."""
+
+    caso = models.ForeignKey(
+        CasoSimulacion, on_delete=models.PROTECT, related_name="atenciones_enfermeria"
+    )
+    estudiante = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.PROTECT,
+        related_name="atenciones_enfermeria_simuladas",
+    )
+    cuidados = models.TextField(max_length=5000, blank=True)
+    observaciones = models.TextField(max_length=2000, blank=True)
+    version = models.PositiveIntegerField(default=1)
+    finalizada = models.BooleanField(default=False)
+    finalizada_en = models.DateTimeField(null=True, blank=True)
+    creada_en = models.DateTimeField(auto_now_add=True)
+    actualizada_en = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-actualizada_en", "-pk"]
+        constraints = [models.UniqueConstraint(
+            fields=["caso", "estudiante"], condition=models.Q(finalizada=False),
+            name="sim_rae_un_borrador_por_alumno",
+        )]
+
+
 class ProcedimientoDAU(models.Model):
     class Responsable(models.TextChoices):
         ESTUDIANTE = "ESTUDIANTE", "Estudiante en simulación"

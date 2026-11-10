@@ -1,0 +1,14 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block head_title %}Mi historial de enfermería | CliniTENS{% endblock %}
+{% block workspace_name %}Área clínica · Enfermería{% endblock %}
+{% block page_title %}Mi historial de enfermería{% endblock %}
+{% block content_main %}
+<div class="rae-heading"><p class="section-description">Tus borradores y atenciones finalizadas de los casos publicados de tus cursos actuales.</p><a class="btn-primary" href="{% url 'clinitens_simulacion:enfermeria_inicio' %}">Buscar paciente / nueva atención</a></div>
+{% if page_obj %}
+<div class="table-scroll" role="region" aria-label="Historial de enfermería" tabindex="0"><table class="table"><thead><tr><th scope="col">Registro</th><th scope="col">Paciente simulado</th><th scope="col">Curso</th><th scope="col">Estado</th><th scope="col">Último guardado</th><th scope="col">Acción</th></tr></thead><tbody>
+{% for atencion in page_obj %}<tr><td>RAE #{{ atencion.pk }}</td><td>{{ atencion.caso.paciente_nombre }}<br>{{ atencion.caso.paciente_codigo }}</td><td>{{ atencion.caso.curso }}</td><td>{% if atencion.finalizada %}Finalizada{% else %}Borrador{% endif %}</td><td>{{ atencion.actualizada_en|date:'d/m/Y H:i' }}</td><td><a class="btn-secondary" href="{% url 'clinitens_simulacion:enfermeria_registro' atencion.pk %}">{% if atencion.finalizada %}Ver{% else %}Continuar{% endif %} RAE #{{ atencion.pk }}</a></td></tr>{% endfor %}
+</tbody></table></div>
+<nav class="intro-actions" aria-label="Páginas de historial">{% if page_obj.has_previous %}<a class="btn-secondary" href="?page={{ page_obj.previous_page_number }}">Anterior</a>{% endif %}<span class="section-description">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>{% if page_obj.has_next %}<a class="btn-secondary" href="?page={{ page_obj.next_page_number }}">Siguiente</a>{% endif %}</nav>
+{% else %}<div class="pending-note"><h2 class="text-lg font-semibold">Aún no tienes atenciones de enfermería</h2><p>Busca un paciente de práctica para comenzar tu primer registro.</p></div>{% endif %}
+<div class="intro-actions"><a class="btn-secondary" href="{% url 'clinitens' %}">Volver al área clínica</a></div>
+{% endblock %}

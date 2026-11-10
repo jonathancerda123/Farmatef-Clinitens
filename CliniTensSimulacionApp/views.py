@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator
+from django.db.models import F
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -26,11 +28,13 @@ from .forms import (
     BuscarPacienteDAUForm, CasoSimulacionForm, CierreDAUForm, ContenidoDAUDocenteForm,
     ContenidoDiagnosticoDocenteForm, ContenidoLaboratorioDocenteForm, DatosDAUForm,
     ProcedimientoDAUForm, SolicitudLaboratorioForm,
+    PacienteEnfermeriaDocenteForm, RegistroEnfermeriaForm,
 )
 from .models import (
-    AtencionDAU, CasoSimulacion, EventoKardex, IntentoSimulacion, ProcedimientoDAU,
+    AtencionDAU, AtencionEnfermeria, CasoSimulacion, EventoKardex, IntentoSimulacion, ProcedimientoDAU,
     SolicitudLaboratorioSimulada,
 )
+from .preparacion import preparacion_caso, paso_url
 
 
 def curso_estudiante(request, caso):
@@ -64,6 +68,13 @@ class DocenteModuloView(DocenteMixin, TemplateView):
     template_name = "pages/clinitens/simulacion/docente_modulo.html"
     modulo = None
     configuracion = {
+        "enfermeria": {
+            "titulo": "Preparar pacientes de enfermería",
+            "descripcion": "Completa el paciente ficticio del caso. Comparte su identidad con DAU, laboratorio y apoyo diagnóstico; los registros de cuidados son independientes.",
+            "form_class": PacienteEnfermeriaDocenteForm,
+            "seccion": "Paciente simulado para enfermería",
+            "clase": "enfermeria",
+        },
         "dau": {
             "titulo": "Preparar Atención de urgencia (DAU)",
             "descripcion": "Configura el paciente ficticio SIM y el proceso que completará el estudiante.",
@@ -95,10 +106,19 @@ class DocenteModuloView(DocenteMixin, TemplateView):
 
     def get_queryset(self):
         cursos = cursos_visibles_para_docente(Curso.objects.all(), self.request.user)
-        return CasoSimulacion.objects.filter(curso__in=cursos).select_related("curso")
+        queryset = CasoSimulacion.objects.filter(curso__in=cursos).select_related("curso")
+        selected = self.request.GET.get("caso")
+        if selected is not None:
+            if not selected.isdecimal():
+                raise Http404("Caso no encontrado.")
+            caso = get_object_or_404(queryset, pk=selected)
+            return queryset.filter(pk=caso.pk)
+        return queryset
 
     def crear_form(self, caso, data=None):
         form_class = self.get_modulo()["form_class"]
+        if self.modulo == "enfermeria":
+            return form_class(data, instance=caso, prefix=f"rae-{caso.pk}")
         if self.modulo == "diagnostico":
             return form_class(data, instance=caso)
         return form_class(data, instance=caso)
@@ -121,17 +141,23 @@ class DocenteModuloView(DocenteMixin, TemplateView):
             "crear_caso_url": reverse("clinitens_simulacion:docente_casos") + "#nuevo-caso",
             "resultados_url": reverse("clinitens_simulacion:docente_resultados"),
         })
+        if self.request.GET.get("caso") is not None:
+            context["preparacion"] = preparacion_caso(filas[0]["caso"])
         return context
 
     def post(self, request):
         caso = get_object_or_404(self.get_queryset(), pk=request.POST.get("caso_id"))
         if caso.publicado:
             messages.error(request, "Este caso ya está publicado. Para proteger las prácticas activas, sus contenidos quedan en solo lectura.")
-            return redirect(f"clinitens_simulacion:docente_{self.modulo}")
+            return redirect(paso_url(caso, self.modulo) if "caso" in request.GET else reverse(f"clinitens_simulacion:docente_{self.modulo}"))
         form = self.crear_form(caso, data=request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, f"Se guardó el contenido de {self.get_modulo()['seccion']} para {caso.titulo}.")
+            if "caso" in request.GET:
+                progreso = preparacion_caso(caso)
+                index = [p["modulo"] for p in progreso["pasos"]].index(self.modulo)
+                return redirect(progreso["pasos"][index+1]["url"] if index < 3 else progreso["revision_url"])
             return redirect(f"clinitens_simulacion:docente_{self.modulo}")
         return self.render_to_response(self.get_context_data(
             error_case_id=caso.pk, error_form=form
@@ -151,24 +177,38 @@ class DocenteCasosView(DocenteMixin, FormView):
         context = super().get_context_data(**kwargs)
         cursos = cursos_visibles_para_docente(Curso.objects.all(), self.request.user)
         context["casos"] = CasoSimulacion.objects.filter(curso__in=cursos).select_related("curso")
+        context["preparaciones"] = [preparacion_caso(caso) for caso in context["casos"]]
         return context
 
     def form_valid(self, form):
         caso = form.save()
         messages.success(self.request, "Caso de simulación guardado como borrador.")
-        return redirect("clinitens_simulacion:docente_casos")
+        return redirect(paso_url(caso, "enfermeria"))
+
+
+class PrepararCasoView(DocenteMixin, TemplateView):
+    template_name = "pages/clinitens/simulacion/preparar_caso.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cursos = cursos_visibles_para_docente(Curso.objects.all(), self.request.user)
+        caso = get_object_or_404(CasoSimulacion.objects.select_related("curso"), pk=self.kwargs["pk"], curso__in=cursos)
+        context["preparacion"] = preparacion_caso(caso)
+        return context
 
 
 class PublicarCasoView(DocenteMixin, View):
     def post(self, request, pk):
         cursos = cursos_visibles_para_docente(Curso.objects.all(), request.user)
         caso = get_object_or_404(CasoSimulacion, pk=pk, curso__in=cursos)
-        if not caso.paciente_codigo or not caso.paciente_nombre or not caso.escenario_dau.strip() or not caso.ordenes_laboratorio or not caso.documentos_diagnosticos:
+        if not preparacion_caso(caso)["listo"]:
             messages.error(request, "Completa el proceso DAU, al menos una orden de laboratorio y un resultado del Centro de Apoyo Diagnóstico antes de publicar.")
         else:
             caso.publicado = True
             caso.save(update_fields=["publicado", "actualizado_en"])
             messages.success(request, "Caso ficticio publicado para estudiantes inscritos.")
+        if request.POST.get("volver_preparacion") == "1":
+            return redirect("clinitens_simulacion:preparar_caso", pk=caso.pk)
         return redirect("clinitens_simulacion:docente_casos")
 
 
@@ -469,6 +509,97 @@ def casos_dau_del_alumno(user):
     return CasoSimulacion.objects.filter(
         curso__estudiantes=user, publicado=True
     ).exclude(paciente_codigo="").select_related("curso")
+
+
+def atenciones_enfermeria_del_alumno(user):
+    return AtencionEnfermeria.objects.filter(
+        estudiante=user, caso__curso__estudiantes=user, caso__publicado=True,
+    ).select_related("caso", "caso__curso")
+
+
+class EnfermeriaInicioView(EstudianteMixin, FormView):
+    template_name = "pages/clinitens/simulacion/enfermeria_inicio.html"
+    form_class = BuscarPacienteDAUForm
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["codigo"].widget.attrs["class"] = "input"
+        return form
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["casos"] = casos_dau_del_alumno(self.request.user)
+        context["funcionario"] = self.request.user.get_full_name().strip() or self.request.user.get_username()
+        return context
+
+    def form_valid(self, form):
+        caso = casos_dau_del_alumno(self.request.user).filter(
+            paciente_codigo__iexact=form.cleaned_data["codigo"],
+        ).first()
+        if not caso:
+            form.add_error("codigo", "No encontramos ese código SIM entre los casos publicados de tus cursos.")
+            return self.form_invalid(form)
+        atencion, _ = AtencionEnfermeria.objects.get_or_create(
+            caso=caso, estudiante=self.request.user, finalizada=False,
+        )
+        return redirect("clinitens_simulacion:enfermeria_registro", pk=atencion.pk)
+
+
+class EnfermeriaHistorialView(EstudianteMixin, TemplateView):
+    template_name = "pages/clinitens/simulacion/enfermeria_historial.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_obj"] = Paginator(
+            atenciones_enfermeria_del_alumno(self.request.user), 20,
+        ).get_page(self.request.GET.get("page"))
+        return context
+
+
+class EnfermeriaRegistroView(EstudianteMixin, TemplateView):
+    template_name = "pages/clinitens/simulacion/enfermeria_registro.html"
+
+    def get_atencion(self):
+        return get_object_or_404(
+            atenciones_enfermeria_del_alumno(self.request.user), pk=self.kwargs["pk"],
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        atencion = context.get("atencion") or self.get_atencion()
+        context.update({
+            "atencion": atencion, "caso": atencion.caso,
+            "funcionario": self.request.user.get_full_name().strip() or self.request.user.get_username(),
+        })
+        context.setdefault("form", RegistroEnfermeriaForm(initial={
+            "version": atencion.version, "cuidados": atencion.cuidados,
+            "observaciones": atencion.observaciones,
+        }))
+        return context
+
+    def post(self, request, pk):
+        atencion = self.get_atencion()
+        form = RegistroEnfermeriaForm(request.POST)
+        if atencion.finalizada:
+            form.add_error(None, "Esta atención ya está finalizada y se conserva en modo lectura. Tus cambios no se guardaron.")
+            return self.render_to_response(self.get_context_data(atencion=atencion, form=form, conflicto=True), status=409)
+        if not form.is_valid():
+            return self.render_to_response(self.get_context_data(atencion=atencion, form=form), status=400)
+        data = form.cleaned_data
+        finalizada = data["accion"] == "finalizar"
+        now = timezone.now()
+        updated = atenciones_enfermeria_del_alumno(request.user).filter(
+            pk=pk, finalizada=False, version=data["version"],
+        ).update(
+            cuidados=data["cuidados"], observaciones=data["observaciones"],
+            finalizada=finalizada, finalizada_en=now if finalizada else None,
+            actualizada_en=now, version=F("version") + 1,
+        )
+        if not updated:
+            form.add_error(None, "El registro cambió en otra pestaña o se finalizó. Tus cambios no se guardaron; copia tu texto y recarga el registro para revisar la versión vigente.")
+            return self.render_to_response(self.get_context_data(atencion=atencion, form=form, conflicto=True), status=409)
+        messages.success(request, "Atención de enfermería finalizada." if finalizada else "Borrador de enfermería guardado.")
+        return redirect("clinitens_simulacion:enfermeria_registro", pk=pk)
 
 
 def atenciones_dau_del_alumno(user):

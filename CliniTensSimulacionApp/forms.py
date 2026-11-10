@@ -61,7 +61,7 @@ class ContenidoDAUDocenteForm(forms.ModelForm):
             "escenario_dau",
         ]
         widgets = {
-            "paciente_fecha_nacimiento": forms.DateInput(attrs={"type": "date"}),
+            "paciente_fecha_nacimiento": forms.DateInput(format="%Y-%m-%d", attrs={"type": "date"}),
             "paciente_antecedentes": forms.Textarea(attrs={"rows": 3}),
             "escenario_dau": forms.Textarea(attrs={"rows": 5}),
         }
@@ -75,8 +75,9 @@ class ContenidoDAUDocenteForm(forms.ModelForm):
             self.fields[name].required = True
         self.fields["paciente_codigo"].help_text = "Código inventado, por ejemplo SIM-PAC-001. No uses RUT."
         self.fields["paciente_antecedentes"].help_text = "Escribe solo antecedentes ficticios para este ejercicio."
-        self.fields["escenario_dau"].label = "Proceso de atención de urgencia"
-        self.fields["escenario_dau"].help_text = "Describe el escenario educativo que verá el estudiante."
+        if "escenario_dau" in self.fields:
+            self.fields["escenario_dau"].label = "Proceso de atención de urgencia"
+            self.fields["escenario_dau"].help_text = "Describe el escenario educativo que verá el estudiante."
 
     def clean_paciente_codigo(self):
         codigo = self.cleaned_data["paciente_codigo"].strip().upper()
@@ -92,6 +93,50 @@ class ContenidoDAUDocenteForm(forms.ModelForm):
         if edad is not None and edad > 120:
             raise ValidationError("Ingresa una edad de hasta 120 años para el escenario ficticio.")
         return edad
+
+
+class PacienteEnfermeriaDocenteForm(ContenidoDAUDocenteForm):
+    """Comparte los datos y validación SIM sin editar el escenario DAU."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["paciente_fecha_nacimiento"].widget.format = "%Y-%m-%d"
+        self.fields["paciente_antecedentes"].label = "Antecedentes disponibles para el estudiante"
+        self.fields["paciente_antecedentes"].help_text = "Describe los antecedentes ficticios que el estudiante conocerá al abrir el paciente."
+        self.fields["paciente_nombre"].widget.attrs["placeholder"] = "Nombre del paciente de práctica"
+
+    class Meta(ContenidoDAUDocenteForm.Meta):
+        fields = [
+            "paciente_codigo", "paciente_nombre", "paciente_sexo", "paciente_edad",
+            "paciente_fecha_nacimiento", "paciente_comuna", "paciente_antecedentes",
+        ]
+        labels = {
+            "paciente_codigo": "Código del paciente SIM", "paciente_nombre": "Nombre ficticio",
+            "paciente_sexo": "Sexo", "paciente_edad": "Edad",
+            "paciente_fecha_nacimiento": "Fecha de nacimiento ficticia",
+            "paciente_comuna": "Comuna", "paciente_antecedentes": "Antecedentes del escenario",
+        }
+
+
+class RegistroEnfermeriaForm(forms.Form):
+    version = forms.IntegerField(min_value=1, widget=forms.HiddenInput)
+    accion = forms.ChoiceField(choices=[("guardar", "Guardar borrador"), ("finalizar", "Finalizar atención")])
+    cuidados = forms.CharField(
+        label="Cuidados realizados", max_length=5000, required=False,
+        help_text="Describe los cuidados realizados en el ejercicio. Obligatorio al finalizar.",
+        widget=forms.Textarea(attrs={"rows": 7, "class": "input", "placeholder": "Registra lo que realizaste en la simulación"}),
+    )
+    observaciones = forms.CharField(
+        label="Observaciones", max_length=2000, required=False,
+        help_text="Agrega lo observado durante la práctica; usa solo datos ficticios.",
+        widget=forms.Textarea(attrs={"rows": 4, "class": "input"}),
+    )
+
+    def clean(self):
+        data = super().clean()
+        if data.get("accion") == "finalizar" and not data.get("cuidados") and "cuidados" not in self.errors:
+            self.add_error("cuidados", "Registra los cuidados realizados antes de finalizar la atención.")
+        return data
 
 
 class ContenidoLaboratorioDocenteForm(forms.ModelForm):

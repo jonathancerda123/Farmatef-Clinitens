@@ -19,7 +19,7 @@ La arquitectura descrita aquí refleja el código y la configuración del reposi
 | `CliniTensDocenteApp` | Actividades, cursos, colaboradores de FarmaTEF por curso, participantes, importación de planillas, revisión y publicación de resultados |
 | `CliniTensFichaApp` | Fichas estructuradas, validación de esquema, estados y control de versiones |
 | `FarmaTEFApp` | Inventario, recetas simuladas, dispensación docente, casos por curso, respuestas estudiantiles privadas, consumo FEFO atómico y eliminación acotada de recetas sin actividad |
-| `CliniTensSimulacionApp` | Casos educativos DAU/laboratorio/Centro de Apoyo Diagnóstico, preparación por módulo, órdenes y tubos por intento, resultados categorizados/revisión individual, atención DAU y PDF ficticio; conserva modelos Kardex legados |
+| `CliniTensSimulacionApp` | Casos educativos DAU/RAE/laboratorio/Centro de Apoyo Diagnóstico, preparación por módulo, órdenes y tubos por intento, resultados categorizados/revisión individual, atención DAU y PDF ficticio; RAE con cuidados, borrador/cierre/versiones e historial propio; conserva modelos Kardex legados |
 | `theme/static_src/` | Fuentes de estilos, configuración y proceso de compilación de CSS |
 
 ## Flujo de solicitudes
@@ -33,6 +33,8 @@ La arquitectura descrita aquí refleja el código y la configuración del reposi
 No hay una API REST pública, una SPA, workers asíncronos ni WebSockets. La actividad visible se actualiza mediante solicitudes periódicas. El inventario comienza en `/farmatef/inventario/`; docentes administran casos en `/farmatef/recetas/`, y estudiantes inscritos acceden a `/farmatef/practica/recetas/`. Desde el historial, un POST en `/farmatef/recetas/<id>/eliminar/` solo retira una receta sin respuestas ni dispensaciones. Las simulaciones CliniTENS se preparan en `/clinitens/simulaciones/docente/casos/` y se practican en rutas `/clinitens/simulaciones/practica/`; cada curso separa material y resultados por estudiante.
 
 ## Persistencia y modelos existentes
+
+Spec 019 (2026-11-09): `AtencionEnfermeria` enlaza caso/estudiante con FK protegidas, cuidados y observaciones de texto, estado/fechas y versión. Una restricción condicional permite solo un borrador por alumno/caso; guardado/finalización usan UPDATE por propietario, matrícula, publicación, estado y versión esperados. No se reutilizan atenciones DAU ni eventos Kardex. Entrada `/clinitens/simulaciones/enfermeria/`, registro/historial propios y preparación docente en `/clinitens/simulaciones/docente/enfermeria/`. Se reutilizan identidad SIM y publicación de casos existentes; preparar paciente RAE no publica por sí solo el caso. Migración 0007 probada solo sobre bases ficticias, sin aplicación a instalación habitual.
 
 La aplicación utiliza modelos Django y SQLite en el entorno local documentado. Entre las estructuras existentes se encuentran cuentas/perfiles, actividades, cursos, fichas, rúbricas, resultados y archivos asociados.
 
