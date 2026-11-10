@@ -1,0 +1,30 @@
+{
+  "viewports": [
+    {
+      "label": "inicio-1440",
+      "viewport": 1440,
+      "document": 1440,
+      "h1": 1,
+      "columns": null
+    },
+    {
+      "label": "selector-390",
+      "viewport": 390,
+      "document": 390,
+      "h1": 1,
+      "columns": null
+    },
+    {
+      "label": "inicio-alumno-390",
+      "viewport": 390,
+      "document": 390,
+      "h1": 1,
+      "columns": null
+    }
+  ],
+  "flow": [
+    "Filtro sin acentos, límite 20, teclado/escape, selección exacta, texto libre inválido, lote dependiente, POST de etiqueta, reset y fila dinámica correctos.",
+    "Sin JavaScript se conserva el select nativo."
+  ],
+  "errors": []
+}

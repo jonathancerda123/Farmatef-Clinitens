@@ -71,16 +71,19 @@ class LoteInventarioForm(forms.ModelForm):
         widgets = {
             "numero_lote": forms.TextInput(attrs={"maxlength": 80}),
             "vence_el": forms.DateInput(attrs={"type": "date"}),
-            "unidades": forms.NumberInput(attrs={"min": 1}),
+            "unidades": forms.NumberInput(attrs={"min": 1, "placeholder": "0"}),
         }
 
     def __init__(self, *args, actor=None, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.instance.pk is None:
+            self.initial.setdefault("unidades", None)
         self.fields["medicamento"].queryset = objetos_del_docente(
             Medicamento.objects.filter(activo=True), actor, campo="creado_por"
         )
         for field in self.fields.values():
             field.widget.attrs["class"] = INPUT
+        self.fields["medicamento"].widget = MedicamentoEtiquetaSelect(attrs={"class": INPUT}, choices=self.fields["medicamento"].choices)
 
     def clean(self):
         cleaned = super().clean()
@@ -96,6 +99,9 @@ class LoteInventarioForm(forms.ModelForm):
 
 
 class MedicamentoEtiquetaSelect(forms.Select):
+    def __init__(self, attrs=None, choices=()):
+        super().__init__({**(attrs or {}), "data-medicamento-search": ""}, choices)
+
     def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
         option = super().create_option(
             name, value, label, selected, index, subindex=subindex, attrs=attrs
@@ -105,6 +111,7 @@ class MedicamentoEtiquetaSelect(forms.Select):
             option["attrs"].update(
                 {
                     "data-principio": medicamento.principio_activo,
+                    "data-search": " ".join([medicamento.nombre, medicamento.principio_activo, medicamento.concentracion, medicamento.forma_farmaceutica]),
                     "data-concentracion": medicamento.concentracion,
                     "data-forma": medicamento.forma_farmaceutica,
                 }
@@ -249,7 +256,7 @@ class RecetaLineaForm(forms.Form):
         self.fields["medicamento"].queryset = objetos_del_docente(
             Medicamento.objects.filter(activo=True), actor, campo="creado_por"
         )
-        self.fields["medicamento"].widget.attrs["class"] = INPUT
+        self.fields["medicamento"].widget = MedicamentoEtiquetaSelect(attrs={"class": INPUT}, choices=self.fields["medicamento"].choices)
         for field in self.fields.values():
             field.widget.attrs["class"] = INPUT
 

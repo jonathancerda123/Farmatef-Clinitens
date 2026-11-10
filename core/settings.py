@@ -4,7 +4,8 @@ import environ
 import datetime as dt
 
 env = environ.Env()
-environ.Env.read_env()
+if os.environ.get("CLINITENS_READ_ENV", "1") == "1":
+    environ.Env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

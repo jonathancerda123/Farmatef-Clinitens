@@ -95,3 +95,20 @@ No se han probado correo real, proxy de producción, almacenamiento compartido, 
 - [Validación de FarmaTEF](../specs/005-farmatef-mvp-informe2/validation.md)
 - [Inventario de dependencias](INVENTARIO_DEPENDENCIAS.md)
 - [Preparación operativa](VALIDACION_PREPRODUCCION.md)
+
+
+## Uso local con datos originales — 021 / 2026-11-10
+
+En esta copia se restauró la base indicada por el usuario en `db.sqlite3`, conservando cuentas y registros originales. Fuente sin cambios. Respaldo íntegro, respaldo previo y ensayo en `.test-artifacts/original-021`; todos privados/ignorados. Se ensayó y aplicó 0007 únicamente al destino local. El inventario y la entrega de accesos están en `accesos-locales.txt` dentro de esa carpeta, no en Git.
+
+Desde la raíz:
+
+```powershell
+& ".\.test-artifacts\clinica-019-env\Scripts\python.exe" manage.py runserver 127.0.0.1:8020 --settings=core.local_runtime
+```
+
+URL: http://127.0.0.1:8020/accounts/login/ . Este acceso usa los datos originales restaurados; el demo de 8019 conserva su base independiente. Las cuentas nuevas de prueba exigen cambio de contraseña inicial y caducan a las 24 horas si no se cambian. Las originales conservan sus contraseñas y estado. Los nombres originales se pueden consultar en el inventario privado; para restablecer una cuenta original, usar el procedimiento Django interactivo con autorización para esa cuenta, sin publicar credenciales.
+
+`core.local_runtime` omite .env, usa hashers normales y un secreto nuevo en `.test-artifacts/original-021/local-secret.key`. Su configuración es solo local, con debug/HTTP en localhost y cookies separadas del demo. No usarla en producción. En otro equipo debe prepararse explícitamente su propia copia respaldada y secreto privado; importar esta configuración sin esos archivos falla con un mensaje claro. No transferir entornos virtuales ni subir datos/secretos al repositorio.
+
+Los medios no están contenidos en SQLite y no se copiaron: el acceso a adjuntos originales requiere preparar su almacenamiento privado por separado. No reasignar datos de docentes ni matricular cuentas de prueba en cursos originales sin revisión. Para probar se pueden crear cursos propios y agregar el estudiante de prueba desde la gestión existente.
