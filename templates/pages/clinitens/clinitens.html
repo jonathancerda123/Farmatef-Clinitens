@@ -3,7 +3,15 @@
 {% block page_title %}Área clínica{% endblock page_title %}
 {% block content_main %}
 <section class="home-intro">
-  <div><h2>Una práctica. Todo el proceso.</h2><p class="section-description">Ficha clínica, atención de urgencia, cuidados de enfermería y apoyo diagnóstico. Selecciona el apartado para trabajar con tus casos simulados.</p><div class="intro-actions"><a class="btn-primary" href="#modulos-clinicos">Explorar los apartados {% include 'components/design/icon.html' with icon='arrow' %}</a></div></div>
+  <div>
+    <h2>Una práctica. Todo el proceso.</h2>
+    <p class="section-description">Ficha clínica, atención de urgencia, cuidados de enfermería y apoyo diagnóstico. Selecciona el apartado para trabajar con tus casos simulados.</p>
+    {% if puede_gestionar %}
+      <div class="intro-actions"><a class="btn-primary" href="{% url 'clinitens_simulacion:docente_casos' %}#casos-titulo">Gestionar casos de simulación {% include 'components/design/icon.html' with icon='arrow' %}</a></div>
+    {% elif es_estudiante %}
+      <div class="intro-actions"><a class="btn-primary" href="{% url 'clinitens_simulacion:estudiante_casos' %}">Mis casos de práctica {% include 'components/design/icon.html' with icon='arrow' %}</a></div>
+    {% endif %}
+  </div>
   <div class="clinical-guide"><h3>¿Cómo empiezo?</h3><div class="guide-step">{% include 'components/design/icon.html' with icon='patient' %}<div><strong>Prepara un paciente ficticio</strong><p>El docente crea un caso para su curso y completa los datos del paciente.</p></div></div><div class="guide-step">{% include 'components/design/icon.html' with icon='clipboard' %}<div><strong>Realiza la práctica</strong><p>El estudiante abre el caso publicado de su curso y registra su atención.</p></div></div><div class="guide-step">{% include 'components/design/icon.html' with icon='result' %}<div><strong>Conserva el registro</strong><p>Guarda tu avance y consulta el historial del apartado correspondiente.</p></div></div></div>
 </section>
 <section aria-labelledby="modulos-clinicos">

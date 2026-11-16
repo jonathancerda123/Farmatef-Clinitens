@@ -10,5 +10,5 @@
 </tbody></table></div>
 <nav class="intro-actions" aria-label="Páginas de historial">{% if page_obj.has_previous %}<a class="btn-secondary" href="?page={{ page_obj.previous_page_number }}">Anterior</a>{% endif %}<span class="section-description">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>{% if page_obj.has_next %}<a class="btn-secondary" href="?page={{ page_obj.next_page_number }}">Siguiente</a>{% endif %}</nav>
 {% else %}<div class="pending-note"><h2 class="text-lg font-semibold">Aún no tienes atenciones de enfermería</h2><p>Busca un paciente de práctica para comenzar tu primer registro.</p></div>{% endif %}
-<div class="intro-actions"><a class="btn-secondary" href="{% url 'clinitens' %}">Volver al área clínica</a></div>
+<div class="intro-actions"><a class="btn-primary" href="{% url 'clinitens' %}">Volver al área clínica</a></div>
 {% endblock %}

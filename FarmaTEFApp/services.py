@@ -13,7 +13,17 @@ from .models import (
 )
 
 
-def _registrar_consumo_stock(receta, actor, cantidades, *, respuesta=None, actualizar_saldo=True):
+def lotes_de_practica(receta):
+    return LoteInventario.objects.filter(
+        medicamento__creado_por_id=receta.creado_por_id,
+        medicamento__activo=True,
+        vence_el__gte=timezone.localdate(),
+        unidades__gt=0,
+    ).select_related("medicamento")
+
+
+def _registrar_consumo_stock(receta, actor, cantidades, *, respuesta=None, lotes_elegidos=None):
+    actualizar_saldo = respuesta is None
     lineas = list(receta.lineas.select_related("medicamento").order_by("id"))
     if not lineas:
         raise ValidationError("La receta no tiene medicamentos asociados.")
@@ -33,16 +43,19 @@ def _registrar_consumo_stock(receta, actor, cantidades, *, respuesta=None, actua
         es_simulada=True,
     )
     hoy = timezone.localdate()
-    for linea in lineas:
+    # Acquire inventory locks in the same order across recipes.
+    for linea in sorted(lineas, key=lambda linea: (linea.medicamento_id, linea.pk)):
         restante = cantidades[linea.pk]
         if restante == 0:
             continue
-        lotes = LoteInventario.objects.select_for_update().filter(
+        lotes = LoteInventario.objects.select_for_update(of=("self",)).filter(
             medicamento=linea.medicamento,
             medicamento__activo=True,
             vence_el__gte=hoy,
             unidades__gt=0,
         ).order_by("vence_el", "creado_en", "id")
+        if lotes_elegidos is not None:
+            lotes = lotes.filter(pk=lotes_elegidos[linea.pk])
         for lote in lotes:
             tomar = min(restante, lote.unidades)
             actualizado = LoteInventario.objects.filter(
@@ -69,13 +82,17 @@ def _registrar_consumo_stock(receta, actor, cantidades, *, respuesta=None, actua
     return lineas
 
 
-@transaction.atomic
-def entregar_receta(receta_id, actor, cantidades):
-    receta = recetas_visibles_para_docente(
-        Receta.objects.select_for_update(), actor
-    ).filter(pk=receta_id).first()
+def _receta_docente_bloqueada(receta_id, actor):
+    visibles = recetas_visibles_para_docente(Receta.objects.filter(pk=receta_id), actor)
+    receta = Receta.objects.select_for_update().filter(pk__in=visibles.values("pk")).first()
     if not receta:
         raise ValidationError("No se encontró la receta en tu ámbito de acceso.")
+    return receta
+
+
+@transaction.atomic
+def entregar_receta(receta_id, actor, cantidades):
+    receta = _receta_docente_bloqueada(receta_id, actor)
     if receta.curso_id:
         raise ValidationError("Esta receta pertenece a una práctica de curso; no admite despacho docente manual.")
     if receta.estado == Receta.Estado.ENTREGADA:
@@ -97,24 +114,57 @@ def entregar_receta(receta_id, actor, cantidades):
 
 
 @transaction.atomic
-def responder_receta(receta_id, estudiante, decision, motivo_rechazo=""):
+def responder_receta(
+    receta_id, estudiante, decision, motivo_rechazo="", *,
+    lotes_elegidos=None, intento=1, explicacion_otro_motivo="",
+):
     if not estudiante.is_active or cargo(estudiante) != "RESTRICTED":
         raise ValidationError("La práctica está disponible para estudiantes activos inscritos en el curso.")
     if decision not in RespuestaReceta.Decision.values:
         raise ValidationError("Selecciona dispensar o rechazar la receta.")
     if decision == RespuestaReceta.Decision.RECHAZAR and motivo_rechazo not in RespuestaReceta.Motivo.values:
         raise ValidationError("Selecciona un motivo de rechazo válido.")
+    explicacion_otro_motivo = RespuestaReceta.limpiar_explicacion_otro(
+        decision, motivo_rechazo, explicacion_otro_motivo,
+    )
 
     receta = (
-        Receta.objects.select_for_update()
+        Receta.objects.select_for_update(of=("self",))
         .filter(pk=receta_id, curso__estudiantes__pk=estudiante.pk)
         .select_related("curso")
         .first()
     )
     if not receta:
         raise ValidationError("No se encontró una receta de práctica en tus cursos.")
-    if RespuestaReceta.objects.filter(receta=receta, estudiante=estudiante).exists():
+    anterior = RespuestaReceta.objects.filter(receta=receta, estudiante=estudiante).order_by("-intento").first()
+    if anterior and not anterior.reintento_disponible:
         raise ValidationError("Ya respondiste este caso.")
+    if intento != (2 if anterior else 1):
+        raise ValidationError("El intento cambió. Revisa el estado de la receta antes de responder.")
+
+    lineas = list(receta.lineas.order_by("pk"))
+    if not lineas:
+        raise ValidationError("La receta no tiene medicamentos asociados.")
+    inventario = lotes_de_practica(receta)
+    lotes_elegidos = lotes_elegidos or {}
+    error_seleccion = ""
+    if decision == RespuestaReceta.Decision.DISPENSAR:
+        if set(lotes_elegidos) != {linea.pk for linea in lineas}:
+            raise ValidationError("Selecciona un producto y un lote para cada línea de la receta.")
+        lotes = inventario.filter(pk__in=lotes_elegidos.values()).order_by(
+            "medicamento_id", "vence_el", "creado_en", "pk"
+        ).select_for_update(of=("self",))
+        seleccion = {lote.pk: lote for lote in lotes}
+        if set(seleccion) != set(lotes_elegidos.values()):
+            raise ValidationError("Un lote seleccionado ya no está disponible en esta práctica.")
+        for numero, linea in enumerate(lineas, 1):
+            lote = seleccion[lotes_elegidos[linea.pk]]
+            if lote.medicamento_id != linea.medicamento_id:
+                error_seleccion = f"En la línea {numero}, el producto o la presentación elegida difiere de la receta."
+                break
+            if lote.unidades < linea.unidades:
+                error_seleccion = f"En la línea {numero}, el lote elegido no cubre las unidades indicadas."
+                break
 
     if receta.vence_el < timezone.localdate():
         expected_reason = RespuestaReceta.Motivo.VENCIDA
@@ -122,6 +172,11 @@ def responder_receta(receta_id, estudiante, decision, motivo_rechazo=""):
         expected_reason = RespuestaReceta.Motivo.FALSIFICACION
     else:
         expected_reason = receta.motivo_rechazo_esperado
+        if not expected_reason and any(
+            not inventario.filter(medicamento_id=linea.medicamento_id, unidades__gte=linea.unidades).exists()
+            for linea in lineas
+        ):
+            expected_reason = RespuestaReceta.Motivo.SIN_STOCK
 
     expected_decision = (
         RespuestaReceta.Decision.RECHAZAR
@@ -131,46 +186,59 @@ def responder_receta(receta_id, estudiante, decision, motivo_rechazo=""):
     correcta = decision == expected_decision and (
         decision != RespuestaReceta.Decision.RECHAZAR
         or motivo_rechazo == expected_reason
-    )
-    explanation = receta.retroalimentacion_docente.strip()
-    if not explanation:
-        if expected_decision == RespuestaReceta.Decision.DISPENSAR:
-            explanation = "El caso estaba habilitado para dispensación simulada."
+    ) and not error_seleccion
+    reintento_disponible = intento == 1 and not correcta
+    explicacion = ""
+    respuesta_esperada = ""
+    if not reintento_disponible:
+        if expected_reason == RespuestaReceta.Motivo.SIN_STOCK:
+            explicacion = "Al menos un producto de la receta no tiene un lote vigente con las unidades necesarias."
+        elif error_seleccion and not expected_reason:
+            explicacion = error_seleccion
         else:
-            explanation = f"La respuesta esperada era rechazar por: {dict(RespuestaReceta.Motivo.choices).get(expected_reason, expected_reason)}."
+            explicacion = receta.retroalimentacion_docente.strip() or (
+                "La decisión o el motivo elegido no coincide con la validación de esta receta."
+                if not correcta else "La decisión coincide con las condiciones de la práctica."
+            )
+        if not correcta:
+            if expected_reason:
+                motivo = dict(RespuestaReceta.Motivo.choices).get(expected_reason, expected_reason)
+                respuesta_esperada = f"Rechazar receta por: {motivo}."
+            else:
+                respuesta_esperada = "Dispensar los medicamentos indicados con lotes vigentes que cubran las cantidades."
     respuesta = RespuestaReceta.objects.create(
         receta=receta,
         estudiante=estudiante,
         decision=decision,
         motivo_rechazo=motivo_rechazo if decision == RespuestaReceta.Decision.RECHAZAR else "",
+        explicacion_otro_motivo=explicacion_otro_motivo,
         correcta=correcta,
-        explicacion=explanation,
+        intento=intento,
+        reintento_disponible=reintento_disponible,
+        explicacion=explicacion,
+        respuesta_esperada=respuesta_esperada,
     )
 
     if correcta and decision == RespuestaReceta.Decision.DISPENSAR:
         cantidades = {
             linea.pk: linea.unidades
-            for linea in receta.lineas.all()
+            for linea in lineas
         }
-        if any(linea.unidades_entregadas for linea in receta.lineas.all()):
+        if any(linea.unidades_entregadas for linea in lineas):
             raise ValidationError("El caso ya registra una entrega docente y no se puede dispensar en la práctica.")
         _registrar_consumo_stock(
             receta,
             estudiante,
             cantidades,
             respuesta=respuesta,
-            actualizar_saldo=False,
+            lotes_elegidos=lotes_elegidos,
         )
     return respuesta
 
 
 @transaction.atomic
 def eliminar_receta(receta_id, actor):
-    receta = recetas_visibles_para_docente(
-        Receta.objects.select_for_update(), actor
-    ).filter(pk=receta_id).first()
-    if not receta:
-        raise ValidationError("No se encontró una receta en tu ámbito de acceso.")
+    receta = _receta_docente_bloqueada(receta_id, actor)
     tiene_entrega_registrada = (
         receta.estado != Receta.Estado.PENDIENTE
         or receta.entregado_en is not None

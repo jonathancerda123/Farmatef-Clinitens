@@ -8,7 +8,7 @@
   {% if preparacion %}{% include 'pages/clinitens/simulacion/pasos_preparacion.html' %}{% endif %}
   <div class="sim-module-intro"><p>{{ config.descripcion }}</p><span>SIMULACIÓN EDUCATIVA · Solo casos ficticios</span></div>
   {% if not preparacion %}<div class="sim-module-actions"><a class="btn-primary" href="{{ crear_caso_url }}">Crear caso para mi curso</a><a href="{% url 'clinitens_simulacion:docente_casos' %}#casos-titulo">Preparar un caso paso a paso</a></div>{% endif %}
-  {% if modulo == 'enfermeria' and not preparacion %}<div class="pending-note"><h2 class="text-lg font-semibold">Preparar un paciente para la práctica</h2><p>Crea un caso base en tu curso y completa aquí su paciente SIM. La identidad es compartida con los otros módulos. Para publicarlo, completa también el escenario DAU, los exámenes de laboratorio y los resultados de apoyo diagnóstico desde la gestión de casos.</p><div class="intro-actions"><a class="btn-secondary" href="{% url 'clinitens_simulacion:docente_casos' %}#casos-titulo">Configurar módulos y publicar casos</a><a class="btn-secondary" href="{% url 'clinitens' %}">Volver al área clínica</a></div></div>{% endif %}
+  {% if modulo == 'enfermeria' and not preparacion %}<div class="pending-note"><h2 class="text-lg font-semibold">Preparar un paciente para la práctica</h2><p>Crea un caso base en tu curso y completa aquí su paciente SIM. La identidad es compartida con los otros módulos. Para publicarlo, completa también el escenario DAU, los exámenes de laboratorio y los resultados de apoyo diagnóstico desde la gestión de casos.</p><div class="intro-actions"><a class="btn-secondary" href="{% url 'clinitens_simulacion:docente_casos' %}#casos-titulo">Configurar módulos y publicar casos</a><a class="btn-primary" href="{% url 'clinitens' %}">Volver al área clínica</a></div></div>{% endif %}
   <section class="sim-module-cases" aria-labelledby="casos-modulo-title">
     <div class="sim-cases-heading"><div><h2 id="casos-modulo-title">{{ config.seccion }}</h2></div><p>{% if preparacion.caso.publicado %}Este caso está publicado. Puedes consultar su preparación en modo lectura.{% elif preparacion %}Completa este paso y pulsa Guardar y continuar. Puedes volver a los pasos anteriores desde la guía.{% else %}Los borradores se pueden editar aquí. El contenido publicado queda en solo lectura.{% endif %}</p></div>
     <div class="sim-module-case-list">
@@ -40,7 +40,7 @@
               {% else %}
                 {% for field in fila.form %}<div class="sim-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<p class="sim-help">{{ field.help_text }}</p>{% endif %}{% for error in field.errors %}<p class="sim-error">{{ error }}</p>{% endfor %}</div>{% endfor %}
               {% endif %}
-              <div class="sim-module-form-actions">{% if preparacion %}<a class="btn-secondary" href="{{ preparacion.revision_url }}">Volver al resumen sin guardar</a><button class="btn-primary" type="submit">Guardar y continuar</button>{% else %}<button class="btn-primary" type="submit">Guardar contenido de {{ modulo }}</button>{% endif %}</div>
+              <div class="sim-module-form-actions">{% if preparacion %}<a class="btn-primary" href="{{ preparacion.revision_url }}">Volver al resumen sin guardar</a><button class="btn-primary" type="submit">Guardar y continuar</button>{% else %}<button class="btn-primary" type="submit">Guardar contenido de {{ modulo }}</button>{% endif %}</div>
             </form>
           {% endif %}
         </article>

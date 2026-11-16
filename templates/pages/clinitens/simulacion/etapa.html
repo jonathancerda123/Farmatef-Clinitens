@@ -2,7 +2,7 @@
 {% block head_title %}{{ titulo_etapa }} | CliniTENS{% endblock %}
 {% block page_title %}{{ titulo_etapa }}{% endblock %}
 {% block content_main %}
-<p><a href="{% url 'clinitens_simulacion:estudiante_casos' %}">← Volver a mis casos</a></p>
+<p><a class="btn-primary" href="{% url 'clinitens_simulacion:estudiante_casos' %}">← Volver a mis casos</a></p>
 <section class="form-sheet"><h2>{{ caso.titulo }}</h2><p>{{ caso.resumen }}</p>
   {% if etapa == 'dau' %}<h3>Escenario ficticio</h3><p>{{ caso.escenario_dau }}</p>
   <form method="post">{% csrf_token %}{% for field in form %}<div class="ui-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}</div>{% endfor %}<button class="btn-primary" type="submit">Guardar registro educativo</button></form>

@@ -1,0 +1,43 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block head_title %}Intentos de {{ receta.numero }} | FarmaTEF{% endblock head_title %}
+{% block page_title %}Intentos de la receta{% endblock page_title %}
+
+{% block content_main %}
+<div class="mb-6">
+  <a class="btn-primary" href="{% url 'farmatef:recetas' %}">← Volver a Recetas</a>
+</div>
+<section class="form-sheet" aria-labelledby="receta-intentos-titulo">
+  <h2 id="receta-intentos-titulo" class="text-xl font-semibold text-slate-900">Receta {{ receta.numero }}</h2>
+  {% if receta.curso %}<p class="mt-1 text-sm text-slate-600">{{ receta.curso.nombre }}</p>{% endif %}
+  {% if intentos %}
+    <div class="mt-5 overflow-x-auto rounded-lg border border-slate-200" role="region" aria-label="Respuestas de estudiantes" tabindex="0">
+      <table class="w-full min-w-[600px] text-left text-sm">
+        <thead class="bg-brand-50 text-brand-800">
+          <tr>
+            <th scope="col" class="p-3">Estudiante</th>
+            <th scope="col" class="p-3">Intento</th>
+            <th scope="col" class="p-3">Decisión</th>
+            <th scope="col" class="p-3">Motivo de rechazo</th>
+            <th scope="col" class="p-3">Resultado</th>
+            <th scope="col" class="p-3">Fecha</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+          {% for intento in intentos %}
+            <tr>
+              <td class="p-3">{{ intento.estudiante.get_full_name|default:intento.estudiante.username }}</td>
+              <td class="p-3">{{ intento.intento }}</td>
+              <td class="p-3">{{ intento.get_decision_display }}</td>
+              <td class="p-3">{{ intento.get_motivo_rechazo_display|default:"—" }}{% if intento.explicacion_otro_motivo %}<p class="mt-1 break-words text-slate-600">{{ intento.explicacion_otro_motivo }}</p>{% endif %}</td>
+              <td class="p-3">{% if intento.correcta %}Correcta{% else %}Incorrecta{% endif %}</td>
+              <td class="p-3">{{ intento.respondida_en|date:"d/m/Y H:i" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="mt-5 text-sm text-slate-600">Todavía no hay intentos registrados para esta receta.</p>
+  {% endif %}
+</section>
+{% endblock content_main %}

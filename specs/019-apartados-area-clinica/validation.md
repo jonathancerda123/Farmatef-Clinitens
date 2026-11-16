@@ -48,3 +48,9 @@ Revisadas visualmente [portada escritorio](../../docs/evidencias/019-apartados/p
 0007 se aplicó al esquema de pruebas en memoria y a una fixture nueva bajo `.test-artifacts`; no se abrió ni migró una base habitual. Para activar RAE en la instalación del usuario, preparar el entorno normal, respaldar su base si existe y verificar recuperación, revisar `migrate --plan` y aplicar la migración de `CliniTensSimulacionApp` con autorización específica para ese destino. No ejecutar esas operaciones sobre datos recibidos solo por copiar este documento. El acceso estudiantil necesita caso publicado y matrícula; la publicación conserva los requisitos existentes de DAU/laboratorio/CAD.
 
 RAE es una primera versión educativa acordada, no una copia comprobada de las pantallas interiores de la referencia. No se añadieron protocolos, diagnósticos, tratamientos ni interpretación automática. No se modificaron PDF/Excel. Las pruebas de navegación no equivalen a validar flujos clínicos completos. Aceptación visual/pedagógica pendiente; próximo paso: revisión con el usuario y preparación de migración en su instalación. Sin despliegue, commit ni push.
+
+## Acceso a los casos de práctica
+
+RF-019-08. Pasaron las tres pruebas de `homeApp` con `core.test_settings`. Se verificaron los destinos permitidos y denegados según cargo. Chrome comprobó el acceso estudiantil a 390 px y el docente a 1440 px, con ambos enlaces operables y los siete apartados presentes.
+
+RF-019-09. En Chrome a 1440, 950 y 390 px se revisaron los estados vacío y con casos ficticios publicados. Se comprobó la alineación del aviso y del regreso, la cuadrícula adaptable, la exclusión del borrador y la variante de Laboratorio con su acceso específico. Pasaron 22 pruebas de `homeApp` y `CliniTensSimulacionApp` con `core.test_settings`. Compilación Tailwind 4.3.3 correcta.

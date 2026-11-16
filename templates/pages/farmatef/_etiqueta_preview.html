@@ -1,0 +1,65 @@
+<div data-label-preview>
+  <div class="label-preview-stage">
+    {% if etiqueta %}
+      <div class="label-screen-list">
+        {% for copia in copias %}
+          <article class="label-page" style="--label-width: {{ etiqueta.ancho_mm }}mm; --label-height: {{ etiqueta.alto_mm }}mm" aria-label="Etiqueta {{ copia }}">
+            <strong>{{ etiqueta.medicamento.nombre }}</strong>
+            {% if etiqueta.medicamento.principio_activo %}<span>{{ etiqueta.medicamento.principio_activo }}</span>{% endif %}
+            {% if etiqueta.medicamento.concentracion %}<span>{{ etiqueta.medicamento.concentracion }}</span>{% endif %}
+            {% if etiqueta.medicamento.forma_farmaceutica %}<span>{{ etiqueta.medicamento.forma_farmaceutica }}</span>{% endif %}
+            <span>Lote: {{ etiqueta.lote.numero_lote }}</span>
+            <span>Vence: {{ etiqueta.lote.vence_el|date:"d/m/Y" }}</span>
+            {% if uso.linea.dosis %}<span>Dosis ficticia: {{ uso.linea.dosis }}</span>{% endif %}
+            {% if uso.linea.indicaciones %}<span>{{ uso.linea.indicaciones }}</span>{% endif %}
+            {% if uso %}<small>Unidades dispensadas: {{ uso.unidades }}</small>{% else %}<small>Stock simulado: {{ etiqueta.lote.unidades }}</small>{% endif %}
+            <div class="label-barcode">
+              <img src="data:image/png;base64,{{ etiqueta.imagen_codigo }}" alt="" style="width: {{ etiqueta.ancho_codigo }}mm">
+              <span>{{ etiqueta.codigo }}</span>
+            </div>
+            <small class="label-simulation">FarmaTEF · Simulación educativa</small>
+          </article>
+        {% endfor %}
+      </div>
+    {% elif solo_vista_previa and form.errors %}
+      <div class="error-summary text-sm" role="alert">
+        {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+        {% for field in form %}
+          {% for error in field.errors %}<p><strong>{{ field.label }}</strong> · {{ error }}</p>{% endfor %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-sm text-slate-600">Selecciona el medicamento y el lote para generar la etiqueta con su código de barras.</p>
+    {% endif %}
+  </div>
+  {% if etiqueta %}
+    <p class="mt-3 text-sm text-slate-600">{{ etiqueta.copias }} copia{{ etiqueta.copias|pluralize:"s" }} · una etiqueta por página.</p>
+    <p class="mt-2 text-sm text-amber-900" data-label-overflow hidden>El texto supera el espacio de la etiqueta. Elige un tamaño mayor.</p>
+  {% endif %}
+{% if etiqueta %}<style>
+  @page { size: {{ etiqueta.ancho_mm }}mm {{ etiqueta.alto_mm }}mm; margin: 0; }
+  .label-screen-list { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+  .label-page { box-sizing: border-box; display: flex; flex: 0 0 auto; flex-direction: column; gap: .6mm; width: var(--label-width); height: var(--label-height); overflow: hidden; border: 1px solid #d3e0e2; background: white; padding: 2mm; color: #172f35; box-shadow: 0 1px 4px #19363c20; font: 7pt/1.1 Arial, sans-serif; }
+  .label-page > * { flex-shrink: 0; width: 100%; min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+  .label-page strong { font-size: 8pt; line-height: 1.1; }
+  .label-page small { font-size: 6.5pt; }
+  .label-barcode { margin-top: auto; color: black; text-align: center; font: 6.5pt/1.2 Arial, sans-serif; }
+  .label-barcode img { display: block; max-width: none; height: 7mm; margin: 0 auto .4mm; }
+  .label-simulation { font-weight: 700; }
+  @media print {
+    body > :not(.app-shell), .app-shell > :not(.app-workspace),
+    .app-workspace > :not(.workspace-content), .workspace-content > :not(.label-editor-grid),
+    .label-editor-grid > :not(.label-tools-column), .label-tools-column > :not(:first-child),
+    .label-tools-column > :first-child > :not([data-label-preview]),
+    [data-label-preview] > :not(.label-preview-stage) { display: none !important; }
+    html, body, .app-shell, .app-workspace, .workspace-content, .label-editor-grid, .label-tools-column,
+    .label-tools-column > :first-child, .label-preview-stage, .label-screen-list {
+      display: block !important;
+      min-width: 0; min-height: 0; width: auto; height: auto; overflow: visible;
+      margin: 0; padding: 0; border: 0; background: white; box-shadow: none;
+    }
+    .label-page { width: {{ etiqueta.ancho_mm }}mm; height: {{ etiqueta.alto_mm }}mm; border: 0; box-shadow: none; break-inside: avoid; }
+    .label-page + .label-page { break-before: page; }
+  }
+</style>{% endif %}
+</div>

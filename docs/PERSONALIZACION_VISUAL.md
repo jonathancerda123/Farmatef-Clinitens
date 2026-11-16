@@ -41,6 +41,8 @@ Las páginas generales mantienen `content_main`; formularios `content_pages`; do
 
 Usar `btn-primary`, `btn-secondary`, `btn-danger`, `form-sheet`, `ui-field`, `error-summary`, `field-errors`, `metric-strip`, `evaluation-summary` y `section-navigation` cuando correspondan. Un formulario puede incluir `components/design/field.html` con un BoundField y `form_errors.html` para errores generales. No agregar un contenedor decorativo por cada dato.
 
+Usar `btn-primary` en los controles «Volver a…» y «Volver al…» para mantener el mismo verde en FarmaTEF y CliniTENS.
+
 ## Contratos de interacción
 
 Conservar URLs, `name`, `method`, CSRF, archivos multipart, campos ocultos, versiones, filtros y paginación. No cambiar consultas ni validaciones para resolver una diferencia visual. Usar `request.user` al comprobar navegación dentro de listas de usuarios. La autorización real permanece en servidor.

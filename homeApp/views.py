@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.urls import reverse
 from UsuarioApp.models import Profile
 from core.permissions import cargo, es_administrador, es_docente
+from FarmaTEFApp.inventario import resumen_alertas
 
 
 class HomeView(LoginRequiredMixin, ListView):
@@ -95,7 +96,11 @@ class CliniTENSView(LoginRequiredMixin, TemplateView):
                 "accion": "Administrar usuarios", "restriccion": "Acceso con perfil administrador",
             },
         ]
-        context.update({"modulos_clinicos": modules, "puede_gestionar": docente})
+        context.update({
+            "modulos_clinicos": modules,
+            "puede_gestionar": docente,
+            "es_estudiante": estudiante,
+        })
         return context
 
 
@@ -104,5 +109,9 @@ class FarmaTEFView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["puede_gestionar"] = es_docente(self.request.user)
+        usuario = self.request.user
+        context["puede_gestionar"] = es_docente(usuario)
+        context["es_estudiante"] = cargo(usuario) == "RESTRICTED"
+        if context["puede_gestionar"]:
+            context["alertas"] = resumen_alertas(usuario)
         return context

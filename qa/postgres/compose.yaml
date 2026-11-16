@@ -1,0 +1,17 @@
+name: clinitens-qa
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: clinitens_qa
+      POSTGRES_USER: clinitens_qa
+      POSTGRES_PASSWORD: clinitens_qa_ficticia
+    ports:
+      - "127.0.0.1:55432:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "clinitens_qa", "-d", "clinitens_qa"]
+      interval: 2s
+      timeout: 3s
+      retries: 30

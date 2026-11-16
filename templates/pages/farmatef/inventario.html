@@ -2,71 +2,55 @@
 {% block head_title %}Inventario | FarmaTEF{% endblock head_title %}
 {% block page_title %}Inventario de farmacia{% endblock page_title %}
 {% block content_main %}
-<div class="mb-6">
-  <a class="text-sm font-medium text-brand-700 hover:underline" href="{% url 'farmatef' %}">← Volver a FarmaTEF</a>
-  <p class="section-description mt-2">Medicamentos y lotes ficticios para preparar actividades de simulación. El arsenal APS incluye inventario simulado; las cantidades y fechas no representan existencias reales.</p>
+<div class="mb-6 flex flex-wrap items-center gap-3">
+  <a class="btn-primary" href="{% url 'farmatef' %}">← Volver a FarmaTEF</a>
+  <a class="btn-primary" href="{% url 'farmatef:registro_inventario' %}">Registrar medicamento o lote</a>
 </div>
 
-<div class="grid gap-6 xl:grid-cols-2">
-  <section class="rounded-xl border border-slate-200 bg-white p-5">
-    <h2 class="text-lg font-semibold text-slate-900">Registrar medicamento</h2>
-    <p class="mb-4 mt-1 text-sm text-slate-600">El mínimo define cuándo se mostrará una alerta de reposición.</p>
-    <form method="post" class="grid gap-4 sm:grid-cols-2">
-      {% csrf_token %}
-      {% for field in form_medicamento %}
-        <div class="{% if field.name == 'nombre' or field.name == 'principio_activo' %}sm:col-span-2{% endif %}">
-          <label class="text-sm font-medium text-slate-700" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
-          {{ field }}
-          {% for error in field.errors %}<p class="mt-1 text-sm text-red-700">{{ error }}</p>{% endfor %}
-        </div>
-      {% endfor %}
-      <div class="sm:col-span-2">
-        <button class="btn-primary" type="submit" name="crear_medicamento">Guardar medicamento</button>
-      </div>
-    </form>
-  </section>
-
-  <section class="rounded-xl border border-slate-200 bg-white p-5">
-    <h2 class="text-lg font-semibold text-slate-900">Registrar lote</h2>
-    <p class="mb-4 mt-1 text-sm text-slate-600">Cada lote conserva su propio vencimiento y cantidad disponible.</p>
-    {% if form_lote.fields.medicamento.queryset %}
-      <form method="post" class="grid gap-4">
-        {% csrf_token %}
-        {% for field in form_lote %}
-          <div>
-            <label class="text-sm font-medium text-slate-700" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
-            {{ field }}
-            {% for error in field.errors %}<p class="mt-1 text-sm text-red-700">{{ error }}</p>{% endfor %}
-          </div>
+<section aria-labelledby="inventario-existencias">
+  <h2 id="inventario-existencias" class="text-lg font-semibold text-slate-900">Existencias registradas</h2>
+  <p class="section-description mt-1">Inventario de simulación. El stock disponible suma las unidades de lotes vigentes.</p>
+  {% if alerta %}
+    <p class="mt-3 text-sm font-semibold text-amber-800">Alerta activa: {{ titulo_alerta }}</p>
+  {% endif %}
+  <form class="my-4 flex flex-wrap items-end gap-3" method="get" role="search" aria-label="Filtrar inventario">
+    {% if alerta %}<input type="hidden" name="alerta" value="{{ alerta }}">{% endif %}
+    <div>
+      <label class="text-sm font-medium text-slate-700" for="buscar-existencias">Buscar medicamento</label>
+      <input class="input mt-1" id="buscar-existencias" type="search" name="q" value="{{ busqueda }}"
+             placeholder="Nombre, principio activo o lote" maxlength="160" aria-controls="tabla-existencias">
+    </div>
+    <div>
+      <label class="text-sm font-medium text-slate-700" for="clasificacion-existencias">Clasificación</label>
+      <select class="input mt-1" id="clasificacion-existencias" name="clasificacion">
+        <option value="">Todas las clasificaciones</option>
+        {% for opcion in clasificaciones %}
+          <option value="{{ opcion }}"{% if opcion == clasificacion %} selected{% endif %}>{{ opcion }}</option>
         {% endfor %}
-        <button class="btn-primary" type="submit" name="crear_lote">Guardar lote</button>
-      </form>
-    {% else %}
-      <p class="rounded-lg bg-slate-50 p-4 text-sm text-slate-600">Primero registra un medicamento para añadir lotes.</p>
-    {% endif %}
-  </section>
-</div>
-
-<section class="mt-8">
-  <div class="mb-3">
-    <h2 class="text-lg font-semibold text-slate-900">Existencias registradas</h2>
-    <p class="text-sm text-slate-600">El total suma las unidades de todos los lotes del medicamento.</p>
-  </div>
+      </select>
+    </div>
+    <button class="btn-primary" type="submit">Filtrar</button>
+    {% if busqueda or clasificacion or alerta %}<a class="btn-secondary" href="{% url 'farmatef:inventario' %}">Quitar filtros</a>{% endif %}
+  </form>
   <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white" role="region" aria-label="Inventario desplazable" tabindex="0">
-    <table class="w-full min-w-[760px] text-left text-sm">
+    <table id="tabla-existencias" class="w-full min-w-[760px] text-left text-sm">
       <thead class="border-b border-slate-200 bg-brand-50 text-brand-800">
-        <tr><th class="p-3">Medicamento</th><th class="p-3">Clasificación</th><th class="p-3">Stock</th><th class="p-3">Mínimo</th><th class="p-3">Lotes</th><th class="p-3">Estado</th></tr>
+        <tr><th scope="col" class="p-3">Medicamento</th><th scope="col" class="p-3">Clasificación</th><th scope="col" class="p-3">Stock</th><th scope="col" class="p-3">Mínimo</th><th scope="col" class="p-3">Lotes</th><th scope="col" class="p-3">Estado</th></tr>
       </thead>
       <tbody class="divide-y divide-slate-200">
         {% for medicamento in medicamentos %}
           <tr>
             <td class="p-3 font-medium text-slate-900">{{ medicamento.nombre }}<span class="block text-xs font-normal text-slate-500">{{ medicamento.concentracion }} {{ medicamento.forma_farmaceutica }}</span>{% if medicamento.observaciones %}<span class="block text-xs font-normal text-slate-500">{{ medicamento.observaciones }}</span>{% endif %}</td>
             <td class="p-3">{{ medicamento.clasificacion|default:"—" }}</td>
-            <td class="p-3">{{ medicamento.stock_total }}</td>
+            <td class="p-3">{{ medicamento.stock_disponible }} disponibles<span class="block text-xs text-slate-600">{{ medicamento.stock_total }} registradas</span></td>
             <td class="p-3">{{ medicamento.stock_minimo }}</td>
             <td class="p-3">
               {% for lote in medicamento.lotes.all %}
-                <span class="mb-1 block">{{ lote.numero_lote }} · {{ lote.unidades }} un. · vence {{ lote.vence_el|date:"d/m/Y" }}{% if lote.es_simulado %} · Simulado{% endif %}</span>
+                <div class="mb-1">
+                  <span class="block font-medium">{{ lote.numero_lote }}</span>
+                  <span class="block">{{ lote.unidades }} unidad{{ lote.unidades|pluralize:"es" }}</span>
+                  <span class="block">vence: <time datetime="{{ lote.vence_el|date:'Y-m-d' }}">{{ lote.vence_el|date:"d/m/Y" }}</time>{% if lote.es_simulado %} · Simulado{% endif %}</span>
+                </div>
               {% empty %}<span class="text-slate-500">Sin lotes</span>{% endfor %}
             </td>
             <td class="p-3">
@@ -77,7 +61,7 @@
             </td>
           </tr>
         {% empty %}
-          <tr><td class="p-8 text-center text-slate-600" colspan="6">Aún no hay medicamentos en este inventario.</td></tr>
+          <tr><td class="p-8 text-center text-slate-600" colspan="6">{% if busqueda or clasificacion or alerta %}No hay medicamentos que coincidan con los filtros.{% else %}Aún no hay medicamentos en este inventario.{% endif %}</td></tr>
         {% endfor %}
       </tbody>
     </table>

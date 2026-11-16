@@ -129,6 +129,23 @@
   .module-entry h3 { font-size: 1.2rem; font-weight: 700; }
   .module-entry p { color: rgb(var(--color-muted)); font-size: .875rem; margin: .5rem 0 1rem; max-width: 48ch; }
   .module-entry a { color: rgb(var(--color-primary-hover)); font-size: .9rem; font-weight: 650; text-decoration: underline; text-underline-offset: .25em; }
+  .farmatef-home { display: grid; gap: 1.5rem; align-items: start; }
+  .farmatef-home > section { min-width: 0; }
+  .farmatef-tools .module-entry > div { display: flex; flex-direction: column; align-self: stretch; min-width: 0; }
+  .farmatef-tools .module-entry a { align-self: start; margin-top: auto; }
+  .recetas-layout { display: grid; gap: 1.5rem; align-items: start; }
+  .recetas-layout > section { min-width: 0; }
+  .recetas-busqueda { overflow-wrap: anywhere; }
+  .recetas-busqueda, .recetas-busqueda details { scroll-margin-top: 7rem; }
+  @media (min-width: 1200px) {
+    .farmatef-home { grid-template: "tools alerts" auto / minmax(0, 1fr) minmax(16rem, 23%); }
+    .farmatef-tools { grid-area: tools; }
+    .farmatef-alerts { grid-area: alerts; }
+    .farmatef-tools .module-list { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; }
+    .recetas-layout { grid-template: "registro busqueda" auto / minmax(0, 1fr) minmax(17rem, 30%); }
+    .recetas-registro { grid-area: registro; }
+    .recetas-busqueda { grid-area: busqueda; }
+  }
   .clinical-module-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1.25rem; }
   .clinical-module { flex-direction: column; align-items: stretch; min-width: 0; border-top: 4px solid rgb(var(--color-primary)); }
   .clinical-module-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
