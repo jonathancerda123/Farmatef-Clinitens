@@ -1,5 +1,5 @@
 <section class="sim-preparation" aria-label="Preparación del caso">
-  <p><a href="{% url 'clinitens_simulacion:docente_casos' %}#casos-titulo">Volver a mis casos</a></p>
+  <p><a class="btn-primary" href="{% url 'clinitens_simulacion:docente_casos' %}#casos-titulo">Volver a mis casos</a></p>
   <h2>{{ preparacion.caso.titulo }}</h2><p>{{ preparacion.caso.curso }} · {{ preparacion.completados }} de 4 apartados preparados</p>
   <nav aria-label="Pasos de preparación"><ol class="sim-preparation-steps">
     {% for paso in preparacion.pasos %}<li><a href="{{ paso.url }}"{% if modulo == paso.modulo %} aria-current="step"{% endif %}><strong>{{ paso.numero }}. {{ paso.nombre }}</strong><span>{% if paso.completo %}Preparación guardada{% else %}Falta preparar{% endif %}</span></a></li>{% endfor %}

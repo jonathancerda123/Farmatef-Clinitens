@@ -1,0 +1,10 @@
+# Validación 024
+
+Fecha: 2026-11-11. Rama jonathan. Entorno Python del prototipo con `core.test_settings` y bases ficticias.
+
+- 78 pruebas Django, 4 regresiones JavaScript y cotejo de migraciones correctos. Se probaron enlaces privados, comprobante tras dispensación, dos descargas sin descuento adicional, pérdida de acceso al intentar descargar como otro alumno, dosis/indicaciones, reenvío obsoleto, reintento correcto y dos respuestas incorrectas.
+- Chrome a 390 px con puente local ficticio. El código desconocido mostró un aviso. La selección incorrecta habilitó el segundo intento sin revelar la explicación y dejó 10 unidades. El segundo intento descontó 4, generó la respuesta PDF y habilitó la etiqueta. La vista previa ocultó el botón de impresión al exceder 40 × 30 mm y lo mostró para el ejemplo en 55 × 44 mm.
+- El puente de pruebas capturó la respuesta del comprobante porque Chrome no pudo guardar el archivo interceptado directamente. Se rasterizaron e inspeccionaron el comprobante A4 y la etiqueta de 55 × 44 mm con Poppler. Pendientes la descarga en el servidor habitual y la calibración de una impresora física.
+- La migración 0009 se ensayó desde una copia de la base ficticia 023. Conservó 4 líneas, 4 respuestas previas y 4 dispensaciones. Las respuestas antiguas quedaron cerradas. `foreign_key_check` y `quick_check` correctos. Base de trabajo habitual pendiente de actualizar con respaldo.
+- RF-024-05: 12 pruebas FarmaTEF correctas. El enlace abre una página separada con ambos intentos. Acceso directo permitido al docente responsable, denegado a otro docente y al alumno.
+- RF-024-06: se comprobó que los enlaces de regreso usan `btn-primary`. Chrome renderizó «Volver a mis recetas» en verde con destino al listado de práctica. La evidencia del usuario muestra dos medicamentos dispensados en FAR-QA-027 y ambos roles de gestión consultando los intentos de FAR-QA-026. El PDF adjunto se revisó como comprobante A4 de FAR-QA-024. Queda verificar el comprobante de FAR-QA-027 y un PDF de etiquetas con más de una copia.

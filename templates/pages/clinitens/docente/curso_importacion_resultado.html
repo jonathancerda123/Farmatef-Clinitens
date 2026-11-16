@@ -7,7 +7,7 @@
 
   <div>
     <a href="{% url 'clinitensdocente:curso_detalle' curso.pk %}"
-       class="text-sm font-semibold text-brand-700 hover:underline">
+       class="btn-primary">
       ← Volver al curso
     </a>
 
@@ -118,7 +118,7 @@
   {% endif %}
 
   <a href="{% url 'clinitensdocente:curso_detalle' curso.pk %}"
-     class="inline-flex h-10 items-center rounded-md bg-brand-600 px-4 text-sm font-semibold text-white transition hover:bg-brand-700">
+     class="btn-primary">
     Volver a {{ curso.nombre }}
   </a>
 </div>

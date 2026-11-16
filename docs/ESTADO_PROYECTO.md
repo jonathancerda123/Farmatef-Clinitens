@@ -1,5 +1,21 @@
 # Estado y punto de reanudación — CliniTENS
 
+La pantalla estudiantil «Mis casos de práctica» muestra un aviso único cuando no hay casos publicados. Cada caso disponible tiene una tarjeta con su curso, resumen y accesos. Se verificaron ambas vistas con datos ficticios a 1440, 950 y 390 px.
+
+## Retroalimentación de FarmaTEF — 025 / 2026-11-15
+
+El ajuste visual de la portada docente apila las alertas arriba a la derecha en escritorio y encima de los módulos en móvil. Stock bajo se muestra en ámbar y vencimiento próximo en rosa. Se alinearon las acciones de las cuatro tarjetas y se comprobó la navegación con teclado.
+
+Recetas dedica la columna principal al registro y deja la búsqueda por número a la derecha. Se puede ingresar un fragmento y abrir una de las coincidencias debajo de la lista. El acceso por número exacto desde el historial sigue abriendo el detalle.
+
+Etiquetado actualiza la vista previa al elegir medicamento y lote o cambiar medidas y copias. La validación permanece en servidor. El flujo automático y un PDF de dos páginas para dos copias se verificaron con datos ficticios.
+
+En la práctica estudiantil, cada selector muestra al lado la presentación y cantidad pedidas. Las opciones y la selección muestran la presentación, el lote, su vencimiento y sus existencias. La pista docente sigue disponible en el reintento. Verificado en escritorio y móvil con datos ficticios.
+
+«Otro motivo» solicita una explicación breve que queda en el intento. Se aplicó la migración aditiva 0010 en la demo ficticia del puerto 8025 después de respaldarla. La revisión docente del texto se verificó en Chrome.
+
+La portada docente abre las alertas filtradas en el inventario. El registro de medicamentos y lotes tiene su propia pantalla. Los estudiantes ven etiquetas Code 128 de sus dispensaciones y pueden usar los códigos en el selector de práctica. Validado localmente en `jonathan` con datos ficticios. Próximo paso: probar impresión y lector físicos, ejecutar el laboratorio en Docker e incorporar al notebook la exportación anotada de Roboflow. [Evidencia de pruebas](../specs/025-retroalimentacion-farmatef/validation.md).
+
 ## Comprobación de módulos y claridad de textos — ampliación 020
 
 Por petición de conservar módulos existentes se compararon ramas remotas actualizadas y copia OneDrive. Los apartados tradicionales ya están implementados y se mantienen intactos. La prueba adicional en memoria creó curso/caso/código/paciente/resultado, consultó fichas y seguimiento y comprobó aislamiento; 66 regresiones correctas. Los contadores tradicionales no incluyen casos RAE/DAU/lab/CAD de simulación, por lo que Juan no incrementa esas métricas. No se conectaron ambos historiales. Se ordenó solo el paciente RAE y la guía de preparación: fieldsets, situación/antecedentes separados y “Falta preparar” en lugar de “Pendiente” ambiguo. Sin módulos/archivos funcionales nuevos ni migraciones. Evidencia y límites en validación 020; próximo: revisión del usuario, con los módulos tradicionales protegidos.

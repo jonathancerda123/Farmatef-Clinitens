@@ -35,7 +35,7 @@ body:has(.dau-shell), body:has(.dau-workspace) { background: var(--dau-canvas); 
 .dau-button-secondary { background: #fff; border-color: var(--dau-border); color: var(--dau-ink); }
 .dau-button-save { background: #079b70; color: #fff; }
 .dau-entry-links { display: flex; justify-content: center; gap: 24px; margin-top: 26px; }
-.dau-entry-links a, .dau-history-link { color: var(--dau-ink); text-decoration: none; }
+.dau-entry-links a:not(.btn-primary), .dau-history-link { color: var(--dau-ink); text-decoration: none; }
 .dau-available { margin-top: 30px; }
 .dau-available h2 { font-size: 18px; }
 .dau-available-row, .dau-history-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 16px; border: 1px solid var(--dau-border); border-radius: 10px; background: white; }

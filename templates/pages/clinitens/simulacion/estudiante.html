@@ -1,8 +1,42 @@
 {% extends 'components/Layout/base_extendido.html' %}
-{% block head_title %}Práctica clínica simulada | CliniTENS{% endblock %}
-{% block page_title %}Práctica clínica simulada{% endblock %}
+{% block head_title %}{% if etapa %}{{ titulo_etapa }}{% else %}Mis casos de práctica{% endif %} | CliniTENS{% endblock head_title %}
+{% block page_title %}{% if etapa %}{{ titulo_etapa }}{% else %}Mis casos de práctica{% endif %}{% endblock page_title %}
 {% block content_main %}
-<p class="page-intro">{{ titulo_etapa }} · Solo casos ficticios asignados a tus cursos. No uses datos de personas reales.</p>
-<div class="module-list">{% for caso in casos %}<article class="module-entry"><div><h2>{{ caso.titulo }}</h2><p>{{ caso.curso }} · {{ caso.resumen }}</p>{% if etapa == 'dau' %}<a href="{% url 'clinitens_simulacion:dau_inicio' %}">Abrir registro DAU</a>{% elif etapa == 'laboratorio' %}<a href="{% url 'clinitens_simulacion:solicitud_laboratorio' caso.pk %}">Abrir órdenes y tubos</a>{% elif etapa == 'diagnostico' %}<a href="{% url 'clinitens_simulacion:etapa' caso.pk 'diagnostico' %}">Abrir resultados diagnósticos</a>{% else %}<div class="sim-module-actions"><a class="btn-primary" href="{% url 'clinitens_simulacion:dau_inicio' %}">Atención de urgencia (DAU)</a><a href="{% url 'clinitens_simulacion:solicitud_laboratorio' caso.pk %}">Laboratorio clínico</a><a href="{% url 'clinitens_simulacion:etapa' caso.pk 'diagnostico' %}">Centro de Apoyo Diagnóstico</a></div>{% endif %}</div></article>{% empty %}<p class="form-sheet">No tienes casos publicados en tus cursos por ahora.</p>{% endfor %}</div>
-<p class="form-sheet">Simulación educativa · Los pacientes, resultados e indicaciones son ficticios.</p>
-{% endblock %}
+<div class="mb-6">
+  <a class="btn-primary" href="{% url 'clinitens' %}">← Volver al área clínica</a>
+</div>
+
+{% if casos %}
+  <p class="section-description mb-4">Estos casos ficticios están publicados en tus cursos.</p>
+  <section class="module-list" aria-label="Casos publicados">
+    {% for caso in casos %}
+      <article class="panel flex min-w-0 flex-col gap-4 p-5" aria-labelledby="caso-{{ caso.pk }}">
+        <header class="break-words">
+          <p class="text-sm font-semibold text-brand-700">{{ caso.curso }}</p>
+          <h2 id="caso-{{ caso.pk }}" class="mt-1 text-xl font-semibold">{{ caso.titulo }}</h2>
+          {% if caso.resumen %}<p class="mt-2 text-sm text-slate-600">{{ caso.resumen }}</p>{% endif %}
+        </header>
+        <ul class="mt-auto grid gap-2 border-t border-slate-200 pt-4">
+          {% if not etapa or etapa == 'dau' %}
+            <li><a class="btn-secondary w-full justify-between text-left" href="{% url 'clinitens_simulacion:dau_inicio' %}">Atención de urgencia (DAU) {% include 'components/design/icon.html' with icon='arrow' icon_class='shrink-0' %}</a></li>
+          {% endif %}
+          {% if not etapa or etapa == 'laboratorio' %}
+            <li><a class="btn-secondary w-full justify-between text-left" href="{% url 'clinitens_simulacion:solicitud_laboratorio' caso.pk %}">{% if etapa %}Abrir órdenes y tubos{% else %}Laboratorio clínico{% endif %} {% include 'components/design/icon.html' with icon='arrow' icon_class='shrink-0' %}</a></li>
+          {% endif %}
+          {% if not etapa or etapa == 'diagnostico' %}
+            <li><a class="btn-secondary w-full justify-between text-left" href="{% url 'clinitens_simulacion:etapa' caso.pk 'diagnostico' %}">{% if etapa %}Abrir resultados diagnósticos{% else %}Centro de Apoyo Diagnóstico{% endif %} {% include 'components/design/icon.html' with icon='arrow' icon_class='shrink-0' %}</a></li>
+          {% endif %}
+        </ul>
+      </article>
+    {% endfor %}
+  </section>
+{% else %}
+  <section class="panel flex max-w-2xl items-start gap-4 p-5 sm:p-6" aria-labelledby="sin-casos">
+    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">{% include 'components/design/icon.html' with icon='clipboard' %}</span>
+    <div class="min-w-0">
+      <h2 id="sin-casos" class="text-lg font-semibold">Aún no tienes casos publicados</h2>
+      <p class="section-description mt-1">Cuando tu docente publique un caso para uno de tus cursos, lo verás aquí.</p>
+    </div>
+  </section>
+{% endif %}
+{% endblock content_main %}

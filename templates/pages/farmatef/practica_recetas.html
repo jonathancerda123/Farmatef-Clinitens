@@ -1,58 +1,162 @@
 {% extends 'components/Layout/base_extendido.html' %}
-{% load static %}
 {% block head_title %}Práctica de farmacia | FarmaTEF{% endblock head_title %}
 {% block page_title %}Validar recetas{% endblock page_title %}
 {% block content_main %}
 <div class="mb-6">
-  <a class="text-sm font-medium text-brand-700 hover:underline" href="{% url 'Home' %}">← Volver al inicio</a>
-  <p class="section-description mt-2">Revisa cada receta del curso y decide si corresponde dispensarla o rechazarla. Estos casos son simulaciones educativas.</p>
+  {% if receta %}
+    <a class="btn-primary" href="{% url 'farmatef:practica_recetas' %}">← Volver a mis recetas</a>
+  {% else %}
+    <a class="btn-primary" href="{% url 'Home' %}">← Volver al inicio</a>
+    <a class="btn-secondary" href="{% url 'farmatef:mis_etiquetas' %}">Mis etiquetas</a>
+  {% endif %}
+  {% if not receta %}<p class="section-description mt-2">Abre una receta de práctica de tu curso para decidir si corresponde dispensarla.</p>{% endif %}
 </div>
 
 {% if receta %}
   <section class="form-sheet" aria-labelledby="receta-practica-titulo">
-    <div class="flex flex-wrap items-start justify-between gap-3">
-      <div><h2 id="receta-practica-titulo" class="text-xl font-semibold text-slate-900">Receta {{ receta.numero }}</h2><p class="mt-1 text-sm text-slate-600">{{ receta.persona_ficticia }} · Curso: {{ receta.curso.nombre }}</p></div>
-      <span class="rounded-full bg-sky-100 px-3 py-1 text-sm font-medium text-sky-800">Caso de práctica</span>
-    </div>
-    <dl class="mt-5 grid gap-3 rounded-lg bg-slate-50 p-4 text-sm sm:grid-cols-2">
-      <div><dt class="font-medium text-slate-700">Número</dt><dd>{{ receta.numero }}</dd></div>
-      <div><dt class="font-medium text-slate-700">Válida hasta</dt><dd>{{ receta.vence_el|date:"d/m/Y" }}</dd></div>
-    </dl>
-    <h3 class="mt-6 text-base font-semibold text-slate-900">Medicamentos indicados</h3>
-    <ul class="mt-2 divide-y divide-slate-200 rounded-lg border border-slate-200">
-      {% for linea in receta.lineas.all %}<li class="flex flex-wrap justify-between gap-2 p-3 text-sm"><span class="font-medium text-slate-800">{{ linea.medicamento.nombre }}</span><span class="text-slate-600">{{ linea.unidades }} unidades</span></li>{% empty %}<li class="p-3 text-sm text-slate-600">La receta no contiene líneas.</li>{% endfor %}
-    </ul>
-    {% if receta.pista_estudiante %}<div class="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-4"><h3 class="text-sm font-semibold text-amber-950">Información para revisar</h3><p class="mt-1 text-sm text-amber-900">{{ receta.pista_estudiante }}</p></div>{% endif %}
+    <h2 id="receta-practica-titulo" class="text-xl font-semibold text-slate-900">Receta {{ receta.numero }}</h2>
 
-    {% if respuesta %}
-      <div class="mt-6 rounded-lg border p-4 {% if respuesta.correcta %}border-emerald-200 bg-emerald-50{% else %}border-amber-200 bg-amber-50{% endif %}" role="status">
-        <h3 class="font-semibold {% if respuesta.correcta %}text-emerald-900{% else %}text-amber-950{% endif %}">{% if respuesta.correcta %}Respuesta correcta{% else %}Revisa tu decisión{% endif %}</h3>
-        <p class="mt-1 text-sm">Tu decisión: {{ respuesta.get_decision_display }}{% if respuesta.motivo_rechazo %} · {{ respuesta.get_motivo_rechazo_display }}{% endif %}</p>
-        <p class="mt-2 text-sm">{{ respuesta.explicacion }}</p>
-        {% if respuesta.dispensacion %}<h4 class="mt-4 text-sm font-semibold">Stock descontado</h4><ul class="mt-1 space-y-1 text-sm">{% for uso in respuesta.dispensacion.lotes_usados.all %}<li>{{ uso.linea.medicamento.nombre }} · {{ uso.unidades }} unidades</li>{% endfor %}</ul>{% endif %}
+    {% if respuesta.reintento_disponible %}
+      <div class="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4" role="status">
+        <h3 class="text-lg font-semibold text-amber-950">Te queda un intento</h3>
+        <p class="mt-1 text-sm">Revisa la receta y confirma una nueva decisión.</p>
       </div>
-    {% else %}
-      <form method="post" class="mt-6 space-y-5" action="{% url 'farmatef:responder_receta' receta.id %}">
+    {% elif respuesta %}
+      <section class="mt-4 rounded-lg border p-4 {% if respuesta.correcta %}border-emerald-200 bg-emerald-50{% else %}border-amber-200 bg-amber-50{% endif %}" aria-labelledby="resultado-practica">
+        <h3 id="resultado-practica" class="text-lg font-semibold {% if respuesta.correcta %}text-emerald-900{% else %}text-amber-950{% endif %}">{% if respuesta.dispensacion %}Dispensación registrada{% elif respuesta.correcta %}Rechazo correcto{% else %}Revisa tu decisión{% endif %}</h3>
+        <p class="mt-1 text-sm">Tu decisión fue {{ respuesta.get_decision_display|lower }}{% if respuesta.motivo_rechazo %} · {{ respuesta.get_motivo_rechazo_display }}{% endif %}.</p>
+        {% if respuesta.explicacion_otro_motivo %}<p class="mt-2 break-words text-sm"><strong>Tu explicación:</strong> {{ respuesta.explicacion_otro_motivo }}</p>{% endif %}
+        <p class="mt-2 text-sm">{{ respuesta.explicacion }}</p>
+        {% if respuesta.respuesta_esperada %}
+          <details class="mt-3 text-sm">
+            <summary class="cursor-pointer font-semibold">Ver respuesta esperada</summary>
+            <p class="mt-2">{{ respuesta.respuesta_esperada }}</p>
+          </details>
+        {% endif %}
+        {% if respuesta.dispensacion %}
+          <a class="btn-secondary mt-3" href="{% url 'farmatef:comprobante_dispensacion' respuesta.dispensacion.pk %}">Descargar comprobante PDF</a>
+          <ul class="mt-4 space-y-3">
+            {% for uso in respuesta.dispensacion.lotes_usados.all %}
+              <li class="flex flex-wrap items-center justify-between gap-3 border-t border-emerald-200 pt-3">
+                <div class="text-sm">
+                  <p class="font-semibold">{{ uso.linea.medicamento.nombre }}</p>
+                  <p>Lote {{ uso.lote.numero_lote }} · {{ uso.unidades }} unidades</p>
+                </div>
+                <a class="btn-primary" aria-label="Preparar etiqueta de {{ uso.linea.medicamento.nombre }}, lote {{ uso.lote.numero_lote }}" href="{% url 'farmatef:etiqueta_dispensacion' uso.pk %}">Preparar etiqueta</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </section>
+    {% endif %}
+
+    <section class="mt-6" aria-labelledby="leer-receta">
+      <h3 id="leer-receta" class="text-lg font-semibold text-slate-900">{% if form %}1. Lee la receta{% else %}Datos de la receta{% endif %}</h3>
+      <p class="mt-1 text-sm text-slate-600">{{ receta.persona_ficticia }} · {{ receta.curso.nombre }} · Válida hasta {{ receta.vence_el|date:"d/m/Y" }}</p>
+      <ol class="mt-3 divide-y divide-slate-200 rounded-lg border border-slate-200">
+        {% for linea in receta.lineas.all %}
+          <li class="flex flex-wrap items-center justify-between gap-2 p-3 text-sm">
+            <div>
+              <p class="font-semibold text-slate-900">{{ forloop.counter }}. {{ linea.medicamento.nombre }}{% if linea.medicamento.concentracion %} · {{ linea.medicamento.concentracion }}{% endif %}</p>
+              {% if linea.medicamento.principio_activo and linea.medicamento.principio_activo|lower != linea.medicamento.nombre|lower %}<p class="text-slate-600">Principio activo: {{ linea.medicamento.principio_activo }}</p>{% endif %}
+              {% if linea.medicamento.forma_farmaceutica %}<p class="text-slate-600">{{ linea.medicamento.forma_farmaceutica }}</p>{% endif %}
+              {% if linea.dosis %}<p class="text-slate-600">Dosis ficticia: {{ linea.dosis }}</p>{% endif %}
+              {% if linea.indicaciones %}<p class="text-slate-600">{{ linea.indicaciones }}</p>{% endif %}
+            </div>
+            <span class="font-semibold">{{ linea.unidades }} unidades</span>
+          </li>
+        {% empty %}<li class="p-3 text-sm text-slate-600">La receta no contiene líneas.</li>{% endfor %}
+      </ol>
+      {% if receta.pista_estudiante and form %}<p class="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"><strong>Pista del docente:</strong> {{ receta.pista_estudiante }}</p>{% endif %}
+    </section>
+
+    {% if form %}
+      <form method="post" id="decision-practica" class="mt-6 space-y-5" action="{% url 'farmatef:responder_receta' receta.id %}" novalidate>
         {% csrf_token %}
+        {{ form.intento }}{{ form.intento.errors }}
         {% if form.non_field_errors %}<div class="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">{{ form.non_field_errors }}</div>{% endif %}
-        <fieldset><legend class="text-sm font-semibold text-slate-900">{{ form.decision.label }}</legend><div class="mt-2 flex flex-wrap gap-4">{% for radio in form.decision %}<label class="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 px-4 py-3 text-sm">{{ radio.tag }}{{ radio.choice_label }}</label>{% endfor %}</div>{% for error in form.decision.errors %}<p class="mt-1 text-sm text-red-700">{{ error }}</p>{% endfor %}</fieldset>
-        <div><label class="text-sm font-medium text-slate-800" for="{{ form.motivo_rechazo.id_for_label }}">{{ form.motivo_rechazo.label }}</label>{{ form.motivo_rechazo }}{% for error in form.motivo_rechazo.errors %}<p class="mt-1 text-sm text-red-700">{{ error }}</p>{% endfor %}</div>
-        <button class="btn-primary" type="submit">Registrar mi decisión</button>
+        <fieldset class="space-y-3">
+          <legend class="text-lg font-semibold text-slate-900">2. Busca el producto y el lote</legend>
+          <p class="text-sm text-slate-600">Busca por nombre, principio activo o código de barras. Compara la concentración y la forma farmacéutica, y revisa el vencimiento y las unidades disponibles del lote.</p>
+          {% for linea, campo in form.seleccion_lotes %}
+            <div class="rounded-lg border border-slate-200 p-3">
+              <p id="indicacion-{{ linea.pk }}" class="mb-2 text-sm text-slate-700">
+                En la receta: <strong>{{ linea.medicamento.nombre }}</strong>{% if linea.medicamento.concentracion %} · {{ linea.medicamento.concentracion }}{% endif %}{% if linea.medicamento.forma_farmaceutica %} · {{ linea.medicamento.forma_farmaceutica }}{% endif %} · <strong>{{ linea.unidades }} unidad{{ linea.unidades|pluralize:"es" }}</strong>
+              </p>
+              {{ campo.label_tag }}
+              {{ campo }}
+              {% for error in campo.errors %}<p class="mt-1 text-sm text-red-700">{{ error }}</p>{% endfor %}
+            </div>
+          {% endfor %}
+        </fieldset>
+        <fieldset>
+          <legend class="text-lg font-semibold text-slate-900">3. Decide qué hacer con la receta</legend>
+          <div class="mt-2 flex flex-wrap gap-3">{% for radio in form.decision %}<label class="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 px-4 py-3 text-sm">{{ radio.tag }}{{ radio.choice_label }}</label>{% endfor %}</div>
+          {% for error in form.decision.errors %}<p class="mt-1 text-sm text-red-700">{{ error }}</p>{% endfor %}
+          <div class="mt-3" data-motivo-rechazo>
+            <label class="text-sm font-medium text-slate-800" for="{{ form.motivo_rechazo.id_for_label }}">{{ form.motivo_rechazo.label }}</label>
+            {{ form.motivo_rechazo }}
+            <noscript><p class="mt-1 text-sm text-slate-600">Completa este campo si eliges rechazar la receta.</p></noscript>
+            {% for error in form.motivo_rechazo.errors %}<p class="mt-1 text-sm text-red-700">{{ error }}</p>{% endfor %}
+            <div class="mt-3" data-otro-motivo>
+              <label class="text-sm font-medium text-slate-800" for="{{ form.explicacion_otro_motivo.id_for_label }}">{{ form.explicacion_otro_motivo.label }}</label>
+              {{ form.explicacion_otro_motivo }}
+              <noscript><p class="mt-1 text-sm text-slate-600">Completa este campo si eliges «Otro motivo».</p></noscript>
+              {% for error in form.explicacion_otro_motivo.errors %}<p class="mt-1 text-sm text-red-700">{{ error }}</p>{% endfor %}
+            </div>
+          </div>
+        </fieldset>
+        <button class="btn-primary" type="submit">Confirmar decisión</button>
       </form>
+      <script>
+        (() => {
+          const form = document.getElementById('decision-practica');
+          const reason = form.querySelector('[data-motivo-rechazo]');
+          const reasonSelect = reason.querySelector('select');
+          const otherReason = form.querySelector('[data-otro-motivo]');
+          const explanation = otherReason.querySelector('textarea');
+          const submit = form.querySelector('button[type=submit]');
+          function showDecision() {
+            const decision = form.querySelector('[name=decision]:checked')?.value;
+            const rejects = decision === 'RECHAZAR';
+            const explains = rejects && reasonSelect.value === 'OTRO';
+            reason.hidden = !rejects;
+            reasonSelect.disabled = !rejects;
+            otherReason.hidden = !explains;
+            explanation.disabled = !explains;
+            explanation.required = explains;
+            submit.textContent = rejects ? 'Confirmar rechazo' :
+              decision === 'DISPENSAR' ? 'Confirmar dispensación' : 'Confirmar decisión';
+          }
+          form.addEventListener('change', showDecision);
+          window.addEventListener('pageshow', showDecision);
+          showDecision();
+        })();
+      </script>
     {% endif %}
   </section>
 {% else %}
   <section>
-    <div class="mb-3"><h2 class="text-lg font-semibold text-slate-900">Recetas asignadas a tus cursos</h2><p class="text-sm text-slate-600">La clave de corrección se mantiene reservada hasta que registres tu decisión.</p></div>
+    <div class="mb-3"><h2 class="text-lg font-semibold text-slate-900">Recetas asignadas a tus cursos</h2><p class="text-sm text-slate-600">Abre una receta para buscar sus medicamentos por nombre o principio activo en el inventario de la práctica.</p></div>
+    <form method="get" class="mb-5 flex flex-wrap items-end gap-3">
+      <div><label for="buscar-numero">Número de receta</label><input class="input" id="buscar-numero" name="numero" value="{{ numero }}" maxlength="32" placeholder="Ej. FAR-PRUEBA-003"></div>
+      <button class="btn-primary" type="submit">Buscar receta</button>
+      {% if numero %}<a class="btn-secondary" href="{% url 'farmatef:practica_recetas' %}">Ver todas</a>{% endif %}
+    </form>
     <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {% for item in casos %}
         <article class="rounded-xl border border-slate-200 bg-white p-5">
-          <div class="flex items-start justify-between gap-3"><h3 class="font-semibold text-slate-900">Receta {{ item.receta.numero }}</h3>{% if item.respuesta %}<span class="rounded-full bg-slate-100 px-2 py-1 text-xs text-slate-700">Respondida</span>{% else %}<span class="rounded-full bg-sky-100 px-2 py-1 text-xs text-sky-800">Pendiente</span>{% endif %}</div>
+          <div class="flex items-start justify-between gap-3"><h3 class="font-semibold text-slate-900">Receta {{ item.receta.numero }}</h3>{% if item.respuesta.reintento_disponible %}<span class="rounded-full bg-amber-50 px-2 py-1 text-xs text-amber-900">Segundo intento</span>{% elif item.respuesta %}<span class="rounded-full bg-slate-100 px-2 py-1 text-xs text-slate-700">Respondida</span>{% else %}<span class="rounded-full bg-sky-100 px-2 py-1 text-xs text-sky-800">Pendiente</span>{% endif %}</div>
           <p class="mt-2 text-sm text-slate-600">{{ item.receta.curso.nombre }} · {{ item.receta.persona_ficticia }}</p>
           <p class="mt-1 text-sm text-slate-600">Válida hasta {{ item.receta.vence_el|date:"d/m/Y" }} · {{ item.receta.lineas.all|length }} medicamentos</p>
-          <a class="mt-4 inline-flex font-medium text-brand-700 underline" href="{% url 'farmatef:practica_receta' item.receta.id %}">{% if item.respuesta %}Ver resultado{% else %}Revisar receta{% endif %}</a>
+          <a class="mt-4 {% if item.respuesta.reintento_disponible %}btn-primary{% else %}inline-flex font-medium text-brand-700 underline{% endif %}" href="{% url 'farmatef:practica_receta' item.receta.id %}">{% if item.respuesta.reintento_disponible %}Volver a intentar{% elif item.respuesta %}Ver resultado{% else %}Revisar receta{% endif %}</a>
         </article>
-      {% empty %}<div class="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-600 md:col-span-2 xl:col-span-3">No tienes recetas asignadas en tus cursos por ahora.</div>{% endfor %}
+      {% empty %}
+        <div class="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-600 md:col-span-2 xl:col-span-3">
+          <p>{% if numero %}No encontramos ese número entre tus recetas asignadas.{% else %}No tienes recetas asignadas en tus cursos por ahora.{% endif %}</p>
+          <p class="mt-2 text-sm">{% if numero %}Revisa el número o pulsa «Ver todas».{% else %}Pídele a tu docente que verifique tu inscripción y la asignación de la receta al curso.{% endif %}</p>
+        </div>
+      {% endfor %}
     </div>
   </section>
 {% endif %}

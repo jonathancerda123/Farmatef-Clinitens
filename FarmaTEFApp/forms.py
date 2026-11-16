@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from core.permissions import cursos_visibles_para_docente, objetos_del_docente
+from .codigos_barras import ancho_code128, codigo_para_etiqueta, patron_code128
 from .models import LoteInventario, Medicamento, Receta, RespuestaReceta
 from CliniTensDocenteApp.models import Curso
 
@@ -37,7 +38,7 @@ class MedicamentoForm(forms.ModelForm):
             "clasificacion": forms.TextInput(attrs={"maxlength": 120}),
             "observaciones": forms.TextInput(attrs={"maxlength": 300}),
             "codigo_barras": forms.TextInput(attrs={"maxlength": 64}),
-            "stock_minimo": forms.NumberInput(attrs={"min": 0}),
+            "stock_minimo": forms.NumberInput(attrs={"min": 0, "placeholder": "0"}),
             "dias_alerta_vencimiento": forms.NumberInput(
                 attrs={"min": 1, "max": 365}
             ),
@@ -46,6 +47,8 @@ class MedicamentoForm(forms.ModelForm):
     def __init__(self, *args, actor=None, **kwargs):
         self.actor = actor
         super().__init__(*args, **kwargs)
+        if self.instance.pk is None:
+            self.initial.setdefault("stock_minimo", None)
         for field in self.fields.values():
             field.widget.attrs["class"] = INPUT
 
@@ -163,19 +166,25 @@ class EtiquetaLoteForm(forms.Form):
         widget=forms.NumberInput(attrs={"min": 1, "max": 100, "step": 1, "class": INPUT}),
     )
 
-    def __init__(self, *args, actor=None, **kwargs):
+    def __init__(self, *args, actor=None, lote_dispensado=None, **kwargs):
         super().__init__(*args, **kwargs)
-        medicamentos = objetos_del_docente(
-            Medicamento.objects.filter(activo=True), actor, campo="creado_por"
-        )
+        if lote_dispensado is None:
+            medicamentos = objetos_del_docente(
+                Medicamento.objects.filter(activo=True), actor, campo="creado_por"
+            )
+            lotes = LoteInventario.objects.filter(medicamento__in=medicamentos)
+        else:
+            medicamentos = Medicamento.objects.filter(pk=lote_dispensado.medicamento_id)
+            lotes = LoteInventario.objects.filter(pk=lote_dispensado.pk)
+            self.initial.update(medicamento=lote_dispensado.medicamento_id, lote=lote_dispensado.pk)
+            self.fields["medicamento"].disabled = True
+            self.fields["lote"].disabled = True
         self.fields["medicamento"].queryset = medicamentos
         self.fields["medicamento"].widget = MedicamentoEtiquetaSelect(
             attrs={"class": INPUT}
         )
         self.fields["medicamento"].widget.choices = self.fields["medicamento"].choices
-        self.fields["lote"].queryset = LoteInventario.objects.filter(
-            medicamento__in=medicamentos
-        ).select_related("medicamento")
+        self.fields["lote"].queryset = lotes.select_related("medicamento")
         self.fields["lote"].label_from_instance = lambda lote: (
             f"{lote.numero_lote} · Vence {lote.vence_el:%d/%m/%Y} · "
             f"Stock: {lote.unidades}"
@@ -189,6 +198,16 @@ class EtiquetaLoteForm(forms.Form):
         lote = cleaned.get("lote")
         if medicamento and lote and lote.medicamento_id != medicamento.pk:
             self.add_error("lote", "Selecciona un lote del medicamento elegido.")
+        ancho = cleaned.get("ancho_mm")
+        if medicamento and ancho is not None:
+            codigo = codigo_para_etiqueta(medicamento)
+            patron = patron_code128(codigo)
+            ancho_codigo = ancho_code128(patron)
+            minimo = ancho_codigo + 5
+            if ancho < minimo:
+                self.add_error("ancho_mm", f"Usa al menos {minimo} mm de ancho para imprimir este código de barras.")
+            else:
+                cleaned.update(codigo=codigo, patron_codigo=patron, ancho_codigo=ancho_codigo)
         return cleaned
 
 
@@ -250,6 +269,8 @@ class RecetaForm(forms.Form):
 class RecetaLineaForm(forms.Form):
     medicamento = forms.ModelChoiceField(queryset=Medicamento.objects.none(), required=False, label="Medicamento")
     unidades = forms.IntegerField(required=False, min_value=1, label="Unidades")
+    dosis = forms.CharField(required=False, max_length=60, label="Dosis ficticia")
+    indicaciones = forms.CharField(required=False, max_length=160, label="Indicaciones ficticias")
 
     def __init__(self, *args, actor=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -265,6 +286,8 @@ class RecetaLineaForm(forms.Form):
         medicine, units = cleaned.get("medicamento"), cleaned.get("unidades")
         if bool(medicine) != bool(units):
             raise forms.ValidationError("Selecciona medicamento y unidades en cada línea utilizada.")
+        if not medicine and (cleaned.get("dosis") or cleaned.get("indicaciones")):
+            self.add_error("medicamento", "Selecciona el medicamento al que corresponden las indicaciones.")
         return cleaned
 
 
@@ -323,7 +346,39 @@ EntregaLineaFormSet = formset_factory(
 )
 
 
+class LotePracticaSelect(forms.Select):
+    @staticmethod
+    def titulo(lote):
+        medicamento = lote.medicamento
+        return " · ".join(filter(None, (
+            medicamento.nombre, medicamento.concentracion, medicamento.forma_farmaceutica,
+        )))
+
+    @staticmethod
+    def detalle(lote):
+        medicamento = lote.medicamento
+        datos = [
+            f"Lote {lote.numero_lote}",
+            f"Vence {lote.vence_el:%d/%m/%Y}",
+            f"{lote.unidades} unidades disponibles",
+        ]
+        if medicamento.principio_activo and medicamento.principio_activo.casefold() != medicamento.nombre.casefold():
+            datos.insert(0, medicamento.principio_activo)
+        return " · ".join(datos)
+
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        option = super().create_option(name, value, label, selected, index, subindex, attrs)
+        lote = getattr(value, "instance", None)
+        if lote is not None:
+            option["attrs"]["data-medicine-title"] = self.titulo(lote)
+            option["attrs"]["data-medicine-detail"] = self.detalle(lote)
+            option["attrs"]["data-medicine-barcode"] = lote.medicamento.codigo_barras
+            option["attrs"]["data-medicine-label-code"] = codigo_para_etiqueta(lote.medicamento)
+        return option
+
+
 class RespuestaRecetaForm(forms.Form):
+    intento = forms.IntegerField(min_value=1, max_value=2, initial=1, required=False, widget=forms.HiddenInput)
     decision = forms.ChoiceField(
         choices=RespuestaReceta.Decision.choices,
         widget=forms.RadioSelect,
@@ -334,11 +389,40 @@ class RespuestaRecetaForm(forms.Form):
         required=False,
         label="Motivo del rechazo",
     )
+    explicacion_otro_motivo = forms.CharField(
+        required=False,
+        label="Explica brevemente el motivo",
+        widget=forms.Textarea(attrs={
+            "class": INPUT, "rows": 3, "maxlength": RespuestaReceta.LIMITE_EXPLICACION_OTRO,
+        }),
+    )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, receta, lotes, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs["class"] = INPUT
+        self.fields["motivo_rechazo"].widget.attrs["class"] = INPUT
+        self.campos_lotes = {}
+        self.lineas = list(receta.lineas.all())
+        for numero, linea in enumerate(self.lineas, 1):
+            nombre = f"lote_{linea.pk}"
+            self.fields[nombre] = forms.ModelChoiceField(
+                queryset=lotes,
+                required=False,
+                label=f"Producto y lote para la línea {numero}",
+                widget=LotePracticaSelect(attrs={
+                    "class": INPUT, "data-medicamento-search": "", "data-medicine-accepts-barcode": "",
+                    "aria-describedby": f"indicacion-{linea.pk}",
+                }),
+            )
+            self.fields[nombre].label_from_instance = self.descripcion_lote
+            self.campos_lotes[linea.pk] = nombre
+
+    @staticmethod
+    def descripcion_lote(lote):
+        return f"{LotePracticaSelect.titulo(lote)} · {LotePracticaSelect.detalle(lote)}"
+
+    @property
+    def seleccion_lotes(self):
+        return [(linea, self[self.campos_lotes[linea.pk]]) for linea in self.lineas]
 
     def clean(self):
         cleaned = super().clean()
@@ -347,6 +431,16 @@ class RespuestaRecetaForm(forms.Form):
             and not cleaned.get("motivo_rechazo")
         ):
             self.add_error("motivo_rechazo", "Selecciona el motivo por el que rechazas la receta.")
+        if "explicacion_otro_motivo" in cleaned:
+            try:
+                cleaned["explicacion_otro_motivo"] = RespuestaReceta.limpiar_explicacion_otro(
+                    cleaned.get("decision"), cleaned.get("motivo_rechazo"), cleaned["explicacion_otro_motivo"],
+                )
+            except ValidationError as exc:
+                self.add_error("explicacion_otro_motivo", exc)
         if cleaned.get("decision") == RespuestaReceta.Decision.DISPENSAR:
             cleaned["motivo_rechazo"] = ""
+            for nombre in self.campos_lotes.values():
+                if not cleaned.get(nombre) and nombre not in self.errors:
+                    self.add_error(nombre, "Selecciona el producto y lote de esta línea.")
         return cleaned

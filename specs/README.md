@@ -39,3 +39,9 @@ Flujo: documento → revisión → autorización explícita de tareas de código
 021 — [Datos originales y acceso local](021-base-original-acceso-local/spec.md): restauración respaldada local y cuentas de prueba autorizadas el 2026-11-10; 0007 aplicada solo al destino de trabajo y al ensayo, fuente intacta. Validación en su paquete; no commit/push automático.
 
 022 — [Inicio por áreas y buscador de medicamentos](022-inicio-selector-medicamentos/spec.md): implementado localmente en jonathan por solicitud del 2026-11-10 y elección de buscador integrado; 70 Django/build/navegador, aceptación pendiente. Sin migraciones/commit/push.
+
+023 — [Práctica de farmacia con inventario docente](023-practica-farmacia/spec.md): búsqueda de receta y producto/lote, descuento del lote elegido, evaluación de falta de stock y etiqueta estudiantil. Verificación aislada completada, prueba de usuario pendiente.
+
+024 — [Comprobante, escaneo y reintento de FarmaTEF](024-cierre-dispensacion-farmatef/spec.md): comprobante PDF, datos ficticios en etiqueta, búsqueda por código de barras y dos intentos. Validado con datos ficticios. Actualización de la base habitual y prueba de usuario pendientes.
+
+025 — [Alertas, registro y etiquetas de FarmaTEF](025-retroalimentacion-farmatef/spec.md). Implementación local en `jonathan`. Cambios de plataforma verificados con datos ficticios. Laboratorio PostgreSQL y notebook preparados para ejecución con los insumos correspondientes.

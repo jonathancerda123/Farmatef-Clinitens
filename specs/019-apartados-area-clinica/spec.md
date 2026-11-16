@@ -34,6 +34,8 @@ Anónimo redirigido al login en portada; usuario sin cargo no recibe enlaces a p
 - RF-019-04: RAE busca pacientes SIM publicados en cursos del estudiante; abre o continúa un borrador propio. Cuidados (hasta 5000 caracteres) y observaciones (hasta 2000) se guardan como texto; finalizar exige cuidados, registra hora/autor de sesión y bloquea cambios. Historial paginado propio; otro ejercicio tras finalizar crea atención nueva. Versión obligatoria y UPDATE condicional evitan sobrescribir guardados obsoletos. Un borrador abierto como máximo por estudiante/caso.
 - RF-019-05: cambios locales permanecen en `jonathan`, sin commit/push, sin tocar base habitual.
 - RF-019-06: una guía explica cómo preparar pacientes/casos con los accesos docentes existentes. RAE comparte el paciente SIM y la publicación del caso; no crea un catálogo duplicado. La preparación de paciente en RAE conserva los demás bloques del caso y no permite editar casos publicados.
+- RF-019-08: el botón principal del área clínica abre los casos publicados del estudiante o el listado de gestión del docente y el administrador.
+- RF-019-09: la página estudiantil de casos y sus variantes por módulo presentan un encabezado contextual, regreso al área clínica y una lista ordenada. Sin casos publicados, se muestra un único aviso con el próximo paso.
 
 Casos negativos RAE: no inscrito, caso borrador, usuario ajeno, docente en práctica de estudiante, inactivo o sin cargo no pueden leer/escribir. Versión ausente/inválida, acción desconocida, texto sobre límite o finalización sin cuidados no persisten; versión obsoleta/cierre concurrente responden 409 sin sobrescribir. Se conserva contenido enviado ante error.
 

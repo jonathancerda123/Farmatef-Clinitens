@@ -129,3 +129,23 @@ RF-020-06/07 → T-020-04/05: apps/plantillas tradicionales cotejadas en ramas y
 RF-021-01/02 → respaldo SQLite ro e inventario privado; conteos/identidades preservados. RF-021-03 → core.local_runtime y omisión optativa de read_env; hashers normales, localhost y cookies separadas. RF-021-04 → tres cuentas nuevas temporales, sin cambiar las originales ni reasignar datos. RF-021-05 → integración de acceso y gestión con ensayo + 66 regresiones aisladas; límites y recuperación en specs/021-base-original-acceso-local/validation.md.
 
 RF-022-01 → index y CSS, inicio por áreas/destino alumno comprobados. RF-022-02/03 → widget FarmaTEF y medicamento-select.js: opciones autorizadas, texto libre/ajeno rechazado, selección y lote compatibles. RF-022-04 → navegador ficticio con filas dinámicas, reset, teclado, no coincidencias y fallback sin JS; 70 Django/4 JS existentes/build correctos. Evidencia y límites en specs/022-inicio-selector-medicamentos/validation.md.
+
+RF-023-01/02/03 → inventario, práctica, servicio de stock y etiqueta vinculada a la dispensación. Evidencia de matrícula, selección incorrecta, falta de stock, descuento y acceso a la etiqueta en [validación 023](../specs/023-practica-farmacia/validation.md).
+
+RF-024-01/02/03/04 → comprobante de la entrega, campos ficticios por línea, código de barras en el selector y segundo intento. Evidencia de acceso, stock, respuesta progresiva y PDF en [validación 024](../specs/024-cierre-dispensacion-farmatef/validation.md).
+
+RF-025-01/02 y RNF-025-01/02 → portada, inventario, registro y permisos. RF-025-03/04 → Code 128, impresión y etiquetas propias. RNF-025-03/04 → laboratorio PostgreSQL y comparación de modelos. [Casos y resultados por requisito](../specs/025-retroalimentacion-farmatef/validation.md).
+
+RF-025-05 → plantilla de portada y CSS adaptable de FarmaTEF. Validado en Chrome a cuatro anchos con los enlaces originales.
+
+RF-025-06 → vista docente de Recetas, filtros por número y panel de detalle. Comprobado en Django el ámbito de acceso y en Chrome el flujo de búsqueda y selección.
+
+RF-025-07 → POST de etiquetado y vista previa parcial. Comprobados en Django los errores y permisos, y en Chrome la selección automática y la impresión de copias.
+
+RF-023-05 → formulario y selector de práctica. Se compara la indicación junto al campo con los datos del lote. [Validación](../specs/023-practica-farmacia/validation.md).
+
+RF-023-06 → formulario, campo de explicación en el intento e historial docente. [Validación y recuperación](../specs/023-practica-farmacia/validation.md).
+
+RF-019-08 → enlace principal de Área clínica a los casos según cargo. [Validación](../specs/019-apartados-area-clinica/validation.md).
+
+RF-019-09 → plantilla estudiantil de casos y variantes por módulo. Verificados los estados vacío y con casos publicados en escritorio y móvil.

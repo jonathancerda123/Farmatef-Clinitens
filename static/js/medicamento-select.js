@@ -2,6 +2,8 @@
 (() => {
   let sequence = 0;
   const normalize = text => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
+  const searchTerms = query => normalize(query).trim().split(/\s+/).filter(Boolean);
+
   function enhance(select) {
     if (select.dataset.searchReady || select.closest('template')) return;
     select.dataset.searchReady = '1';
@@ -13,7 +15,8 @@
     select.before(wrapper); wrapper.append(select);
     const input = document.createElement('input'); input.type = 'text';
     input.id = id + '-search'; input.className = 'input'; input.autocomplete = 'off';
-    input.placeholder = 'Escribe el nombre o principio activo';
+    const acceptsBarcode = select.hasAttribute('data-medicine-accepts-barcode');
+    input.placeholder = acceptsBarcode ? 'Nombre, principio activo o código de barras' : 'Escribe el nombre o principio activo';
     input.setAttribute('role', 'combobox'); input.setAttribute('aria-autocomplete', 'list');
     input.setAttribute('aria-expanded', 'false');
     const list = document.createElement('div'); list.id = id + '-options';
@@ -32,10 +35,27 @@
     wrapper.append(input, toggle, list, status); select.hidden = true;
     let active = -1, shown = [];
     const options = () => [...select.options].filter(option => option.value && !option.disabled && !option.hidden);
-    function close() { list.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; }
+    function setStatus(message, warning = false) {
+      status.textContent = message;
+      status.classList.toggle('error-summary', warning);
+    }
+    function describeSelection(option) {
+      if (option?.dataset.medicineDetail) {
+        setStatus(`${option.dataset.medicineTitle} · ${option.dataset.medicineDetail}`);
+      }
+    }
+    function close() {
+      list.hidden = true;
+      input.setAttribute('aria-expanded', 'false');
+      input.removeAttribute('aria-activedescendant');
+      active = -1;
+      describeSelection(select.selectedOptions[0]);
+    }
     function sync() {
-      input.value = select.value ? select.selectedOptions[0]?.textContent || '' : '';
+      const selected = select.value ? select.selectedOptions[0] : null;
+      input.value = selected?.dataset.medicineTitle || selected?.textContent || '';
       input.disabled = select.disabled; toggle.disabled = select.disabled; input.setCustomValidity('');
+      describeSelection(selected);
     }
     function highlight(index) {
       active = index;
@@ -43,23 +63,43 @@
       if (active >= 0) { input.setAttribute('aria-activedescendant', list.children[active].id); list.children[active].scrollIntoView({block: 'nearest'}); }
     }
     function choose(option) {
-      select.value = option.value; sync(); close(); input.focus();
+      select.value = option.value; input.focus(); sync(); close();
       select.dispatchEvent(new Event('change', {bubbles: true}));
     }
     function render(query) {
-      const terms = normalize(query).trim().split(/\s+/).filter(Boolean);
-      const matches = options().filter(option => terms.every(term => normalize(option.dataset.search || option.textContent).includes(term)));
+      const terms = searchTerms(query);
+      const available = options();
+      const code = normalize(query).trim();
+      const printed = acceptsBarcode && code
+        ? available.filter(option => option.dataset.medicineLabelCode === query.trim())
+        : [];
+      const scanned = printed.length ? printed : acceptsBarcode && code
+        ? available.filter(option => normalize(option.dataset.medicineBarcode || '') === code)
+        : [];
+      const barcodeSearch = acceptsBarcode && (scanned.length || /^(?:\d{6,}|ft-\d+)$/.test(code));
+      const matches = barcodeSearch ? scanned :
+        available.filter(option => terms.every(term => normalize(option.dataset.search || option.textContent).includes(term)));
       shown = matches.slice(0, 20); active = -1; list.replaceChildren(); input.removeAttribute('aria-activedescendant');
       shown.forEach((option, index) => {
         const row = document.createElement('button'); row.type = 'button'; row.tabIndex = -1;
         row.id = `${id}-option-${index}`; row.setAttribute('role', 'option'); row.setAttribute('aria-selected', 'false');
-        row.textContent = option.textContent;
-        const details = [option.dataset.principio, option.dataset.concentracion, option.dataset.forma].filter(Boolean).join(' · ');
+        if (option.dataset.medicineTitle) {
+          const title = document.createElement('strong');
+          title.textContent = option.dataset.medicineTitle;
+          row.append(title);
+        } else {
+          row.textContent = option.textContent;
+        }
+        const details = option.dataset.medicineDetail ||
+          [option.dataset.principio, option.dataset.concentracion, option.dataset.forma].filter(Boolean).join(' · ');
         if (details) { const detail = document.createElement('small'); detail.textContent = details; row.append(detail); }
         row.addEventListener('mousedown', event => event.preventDefault());
         row.addEventListener('click', () => choose(option)); list.append(row);
       });
-      status.textContent = matches.length ? `${matches.length} coincidencias${matches.length > 20 ? '; se muestran las primeras 20. Escribe más para afinar la búsqueda.' : '. Elige una opción de la lista.'}` : 'Sin coincidencias. Prueba otro nombre o principio activo.';
+      const message = matches.length
+        ? `${matches.length} coincidencias${matches.length > 20 ? '; se muestran las primeras 20. Escribe más para afinar la búsqueda.' : '. Elige una opción de la lista.'}`
+        : barcodeSearch ? 'No hay lotes disponibles para ese código.' : 'Sin coincidencias. Revisa lo que escribiste.';
+      setStatus(message, barcodeSearch && matches.length === 0);
       list.hidden = !shown.length; input.setAttribute('aria-expanded', String(shown.length > 0));
     }
     input.addEventListener('focus', () => { input.select(); render(''); });
@@ -74,6 +114,7 @@
         event.preventDefault(); if (list.hidden) render(input.value);
         if (shown.length) highlight(active < 0 ? (event.key === 'ArrowDown' ? 0 : shown.length - 1) : (active + (event.key === 'ArrowDown' ? 1 : -1) + shown.length) % shown.length);
       } else if (event.key === 'Enter' && !list.hidden && active >= 0) { event.preventDefault(); choose(shown[active]); }
+      else if (event.key === 'Enter' && acceptsBarcode) { event.preventDefault(); }
       else if (event.key === 'Tab') close();
     });
     toggle.addEventListener('click', () => { const wasOpen = !list.hidden; input.focus(); if (wasOpen) close(); else render(''); });
@@ -83,7 +124,7 @@
       if (select.value) sync();
       else if (!wrapper.contains(document.activeElement)) sync();
     });
-    select.form?.addEventListener('reset', () => setTimeout(() => { sync(); close(); status.textContent = ''; }, 0));
+    select.form?.addEventListener('reset', () => setTimeout(() => { sync(); close(); setStatus(''); }, 0));
     sync();
   }
   const scan = root => root.querySelectorAll('select[data-medicamento-search]').forEach(enhance);

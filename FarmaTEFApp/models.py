@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q
@@ -51,18 +52,26 @@ class Medicamento(models.Model):
         return sum(lote.unidades for lote in self.lotes.all())
 
     @property
+    def stock_disponible(self):
+        hoy = timezone.localdate()
+        return sum(lote.unidades for lote in self.lotes.all() if lote.vence_el >= hoy)
+
+    @property
     def stock_bajo(self):
-        return self.stock_total < self.stock_minimo
+        return self.activo and self.stock_disponible < self.stock_minimo
 
     @property
     def proximo_a_vencer(self):
         hoy = timezone.localdate()
         limite = hoy + timedelta(days=self.dias_alerta_vencimiento)
-        return self.lotes.filter(vence_el__gte=hoy, vence_el__lte=limite).exists()
+        return self.activo and any(
+            lote.unidades and hoy <= lote.vence_el <= limite for lote in self.lotes.all()
+        )
 
     @property
     def tiene_vencidos(self):
-        return self.lotes.filter(vence_el__lt=timezone.localdate()).exists()
+        hoy = timezone.localdate()
+        return any(lote.vence_el < hoy for lote in self.lotes.all())
 
     def __str__(self):
         return self.nombre
@@ -166,6 +175,8 @@ class RecetaLinea(models.Model):
     medicamento = models.ForeignKey(Medicamento, on_delete=models.PROTECT, related_name="lineas_receta")
     unidades = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     unidades_entregadas = models.PositiveIntegerField(default=0)
+    dosis = models.CharField(max_length=60, blank=True)
+    indicaciones = models.CharField(max_length=160, blank=True)
 
     @property
     def unidades_pendientes(self):
@@ -193,6 +204,8 @@ class Dispensacion(models.Model):
 
 
 class RespuestaReceta(models.Model):
+    LIMITE_EXPLICACION_OTRO = 300
+
     class Decision(models.TextChoices):
         DISPENSAR = "DISPENSAR", "Dispensar receta"
         RECHAZAR = "RECHAZAR", "Rechazar receta"
@@ -202,22 +215,39 @@ class RespuestaReceta(models.Model):
         FALSIFICACION = "FALSIFICACION", "Posible falsificación"
         DATOS_INCONSISTENTES = "DATOS_INCONSISTENTES", "Datos inconsistentes"
         INFORMACION_INCOMPLETA = "INFORMACION_INCOMPLETA", "Información incompleta"
+        SIN_STOCK = "SIN_STOCK", "Sin existencias suficientes en un lote vigente"
         OTRO = "OTRO", "Otro motivo"
 
     receta = models.ForeignKey(Receta, on_delete=models.PROTECT, related_name="respuestas_estudiantiles")
     estudiante = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="respuestas_recetas_farmatef")
     decision = models.CharField(max_length=10, choices=Decision.choices)
     motivo_rechazo = models.CharField(max_length=32, choices=Motivo.choices, blank=True)
+    explicacion_otro_motivo = models.CharField(max_length=LIMITE_EXPLICACION_OTRO, blank=True, default="")
     correcta = models.BooleanField(default=False)
+    intento = models.PositiveSmallIntegerField(default=1)
+    reintento_disponible = models.BooleanField(default=False)
     explicacion = models.TextField(max_length=1600, blank=True)
+    respuesta_esperada = models.CharField(max_length=180, blank=True)
     respondida_en = models.DateTimeField(auto_now_add=True)
+
+    @classmethod
+    def limpiar_explicacion_otro(cls, decision, motivo, explicacion):
+        if (decision, motivo) != (cls.Decision.RECHAZAR, cls.Motivo.OTRO):
+            return ""
+        explicacion = explicacion.strip()
+        if not explicacion:
+            raise ValidationError("Escribe una breve explicación para «Otro motivo».")
+        if len(explicacion) > cls.LIMITE_EXPLICACION_OTRO:
+            raise ValidationError(f"La explicación puede tener hasta {cls.LIMITE_EXPLICACION_OTRO} caracteres.")
+        return explicacion
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["receta", "estudiante"],
-                name="ft_respuesta_receta_estudiante_uq",
+                fields=["receta", "estudiante", "intento"],
+                name="ft_respuesta_receta_intento_uq",
             ),
+            models.CheckConstraint(condition=models.Q(intento__in=[1, 2]), name="ft_respuesta_dos_intentos"),
         ]
 
 
