@@ -4,22 +4,26 @@
 
 ## Identidad y fuentes
 
-Un espacio de aprendizaje clínico: navegación petróleo, superficie clara, acciones verde clínico, marca de ficha y contenido alineado a izquierda. La portada presenta observar, registrar y evaluar; el catálogo y la ficha usan la misma estructura. Las métricas provienen del servidor y las funciones futuras se identifican como pendientes.
+La [paleta 026](../specs/026-paleta-clinitens/spec.md) usa la referencia del 2026-11-18 con navegación gris oscuro, superficies blancas y acciones turquesa. El turquesa oscuro permite texto blanco legible en botones. Los textos sobre superficies claras son oscuros. El turquesa claro destaca la marca y el foco en fondos oscuros.
 
 La fuente de identidad es [tokens.css](../static/css/tokens.css): valores RGB separados por espacios, consumidos como `rgb(var(--color-primary))`. Los títulos usan Trebuchet MS y el cuerpo Segoe UI, con alternativas locales. No hay fuentes o fotografías remotas.
 
 | Token | Valor | Uso |
 |---|---|---|
-| color-canvas | #F2F6F6 | Fondo de trabajo |
+| color-canvas | #F5F7F7 | Fondo de trabajo |
 | color-surface | #FFFFFF | Formularios y datos |
-| color-ink | #19363C | Texto principal |
-| color-muted | #566B71 | Instrucciones y texto secundario |
-| color-navigation | #17474E | Barra lateral y acceso |
-| color-primary | #00796F | Acción principal y selección |
-| color-primary-hover | #006058 | Acción al pasar el puntero |
-| color-primary-soft | #E6F4F0 | Fondo de apoyo |
+| color-ink | #333333 | Texto principal |
+| color-muted | #5C6464 | Instrucciones y texto secundario |
+| color-navigation | #333333 | Barra lateral y acceso |
+| color-primary | #087B7E | Acción principal y selección |
+| color-primary-hover | #066366 | Acción al pasar el puntero |
+| color-primary-soft | #E9F7F7 | Selecciones y superficies de apoyo |
+| color-info | #0A9A9E | Indicador activo y foco en superficies claras |
+| color-info-ink | #06696C | Enlaces y texto informativo sobre fondos claros |
+| color-info-soft | #EBF9F9 | Fondo informativo |
+| color-accent | #0CB3B7 | Marca y foco sobre gris oscuro |
 
-Conservar colores semánticos de error, advertencia y éxito acompañados de texto; no recolorear una escala de riesgo solo por estética. Las tonalidades auxiliares `brand-100` a `brand-950` están en [tailwind.config.js](../theme/static_src/tailwind.config.js); revisar esa escala al cambiar la identidad. Radio, fuentes y ancho de barra lateral se definen en tokens.
+Usar rojo para errores, advertencias importantes, emergencias y acciones destructivas. El ámbar señala avisos preventivos y el verde indica confirmaciones. Mantener el texto que identifica cada estado y el significado de las escalas de riesgo. Las tonalidades auxiliares `brand-50` a `brand-950` están en [tailwind.config.js](../theme/static_src/tailwind.config.js). Radio, fuentes y ancho de barra lateral se definen en tokens.
 
 ## Archivos y componentes
 
@@ -41,7 +45,7 @@ Las páginas generales mantienen `content_main`; formularios `content_pages`; do
 
 Usar `btn-primary`, `btn-secondary`, `btn-danger`, `form-sheet`, `ui-field`, `error-summary`, `field-errors`, `metric-strip`, `evaluation-summary` y `section-navigation` cuando correspondan. Un formulario puede incluir `components/design/field.html` con un BoundField y `form_errors.html` para errores generales. No agregar un contenedor decorativo por cada dato.
 
-Usar `btn-primary` en los controles «Volver a…» y «Volver al…» para mantener el mismo verde en FarmaTEF y CliniTENS.
+Usar `btn-primary` en los controles «Volver a…» y «Volver al…» para mantener el mismo turquesa en FarmaTEF y CliniTENS.
 
 ## Contratos de interacción
 

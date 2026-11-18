@@ -142,6 +142,12 @@ RF-025-06 → vista docente de Recetas, filtros por número y panel de detalle. 
 
 RF-025-07 → POST de etiquetado y vista previa parcial. Comprobados en Django los errores y permisos, y en Chrome la selección automática y la impresión de copias.
 
+## Paleta visual — 026
+
+RF-026-01 → tokens, componentes Tailwind, estilos de simulación y marca. RF-026-02 → estilos semánticos de alertas, formularios y notificaciones. RNF-026-01 → contraste calculado y revisión en Chrome. [Evidencia](../specs/026-paleta-clinitens/validation.md).
+
+Revisión del 2026-11-18 → referencia gris/turquesa/blanco aplicada a RF-026-01. RNF-026-01 incluye ahora texto oscuro del porcentaje de progreso y contraste de hover `brand-500`. Build, pruebas y revisión visual repetidos.
+
 RF-023-05 → formulario y selector de práctica. Se compara la indicación junto al campo con los datos del lote. [Validación](../specs/023-practica-farmacia/validation.md).
 
 RF-023-06 → formulario, campo de explicación en el intento e historial docente. [Validación y recuperación](../specs/023-practica-farmacia/validation.md).
