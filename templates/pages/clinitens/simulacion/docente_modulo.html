@@ -4,13 +4,27 @@
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/simulacion-docente.css' %}">{% endblock %}
 {% block page_title %}{{ config.titulo }}{% endblock %}
 {% block content_main %}
-<main class="sim-module-page sim-module-{{ config.clase }}">
+{% if not preparacion %}
+  <div class="mb-6">
+    <a class="btn-primary" href="{% url 'clinitens' %}">← Volver al área clínica</a>
+  </div>
+{% endif %}
+<div class="sim-module-{{ config.clase }}">
   {% if preparacion %}{% include 'pages/clinitens/simulacion/pasos_preparacion.html' %}{% endif %}
   <div class="sim-module-intro"><p>{{ config.descripcion }}</p><span>SIMULACIÓN EDUCATIVA · Solo casos ficticios</span></div>
-  {% if not preparacion %}<div class="sim-module-actions"><a class="btn-primary" href="{{ crear_caso_url }}">Crear caso para mi curso</a><a href="{% url 'clinitens_simulacion:docente_casos' %}#casos-titulo">Preparar un caso paso a paso</a></div>{% endif %}
-  {% if modulo == 'enfermeria' and not preparacion %}<div class="pending-note"><h2 class="text-lg font-semibold">Preparar un paciente para la práctica</h2><p>Crea un caso base en tu curso y completa aquí su paciente SIM. La identidad es compartida con los otros módulos. Para publicarlo, completa también el escenario DAU, los exámenes de laboratorio y los resultados de apoyo diagnóstico desde la gestión de casos.</p><div class="intro-actions"><a class="btn-secondary" href="{% url 'clinitens_simulacion:docente_casos' %}#casos-titulo">Configurar módulos y publicar casos</a><a class="btn-primary" href="{% url 'clinitens' %}">Volver al área clínica</a></div></div>{% endif %}
+  {% if not preparacion %}
+    <div class="sim-module-actions">
+      <a class="btn-primary" href="{{ crear_caso_url }}">Crear caso para mi curso</a>
+      {% if filas %}<a class="btn-secondary" href="{% url 'clinitens_simulacion:docente_casos' %}#casos-titulo">Gestionar y publicar casos</a>{% endif %}
+    </div>
+  {% endif %}
   <section class="sim-module-cases" aria-labelledby="casos-modulo-title">
-    <div class="sim-cases-heading"><div><h2 id="casos-modulo-title">{{ config.seccion }}</h2></div><p>{% if preparacion.caso.publicado %}Este caso está publicado. Puedes consultar su preparación en modo lectura.{% elif preparacion %}Completa este paso y pulsa Guardar y continuar. Puedes volver a los pasos anteriores desde la guía.{% else %}Los borradores se pueden editar aquí. El contenido publicado queda en solo lectura.{% endif %}</p></div>
+    <div class="sim-cases-heading">
+      <div><h2 id="casos-modulo-title">{{ config.seccion }}</h2></div>
+      {% if filas %}
+        <p>{% if preparacion.caso.publicado %}Este caso está publicado y queda en solo lectura.{% elif preparacion %}Completa este paso y pulsa Guardar y continuar. Puedes volver a los pasos anteriores desde la guía.{% else %}Aquí puedes editar los borradores y consultar los casos publicados.{% endif %}</p>
+      {% endif %}
+    </div>
     <div class="sim-module-case-list">
       {% for fila in filas %}
         <article class="sim-module-case-card">
@@ -45,10 +59,12 @@
           {% endif %}
         </article>
       {% empty %}
-        <div class="sim-cases-empty"><h3>Aún no hay casos para este módulo</h3><p>Primero crea un caso base y luego completa el contenido de este módulo.</p><a class="btn-primary" href="{{ crear_caso_url }}">Crear caso base</a></div>
+        <div class="panel p-5">
+          <h3 class="font-semibold">Aún no hay casos para este módulo</h3>
+          <p class="section-description">Crea un caso para tu curso y luego vuelve aquí para completar su contenido.</p>
+        </div>
       {% endfor %}
     </div>
   </section>
-  <p class="sim-module-footnote">Cada módulo tiene una práctica propia: DAU registra signos y procedimientos; enfermería registra cuidados y observaciones; laboratorio organiza órdenes y tubos; el Centro de Apoyo Diagnóstico entrega resultados e informes simulados.</p>
-</main>
+</div>
 {% endblock %}

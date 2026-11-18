@@ -4,6 +4,57 @@
   const normalize = text => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
   const searchTerms = query => normalize(query).trim().split(/\s+/).filter(Boolean);
 
+  function barcodeMatches(available, query) {
+    const code = query.trim();
+    if (!code) return [];
+    const printed = available.filter(option => option.dataset.medicineLabelCode === code);
+    const normalized = normalize(code);
+    return printed.length ? printed :
+      available.filter(option => normalize(option.dataset.medicineBarcode || '') === normalized);
+  }
+
+  function connectInventoryRegistration() {
+    const field = document.querySelector('[data-registro-codigo]');
+    if (!field) return;
+    const input = field.querySelector('input');
+    const status = field.querySelector('[role=status]');
+    const useForLot = field.querySelector('[data-usar-codigo-en-lote]');
+    const lotForm = document.querySelector('[data-registro-lote]');
+    const medication = lotForm?.querySelector('select[data-medicine-accepts-barcode]');
+    const available = medication ? Array.from(medication.options).filter(option => option.value && !option.disabled) : [];
+
+    function showMatch() {
+      const matches = barcodeMatches(available, input.value);
+      useForLot.hidden = matches.length !== 1;
+      let message = '';
+      if (matches.length === 1) {
+        message = `Medicamento registrado: ${matches[0].textContent.trim()}.`;
+      } else if (matches.length > 1) {
+        message = 'Hay varios medicamentos con este código. Búscalo en Registrar lote y elige el producto.';
+      } else if (input.value.trim()) {
+        message = 'Código capturado. Completa los datos si quieres registrar un medicamento nuevo.';
+      }
+      if (status.textContent !== message) status.textContent = message;
+      return matches;
+    }
+
+    input.addEventListener('input', showMatch);
+    input.addEventListener('keydown', event => {
+      if (event.key !== 'Enter' || event.isComposing) return;
+      event.preventDefault();
+      showMatch();
+      input.select();
+    });
+    useForLot.addEventListener('click', () => {
+      const matches = showMatch();
+      if (matches.length !== 1) return;
+      medication.value = matches[0].value;
+      medication.dispatchEvent(new Event('change', {bubbles: true}));
+      lotForm.querySelector('[data-numero-lote]').focus();
+    });
+    showMatch();
+  }
+
   function enhance(select) {
     if (select.dataset.searchReady || select.closest('template')) return;
     select.dataset.searchReady = '1';
@@ -70,12 +121,7 @@
       const terms = searchTerms(query);
       const available = options();
       const code = normalize(query).trim();
-      const printed = acceptsBarcode && code
-        ? available.filter(option => option.dataset.medicineLabelCode === query.trim())
-        : [];
-      const scanned = printed.length ? printed : acceptsBarcode && code
-        ? available.filter(option => normalize(option.dataset.medicineBarcode || '') === code)
-        : [];
+      const scanned = acceptsBarcode ? barcodeMatches(available, query) : [];
       const barcodeSearch = acceptsBarcode && (scanned.length || /^(?:\d{6,}|ft-\d+)$/.test(code));
       const matches = barcodeSearch ? scanned :
         available.filter(option => terms.every(term => normalize(option.dataset.search || option.textContent).includes(term)));
@@ -98,7 +144,9 @@
       });
       const message = matches.length
         ? `${matches.length} coincidencias${matches.length > 20 ? '; se muestran las primeras 20. Escribe más para afinar la búsqueda.' : '. Elige una opción de la lista.'}`
-        : barcodeSearch ? 'No hay lotes disponibles para ese código.' : 'Sin coincidencias. Revisa lo que escribiste.';
+        : barcodeSearch ? (select.form?.hasAttribute('data-registro-lote')
+          ? 'No hay medicamentos disponibles para ese código.' : 'No hay lotes disponibles para ese código.')
+          : 'Sin coincidencias. Revisa lo que escribiste.';
       setStatus(message, barcodeSearch && matches.length === 0);
       list.hidden = !shown.length; input.setAttribute('aria-expanded', String(shown.length > 0));
     }
@@ -130,6 +178,7 @@
   const scan = root => root.querySelectorAll('select[data-medicamento-search]').forEach(enhance);
   document.addEventListener('DOMContentLoaded', () => {
     scan(document);
+    connectInventoryRegistration();
     new MutationObserver(records => {
       for (const record of records) for (const node of record.addedNodes) if (node.nodeType === 1) {
         if (node.matches('select[data-medicamento-search]')) enhance(node); else scan(node);

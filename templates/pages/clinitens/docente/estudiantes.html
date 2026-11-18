@@ -4,11 +4,14 @@
 
 {% block docente_content %}
 <div class="space-y-6">
-  <div>
-    <h2 class="text-xl font-bold text-slate-900">Estudiantes</h2>
-    <p class="mt-1 text-sm text-slate-500">
-      Revisa las fichas clínicas enviadas por los estudiantes.
-    </p>
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <h2 class="text-xl font-bold text-slate-900">Fichas enviadas</h2>
+      <p class="mt-1 text-sm text-slate-500">
+        Para revisar una actividad que el alumno aún está completando, abre el seguimiento en vivo.
+      </p>
+    </div>
+    <a class="btn-secondary" href="{% url 'clinitensdocente:en_vivo' %}">Abrir seguimiento en vivo</a>
   </div>
 
   <form method="get"

@@ -259,7 +259,7 @@ class BuscarPacienteDAUForm(forms.Form):
     codigo = forms.CharField(
         label="Código ficticio del paciente",
         max_length=24,
-        widget=forms.TextInput(attrs={"placeholder": "Ej.: SIM-PAC-001", "autocomplete": "off"}),
+        widget=forms.TextInput(attrs={"class": "input", "placeholder": "Ej.: SIM-PAC-001", "autocomplete": "off"}),
     )
 
     def clean_codigo(self):

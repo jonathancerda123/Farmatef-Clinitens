@@ -20,4 +20,6 @@ El usuario confirma Juan visible al estudiante y pide verificar las ramas/copia 
 RF-020-06: ordenar solo el formulario nuevo de paciente RAE por identificación/datos de referencia/antecedentes, y la lectura estudiantil por paciente/situación/antecedentes/contexto académico. Conservar nombres POST, límites, datos guardados y control de versión.
 RF-020-07: los estados de preparación deben distinguir contenido que el docente aún debe completar de una revisión clínica o actividad pendiente del estudiante. No cambiar las condiciones de publicación ni unir modelos tradicionales con simulaciones.
 
+RF-020-08: las pantallas docentes DAU, enfermería, laboratorio y apoyo diagnóstico presentan un solo enlace para crear casos. La gestión y publicación se ofrece cuando hay casos. El regreso al área clínica se ubica arriba a la izquierda en los cuatro módulos y en el ingreso a una actividad de ficha clínica.
+
 Verificar el comportamiento existente con datos sintéticos y registrar la diferencia entre presencia de código, prueba funcional y datos de demostración vacíos. Los cambios de interfaz usan frontend-design ya cargada y tokens existentes. Sin archivos funcionales nuevos para este ajuste, migraciones, commit/push ni lectura de datos habituales.

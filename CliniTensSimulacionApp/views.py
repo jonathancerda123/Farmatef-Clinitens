@@ -615,7 +615,6 @@ class DAUInicioView(EstudianteMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["casos"] = casos_dau_del_alumno(self.request.user)
-        context["funcionario"] = self.request.user.get_full_name().strip() or self.request.user.get_username()
         context["historial_url"] = reverse("clinitens_simulacion:dau_historial")
         return context
 
@@ -665,21 +664,23 @@ class DAURegistroView(EstudianteMixin, TemplateView):
         ) if peso not in (None, "") and talla not in (None, "") else None
         return pam, imc
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *, signos_form=None, procedimiento_form=None, cierre_form=None, **kwargs):
         context = super().get_context_data(**kwargs)
         atencion = self.get_atencion()
-        signs_form = DatosDAUForm(initial=atencion.signos_vitales)
-        cierre_form = CierreDAUForm(initial=atencion.cierre)
-        if atencion.finalizada:
-            for form in (signs_form, cierre_form):
-                for field in form.fields.values():
+        signos_form = signos_form or DatosDAUForm(initial=atencion.signos_vitales)
+        cierre_form = cierre_form or CierreDAUForm(initial=atencion.cierre)
+        procedimiento_form = procedimiento_form or ProcedimientoDAUForm()
+        for form in (signos_form, cierre_form, procedimiento_form):
+            for field in form.fields.values():
+                field.widget.attrs.setdefault("class", "input")
+                if atencion.finalizada:
                     field.disabled = True
         context.update({
             "atencion": atencion,
             "caso": atencion.caso,
-            "signos_form": signs_form,
+            "signos_form": signos_form,
             "cierre_form": cierre_form,
-            "procedimiento_form": ProcedimientoDAUForm(),
+            "procedimiento_form": procedimiento_form,
             "procedimientos": atencion.procedimientos.select_related("registrado_por"),
             "funcionario": self.request.user.get_full_name().strip() or self.request.user.get_username(),
         })
@@ -706,9 +707,7 @@ class DAURegistroView(EstudianteMixin, TemplateView):
                 atencion.save(update_fields=["signos_vitales", "actualizada_en"])
                 messages.success(request, "Signos del escenario guardados.")
                 return redirect("clinitens_simulacion:dau_registro", pk=pk)
-            context = self.get_context_data()
-            context["signos_form"] = form
-            return self.render_to_response(context)
+            return self.render_to_response(self.get_context_data(signos_form=form))
 
         if action == "agregar_procedimiento":
             form = ProcedimientoDAUForm(request.POST)
@@ -720,9 +719,7 @@ class DAURegistroView(EstudianteMixin, TemplateView):
                 )
                 messages.success(request, "Procedimiento agregado al historial educativo.")
                 return redirect("clinitens_simulacion:dau_registro", pk=pk)
-            context = self.get_context_data()
-            context["procedimiento_form"] = form
-            return self.render_to_response(context)
+            return self.render_to_response(self.get_context_data(procedimiento_form=form))
 
         if action in {"guardar_cierre", "finalizar"}:
             form = CierreDAUForm(request.POST)
@@ -737,9 +734,7 @@ class DAURegistroView(EstudianteMixin, TemplateView):
                 else:
                     messages.success(request, "Borrador de cierre guardado.")
                 return redirect("clinitens_simulacion:dau_registro", pk=pk)
-            context = self.get_context_data()
-            context["cierre_form"] = form
-            return self.render_to_response(context)
+            return self.render_to_response(self.get_context_data(cierre_form=form))
 
         raise Http404("Acción no encontrada.")
 

@@ -1,62 +1,124 @@
-{% extends 'components/Layout/base.html' %}
+{% extends 'pages/clinitens/simulacion/dau_base.html' %}
 {% load static %}
-{% block head_title %}DAU simulado · {{ caso.paciente_codigo }}{% endblock %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dau.css' %}">{% endblock %}
+{% block head_title %}Atención de urgencia · {{ caso.paciente_codigo }} | CliniTENS{% endblock %}
+{% block page_title %}Atención de urgencia{% endblock %}
 {% block javascript %}<script defer src="{% static 'js/dau-calculos.js' %}"></script>{% endblock %}
-{% block content %}
-{% include 'pages/clinitens/simulacion/dau_header.html' %}
-<main class="dau-workspace">
-  <p class="dau-banner">SIMULACIÓN EDUCATIVA · No es un registro de atención real. No ingresar información de pacientes reales.</p>
+{% block dau_content %}
+<div class="dau-toolbar">
+  <a class="btn-primary" href="{% url 'clinitens_simulacion:dau_inicio' %}">← Volver a urgencia</a>
+  <a class="btn-secondary" href="{% url 'clinitens_simulacion:dau_historial' %}">Historial de urgencia</a>
+</div>
 
-  <section class="dau-panel dau-patient-panel" aria-labelledby="dau-patient-title">
-    <div class="dau-section-title"><h1 id="dau-patient-title">Identificación del paciente</h1><span class="dau-sim-code">{{ caso.paciente_codigo }}</span></div>
-    <dl class="dau-patient-grid">
-      <div><dt>Nombre completo</dt><dd>{{ caso.paciente_nombre }}</dd></div>
-      <div><dt>Código simulado</dt><dd>{{ caso.paciente_codigo }}</dd></div>
-      <div><dt>Sexo</dt><dd>{{ caso.get_paciente_sexo_display|default:"—" }}</dd></div>
-      <div><dt>Edad</dt><dd>{% if caso.paciente_edad is not None %}{{ caso.paciente_edad }} años{% else %}—{% endif %}</dd></div>
-      <div><dt>Fecha de nacimiento</dt><dd>{{ caso.paciente_fecha_nacimiento|date:"d-m-Y"|default:"—" }}</dd></div>
-      <div><dt>Comuna de residencia</dt><dd>{{ caso.paciente_comuna|default:"—" }}</dd></div>
-      <div class="dau-patient-history"><dt>Antecedentes crónicos ficticios</dt><dd>{{ caso.paciente_antecedentes|default:"Sin antecedentes indicados en este caso." }}</dd></div>
-    </dl>
-  </section>
+<section class="panel dau-patient" aria-labelledby="dau-patient-title">
+  <div class="dau-panel-header">
+    <div>
+      <h2 id="dau-patient-title" class="dau-heading">{{ caso.paciente_nombre }}</h2>
+      <p class="dau-case-name">{{ caso.titulo }}</p>
+      <p class="dau-row-meta"><span class="dau-code">{{ caso.paciente_codigo }}</span><span>{{ caso.curso }}</span></p>
+    </div>
+    <div class="dau-history-meta">
+      {% if atencion.finalizada %}
+        <span class="dau-status dau-status-closed">Finalizado · Solo lectura</span>
+        <time class="muted" datetime="{{ atencion.finalizada_en|date:'c' }}">{{ atencion.finalizada_en|date:'d/m/Y H:i' }}</time>
+      {% else %}
+        <span class="dau-status">Borrador</span>
+      {% endif %}
+    </div>
+  </div>
+  <dl class="dau-patient-grid">
+    <div><dt>Edad</dt><dd>{% if caso.paciente_edad is not None %}{{ caso.paciente_edad }} años{% else %}—{% endif %}</dd></div>
+    <div><dt>Sexo</dt><dd>{{ caso.get_paciente_sexo_display|default:'—' }}</dd></div>
+    <div><dt>Fecha de nacimiento</dt><dd>{{ caso.paciente_fecha_nacimiento|date:'d/m/Y'|default:'—' }}</dd></div>
+    <div><dt>Comuna</dt><dd>{{ caso.paciente_comuna|default:'—' }}</dd></div>
+    <div><dt>Funcionario</dt><dd>{{ funcionario }}</dd></div>
+  </dl>
+  <div class="dau-context">
+    <h3>Antecedentes del paciente</h3>
+    <p>{{ caso.paciente_antecedentes|default:'Sin antecedentes indicados en el caso.' }}</p>
+  </div>
+</section>
 
-  <section class="dau-panel" aria-labelledby="dau-vitals-title">
-    <div class="dau-section-title"><h2 id="dau-vitals-title">Signos vitales</h2><p>Cálculos automáticos: PAM e IMC · No entregan interpretación clínica.</p></div>
-    <form method="post" class="dau-vitals-form">
-      {% csrf_token %}<input type="hidden" name="action" value="guardar_signos">
+<nav class="dau-section-nav" aria-label="Secciones de la atención">
+  <a href="#dau-signos">Signos vitales</a>
+  <a href="#dau-procedimientos">Procedimientos</a>
+  <a href="#dau-cierre">Cierre{% if atencion.finalizada %} y PDF{% endif %}</a>
+</nav>
+
+<section class="panel dau-section" id="dau-signos" aria-labelledby="dau-vitals-title" tabindex="-1">
+  <h2 id="dau-vitals-title" class="dau-heading">Signos vitales</h2>
+  <form method="post" action="#dau-signos" class="dau-form">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="guardar_signos">
+    {% include 'components/design/form_errors.html' with form=signos_form %}
+    <div class="dau-vitals-layout">
       <div class="dau-vitals-grid">
-        {% for field in signos_form %}<div class="dau-form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<p class="dau-field-error">{{ error }}</p>{% endfor %}</div>{% endfor %}
-        <div class="dau-form-field"><label for="dau-pam">PAM (mmHg) <small>Auto</small></label><input id="dau-pam" type="text" value="{% if pam is not None %}{{ pam }}{% endif %}" readonly aria-describedby="dau-auto-note"></div>
-        <div class="dau-form-field"><label for="dau-imc">IMC (kg/m²) <small>Auto</small></label><input id="dau-imc" type="text" value="{% if imc is not None %}{{ imc }}{% endif %}" readonly aria-describedby="dau-auto-note"></div>
+        {% for field in signos_form %}{% include 'components/design/field.html' with field=field %}{% endfor %}
       </div>
-      <p class="dau-field-hint" id="dau-auto-note">PAM e IMC son cálculos aritméticos para el ejercicio; el sistema no clasifica los valores.</p>
-      {% if not atencion.finalizada %}<button class="dau-button dau-button-primary" type="submit">Guardar signos del escenario</button>{% endif %}
-    </form>
-  </section>
+      <aside class="dau-calculations" aria-labelledby="dau-calculations-title">
+        <h3 id="dau-calculations-title">Cálculos automáticos</h3>
+        <div class="dau-calculation-fields">
+          <div class="ui-field">
+            <label for="dau-pam">PAM (mmHg)</label>
+            <input class="input" id="dau-pam" type="text" value="{{ pam|default_if_none:'' }}" readonly>
+          </div>
+          <div class="ui-field">
+            <label for="dau-imc">IMC (kg/m²)</label>
+            <input class="input" id="dau-imc" type="text" value="{{ imc|default_if_none:'' }}" readonly>
+          </div>
+        </div>
+      </aside>
+    </div>
+    {% if not atencion.finalizada %}<div class="dau-form-actions"><button class="btn-primary" type="submit">Guardar signos vitales</button></div>{% endif %}
+  </form>
+</section>
 
-  <section class="dau-panel" aria-labelledby="dau-procedures-title">
-    <div class="dau-section-title"><h2 id="dau-procedures-title">Registro de procedimientos</h2><p>Entradas acumuladas; no se reemplazan al editar el cierre.</p></div>
-    {% if not atencion.finalizada %}<form method="post" class="dau-procedure-form">
-      {% csrf_token %}<input type="hidden" name="action" value="agregar_procedimiento">
-      {% for field in procedimiento_form %}<div class="dau-form-field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<p class="dau-field-error">{{ error }}</p>{% endfor %}</div>{% endfor %}
-      <button class="dau-button dau-button-secondary" type="submit">Agregar registro</button>
-    </form>{% endif %}
-    <ol class="dau-procedure-list">{% for item in procedimientos %}<li><div><strong>{{ item.procedimiento }}</strong><p>{{ item.observaciones|default:"Sin observación" }}</p></div><span>{{ item.get_responsable_display }} · {{ item.registrado_en|date:"d-m-Y H:i" }}</span></li>{% empty %}<li class="dau-empty">No hay procedimientos registrados todavía.</li>{% endfor %}</ol>
-  </section>
-
-  <section class="dau-panel dau-finish-panel" aria-labelledby="dau-finish-title">
-    <div class="dau-section-title"><h2 id="dau-finish-title">Finalización de la atención — Documento de Atención de Urgencia (DAU)</h2>{% if atencion.finalizada %}<span class="dau-status">Finalizado · {{ atencion.finalizada_en|date:"d-m-Y H:i" }}</span>{% endif %}</div>
-    <form method="post" class="dau-close-form">
+<section class="panel dau-section" id="dau-procedimientos" aria-labelledby="dau-procedures-title" tabindex="-1">
+  <h2 id="dau-procedures-title" class="dau-heading">Procedimientos</h2>
+  {% if not atencion.finalizada %}
+    <form method="post" action="#dau-procedimientos" class="dau-form">
       {% csrf_token %}
-      <div class="dau-close-grid">
-      {% for field in cierre_form %}<div class="dau-form-field{% if field.name == 'evaluacion_realizada' %} dau-field-wide{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<p class="dau-field-error">{{ error }}</p>{% endfor %}</div>{% endfor %}
+      <input type="hidden" name="action" value="agregar_procedimiento">
+      {% include 'components/design/form_errors.html' with form=procedimiento_form %}
+      <div class="dau-procedure-grid">
+        {% for field in procedimiento_form %}{% include 'components/design/field.html' with field=field %}{% endfor %}
       </div>
-      {% if not atencion.finalizada %}<div class="dau-action-row"><button class="dau-button dau-button-save" type="submit" name="action" value="guardar_cierre">Guardar borrador</button><button class="dau-button dau-button-primary" type="submit" name="action" value="finalizar">Finalizar DAU</button></div>{% else %}<div class="dau-action-row"><a class="dau-button dau-button-primary" href="{% url 'clinitens_simulacion:dau_pdf' atencion.pk %}">Descargar DAU (PDF)</a><a class="dau-button dau-button-secondary" href="{% url 'clinitens_simulacion:dau_pdf' atencion.pk %}?inline=1" target="_blank" rel="noopener">Imprimir DAU</a></div>{% endif %}
+      <div class="dau-form-actions"><button class="btn-primary" type="submit">Agregar procedimiento</button></div>
     </form>
-    <a class="dau-history-link" href="{% url 'clinitens_simulacion:dau_historial' %}"><span aria-hidden="true">◷</span> Historial de DAU</a>
-    <p class="dau-field-hint">Los DAU se almacenan como registros educativos asociados a tu cuenta.</p>
-  </section>
-  <p class="dau-footer-disclaimer">SIMULACIÓN EDUCATIVA · Datos ficticios · No válido para atención clínica.</p>
-</main>
+  {% endif %}
+  {% if procedimientos %}
+    <ol class="dau-list dau-procedure-list">
+      {% for item in procedimientos %}
+        <li class="dau-row">
+          <div><strong>{{ item.procedimiento }}</strong>{% if item.observaciones %}<p class="muted">{{ item.observaciones }}</p>{% endif %}</div>
+          <div class="dau-history-meta"><span class="muted">{{ item.get_responsable_display }}</span><time class="muted" datetime="{{ item.registrado_en|date:'c' }}">{{ item.registrado_en|date:'d/m/Y H:i' }}</time></div>
+        </li>
+      {% endfor %}
+    </ol>
+  {% else %}
+    <p class="section-description">Aún no hay procedimientos en este registro.</p>
+  {% endif %}
+</section>
+
+<section class="panel dau-section" id="dau-cierre" aria-labelledby="dau-finish-title" tabindex="-1">
+  <h2 id="dau-finish-title" class="dau-heading">Cierre de la atención</h2>
+  <form method="post" action="#dau-cierre" class="dau-form">
+    {% csrf_token %}
+    {% include 'components/design/form_errors.html' with form=cierre_form %}
+    <div class="dau-close-grid">
+      {% for field in cierre_form %}
+        <div{% if field.name == 'evaluacion_realizada' %} class="dau-field-wide"{% endif %}>{% include 'components/design/field.html' with field=field %}</div>
+      {% endfor %}
+    </div>
+    <div class="dau-form-actions">
+      {% if atencion.finalizada %}
+        <a class="btn-primary" href="{% url 'clinitens_simulacion:dau_pdf' atencion.pk %}">Descargar DAU (PDF)</a>
+        <a class="btn-secondary" href="{% url 'clinitens_simulacion:dau_pdf' atencion.pk %}?inline=1" target="_blank" rel="noopener">Imprimir DAU</a>
+      {% else %}
+        <button class="btn-secondary" type="submit" name="action" value="guardar_cierre">Guardar borrador</button>
+        <button class="btn-primary" type="submit" name="action" value="finalizar">Finalizar DAU</button>
+      {% endif %}
+    </div>
+  </form>
+</section>
+<p class="muted">Simulación educativa. Usa solo datos ficticios.</p>
 {% endblock %}

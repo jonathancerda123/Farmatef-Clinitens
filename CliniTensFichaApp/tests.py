@@ -102,3 +102,23 @@ class IntegridadFichaTests(TestCase):
         self.codigo.save()
         form = IngresoFichaForm({"codigo_actividad": self.codigo.pk, "docente": root.pk}, actor=self.alumno)
         self.assertTrue(form.is_valid(), form.errors)
+
+    def test_docente_no_crea_ficha_de_curso_sin_matricula(self):
+        from CliniTensDocenteApp.models import Curso
+
+        self.client.force_login(self.docente)
+        ingreso = reverse("clinitensficha:ingreso")
+        datos = {"codigo_actividad": self.codigo.pk, "docente": self.docente.pk}
+        self.codigo.curso = Curso.objects.create(nombre="Curso ficticio", creado_por=self.docente)
+        self.codigo.save(update_fields=["curso"])
+
+        response = self.client.post(ingreso, datos)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context["form"].errors["codigo_actividad"])
+        self.assertFalse(FichaClinica.objects.filter(estudiante=self.docente).exists())
+
+        self.codigo.curso = None
+        self.codigo.save(update_fields=["curso"])
+        response = self.client.post(ingreso, datos)
+        ficha = FichaClinica.objects.get(codigo_actividad=self.codigo, estudiante=self.docente)
+        self.assertRedirects(response, reverse("clinitensficha:caso", args=[ficha.pk]))

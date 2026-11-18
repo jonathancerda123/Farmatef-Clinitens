@@ -17,6 +17,23 @@ class PrivacidadInicioTests(TestCase):
         self.assertNotContains(response, "ajeno@example.test")
         self.assertEqual(list(response.context["object_list"]), [student])
 
+    def test_tarjeta_ficha_clinica_lleva_a_la_vista_de_cada_perfil(self):
+        destinos = (
+            ("RESTRICTED", "clinitensficha:ingreso", "Abrir ficha clínica"),
+            ("MANAGER", "clinitensdocente:estudiantes", "Revisar fichas de estudiantes"),
+            ("ADMIN", "clinitensdocente:estudiantes", "Revisar fichas de estudiantes"),
+        )
+        for cargo, vista, accion in destinos:
+            with self.subTest(cargo=cargo):
+                self.client.force_login(usuario(cargo.lower(), cargo))
+                response = self.client.get(reverse("clinitens"))
+                self.assertContains(response, f'href="{reverse(vista)}"')
+                self.assertContains(response, accion)
+                destino = self.client.get(reverse(vista))
+                self.assertEqual(destino.status_code, 200)
+                if cargo != "RESTRICTED":
+                    self.assertContains(destino, f'href="{reverse("clinitensdocente:en_vivo")}"')
+
     def test_acceso_principal_clinico_abre_los_casos_del_perfil(self):
         portada = reverse("clinitens")
         casos_estudiante = reverse("clinitens_simulacion:estudiante_casos")

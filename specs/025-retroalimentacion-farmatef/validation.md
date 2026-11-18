@@ -18,6 +18,8 @@
 
 ## Verificación general
 
+- RF-025-08, 2026-11-16. `manage.py test FarmaTEFApp --settings=core.test_settings` ejecutado con el intérprete aislado. 19 pruebas aprobadas y una omitida por requerir PostgreSQL. El registro incluye únicamente los códigos de los medicamentos autorizados para el docente. `node.exe --check static/js/medicamento-select.js` correcto. Chrome con una fixture aislada simuló la entrada por teclado con Enter y comprobó que no se envía el formulario, que una coincidencia permite seleccionar el medicamento y enfocar el número de lote, que el selector admite el código y que un código nuevo conserva los ceros iniciales. Falta la prueba con un lector físico.
+
 - En Etiquetado, Chrome confirmó que «Imprimir / Guardar como PDF» aparece debajo de Cantidad de copias y antes del aviso. Un formato inválido oculta el botón y dos copias válidas generan dos páginas.
 
 - `manage.py check --settings=core.test_settings` correcto. `manage.py makemigrations --check --dry-run --settings=core.test_settings` sin cambios.

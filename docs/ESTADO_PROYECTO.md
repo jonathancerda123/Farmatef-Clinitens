@@ -1,5 +1,51 @@
 # Estado y punto de reanudación — CliniTENS
 
+## Ancho de los módulos clínicos docentes — 032 / 2026-11-18
+
+DAU, Enfermería, Laboratorio y Centro de Apoyo Diagnóstico usan el mismo ancho que la tabla de Estudiantes. Los bordes coincidieron a 1920, 1440, 768 y 390 px. La demo 8025 ya sirve el ajuste. [Validación](../specs/032-ancho-modulos-clinicos-docentes/validation.md).
+
+Próxima revisión docente. Abrir los cuatro módulos desde el área clínica de la demo.
+
+## Entrada de Urgencia con el patrón de Enfermería — 031 / 2026-11-18
+
+La demo 8025 muestra el historial arriba, el buscador centrado y los pacientes SIM en tarjetas debajo. La entrada usa los componentes de Enfermería y se comprobó en la pestaña activa de Chrome. [Validación](../specs/031-dau-entrada-enfermeria/validation.md).
+
+Próxima revisión: abrir un registro desde una tarjeta del DAU.
+
+## Diseño compartido del DAU — 030 / 2026-11-18
+
+El DAU estudiantil usa navegación y colores de CliniTENS. La entrada reúne búsqueda y pacientes ordenados por código, el registro organiza signos, procedimientos y cierre, y el historial distingue borradores de atenciones finalizadas. Chrome verificó las tres vistas a 1440, 768 y 390 px y el recorrido se ensayó sobre una copia 8025. [Validación](../specs/030-dau-diseno-compartido/validation.md).
+
+Próxima revisión: abrir el DAU en la demo 8025 con el perfil de estudiante.
+
+## Tres avances de ficha simulada — 029 / 2026-11-18
+
+En la demo 8025, `FCE-APS028-01` quedó con 13/13 secciones resueltas y dos recontroles, pendiente de calificación. Los borradores `FCE-APS028-02` y `FCE-INT-03` quedaron con 6/13 y 3/13. Las tres fichas pertenecen al alumno ficticio existente. [Validación y respaldo](../specs/029-fichas-simuladas-progreso/validation.md).
+
+Próxima revisión docente: abrir la ficha 4 en Estudiantes y buscar los borradores por código en Seguimiento en vivo.
+
+## Inventario y prácticas APS en la demo — 028 / 2026-11-18
+
+La demo 8025 tiene 364 productos con mínimos y existencias, 467 lotes nuevos simulados y 7 lotes previos. Las cinco recetas `APS028-01` a `APS028-05` se reparten entre Farmacia QA y Práctica clínica integrada. El curso clínico tiene cinco nuevos escenarios `SIM-APS028-01` a `SIM-APS028-05` para DAU, RAE, Laboratorio y CAD, con cinco actividades FCE y ejemplos de historial para el alumno ficticio. [Validación y respaldo](../specs/028-demo-aps-operativa/validation.md).
+
+Próxima revisión docente: recorrer el retiro FOFAR `APS028-02` y su caso clínico `SIM-APS028-02`.
+
+## Arsenal APS en la demo FarmaTEF — 027 / 2026-11-18
+
+La demo local 8025 incorporó las 363 presentaciones del Arsenal APS 2024–2026. La carga agregó 359 y actualizó cuatro en sus registros originales. Se conservaron los siete lotes, el historial y la Solución de simulación. Las altas tienen mínimo 0 y están disponibles en el catálogo para registrar lotes. El inventario muestra 364 registros en las seis columnas existentes. [Validación, respaldo y recuperación](../specs/027-arsenal-inventario-demo/validation.md).
+
+Próximo paso: revisión docente del inventario y de sus filtros en la demo local.
+
+## Número de lote en mayúsculas — 026 / 2026-11-16
+
+FarmaTEF y Django admin guardan las altas de lotes en mayúsculas y rechazan duplicados por medicamento aun si el lote registrado contiene minúsculas. La [validación aislada](../specs/026-lotes-mayusculas/validation.md) registra cinco regresiones. Próximo paso de revisión funcional: registrar un lote ficticio con letras mixtas y comprobar en inventario el número y el rechazo de una segunda alta. Los registros de la captura tienen vencimientos distintos y su conciliación requiere revisión individual.
+
+## Precarga de demo integrada — 2026-11-16
+
+La demo local 8025 tiene el curso «Práctica clínica integrada · Demo 8025», con cuatro casos publicados `SIM-INT-01` a `SIM-INT-04`, cuatro actividades `FCE-INT-01` a `FCE-INT-04`, pacientes y resultados ficticios. Incluye historiales de DAU, enfermería y laboratorio, revisiones de apoyo diagnóstico y fichas en distintas etapas. Se conservaron las cuatro recetas FarmaTEF previas y se añadió `qa025-admin` para revisar Usuarios.
+
+La carga fue aditiva en `.test-artifacts/farmacia-025-fixture.sqlite3`, tras un respaldo SQLite con `quick_check=ok` en `.test-artifacts/qa-farmacia-025/demo-antes-precarga-integrada-20261116T032251046876Z.sqlite3`. El ensayo independiente pasó 49 comprobaciones de rutas, permisos, etiquetas y PDF con `core.test_settings`. Para recuperar el estado anterior, detener la demo y restaurar ese respaldo antes de reiniciarla. Los datos precargados pertenecen a esta demo local.
+
 La pantalla estudiantil «Mis casos de práctica» muestra un aviso único cuando no hay casos publicados. Cada caso disponible tiene una tarjeta con su curso, resumen y accesos. Se verificaron ambas vistas con datos ficticios a 1440, 950 y 390 px.
 
 ## Retroalimentación de FarmaTEF — 025 / 2026-11-15
@@ -169,3 +215,9 @@ Límites: no se ejecutó navegador, URLs ni suite funcional completa; esta verif
 2026-11-10 — Spec 021: usuario autorizó utilizar datos originales y cuentas adicionales de prueba. Fuente respaldada en lectura; destino operativo db.sqlite3 en la carpeta actual, sin reemplazar base previa. 10 cuentas y registros originales conservados, tres nuevas temporales sin superusuario, sin cambiar contraseñas/estados originales. Migración 0007 ensayada y aplicada al destino. Inicio local en 8020 con core.local_runtime, sin .env/test_settings; demo 8019 independiente. Credenciales/inventario privados en .test-artifacts/original-021/accesos-locales.txt. Check, login/alta/búsqueda/activación/perfil/cambio de password y 66 regresiones correctas con límites en validación 021. Medios no copiados; siguiente paso: usuario inicia sesión, cambia su contraseña temporal y prepara curso/caso de prueba propio. No commit/push de este incremento.
 
 2026-11-10 — Spec 022: inicio simplificado a dos accesos grandes FarmaTEF/CliniTENS, actividad debajo y destino de farmacia estudiantil específico. Selector de medicamento con buscador integrado en etiquetas/lotes/recetas, metadatos, teclado y filas dinámicas, conservando select nativo/POST/validación y lotes dependientes. Usuario confirmó el patrón. 70 Django, cuatro JS existentes, build y navegador ficticio con límites documentados. Sin migraciones ni cambios en datos originales; preservar 021. Próximo: usuario recarga inicio y prueba búsqueda en 8020. No commit/push.
+
+2026-11-10 — Spec 023: el docente prepara los productos y lotes; cada alumno inscrito busca en el inventario del autor, selecciona un lote por línea y puede imprimir la etiqueta de su propia dispensación. 75 pruebas Django y recorrido Chrome/PDF con datos ficticios. Próximo paso: probar con Docente de prueba y Alumno de prueba una receta válida y otra sin stock suficiente.
+
+2026-11-10 — Se reorganizó la práctica estudiantil en tres pasos. El motivo aparece al elegir rechazo y el resultado ofrece la etiqueta como acción principal. Revisado en Chrome con datos ficticios en móvil y escritorio.
+
+2026-11-11 — Spec 024: FarmaTEF genera el comprobante PDF de una dispensación simulada, admite dosis e indicaciones ficticias por línea, busca lotes por código de barras y conserva dos intentos. Validado con base ficticia y PDF rasterizados. Próximo paso: respaldar la base habitual, aplicar la migración y probar una receta nueva en el servidor del puerto 8020.

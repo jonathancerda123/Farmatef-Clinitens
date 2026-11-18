@@ -14,9 +14,14 @@
     <form method="post" action="{% url 'farmatef:registro_inventario' %}" class="grid gap-4 sm:grid-cols-2">
       {% csrf_token %}
       {% for field in form_medicamento %}
-        <div class="{% if field.name == 'nombre' or field.name == 'principio_activo' %}sm:col-span-2{% endif %}">
+        <div class="{% if field.name == 'nombre' or field.name == 'principio_activo' %}sm:col-span-2{% endif %}"{% if field.name == 'codigo_barras' %} data-registro-codigo{% endif %}>
           <label class="text-sm font-medium text-slate-700" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
           {{ field }}
+          {% if field.name == 'codigo_barras' %}
+            <p id="codigo-registro-ayuda" class="mt-1 text-sm text-slate-600">Escanea con un lector en modo teclado o escribe el código.</p>
+            <p id="codigo-registro-estado" class="mt-1 text-sm font-medium text-slate-700" role="status"></p>
+            <button class="btn-secondary mt-2" type="button" data-usar-codigo-en-lote hidden>Registrar lote de este medicamento</button>
+          {% endif %}
           {% for error in field.errors %}<p class="mt-1 text-sm text-red-700">{{ error }}</p>{% endfor %}
         </div>
       {% endfor %}
@@ -30,7 +35,7 @@
     <h2 class="text-lg font-semibold text-slate-900">Registrar lote</h2>
     <p class="mb-4 mt-1 text-sm text-slate-600">Cada lote conserva su propio vencimiento y cantidad disponible.</p>
     {% if form_lote.fields.medicamento.queryset %}
-      <form method="post" action="{% url 'farmatef:registro_inventario' %}" class="grid gap-4">
+      <form method="post" action="{% url 'farmatef:registro_inventario' %}" class="grid gap-4" data-registro-lote>
         {% csrf_token %}
         {% for field in form_lote %}
           <div>

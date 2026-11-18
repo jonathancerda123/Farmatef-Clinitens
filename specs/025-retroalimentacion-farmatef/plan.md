@@ -6,6 +6,7 @@
 - Separar la vista de registro de la consulta. Mantener el POST histórico del inventario en la misma implementación de altas y conservar el alcance de los selectores.
 - Compartir el código que se imprime con el selector de práctica. Usar ReportLab y Pillow ya instalados. La lista y el detalle estudiantiles comparten el mismo queryset de dispensaciones autorizadas.
 - Reutilizar el POST de etiquetado y actualizar su vista previa en la página con la respuesta validada. Invalidar la vista anterior al cambiar la selección o el tamaño y conservar el botón para uso sin JavaScript.
+- Reutilizar el campo de código y las opciones autorizadas del selector de medicamentos para la lectura en Registro. El navegador procesa la entrada del lector y el usuario confirma cada registro. Se conservan las validaciones de propiedad y duplicados en el servidor.
 - Añadir configuración PostgreSQL aislada de `core.settings` y un Compose solo para el laboratorio local. Probar concurrencia y medir transacciones sintéticas por separado.
 - Añadir un notebook independiente de la aplicación. Trabajar con una exportación local YOLO de Roboflow, métricas comparables y rutas de resultados ignoradas por Git.
 - Verificar con datos ficticios, URLs, navegador y pruebas de etiquetas. El cambio de plataforma no requiere migraciones nuevas.

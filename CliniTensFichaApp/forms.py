@@ -29,11 +29,11 @@ class IngresoFichaForm(forms.Form):
         if actor is None:
             self.fields["codigo_actividad"].queryset = CodigoActividad.objects.none()
         elif not es_administrador(actor):
-            codes = self.fields["codigo_actividad"].queryset
+            codes = self.fields["codigo_actividad"].queryset.filter(
+                Q(curso__isnull=True) | Q(curso__estudiantes=actor)
+            )
             if cargo(actor) == "MANAGER":
                 codes = codes.filter(creado_por=actor)
-            else:
-                codes = codes.filter(Q(curso__isnull=True) | Q(curso__estudiantes=actor))
             self.fields["codigo_actividad"].queryset = codes.distinct()
         self.fields["docente"].queryset = User.objects.filter(is_active=True, pk__in=self.fields["codigo_actividad"].queryset.values_list("creado_por_id", flat=True)).filter(
             Q(is_superuser=True) | Q(profile__position_FK__permission_code__in=["MANAGER", "ADMIN"])

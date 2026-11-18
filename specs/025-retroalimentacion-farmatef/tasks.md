@@ -8,6 +8,8 @@
 - [x] T-025-06 · Ordenar la portada y comprobar la disposición y los destinos en Chrome (RF-025-05).
 - [x] T-025-07 · Dar prioridad al registro de recetas y verificar búsqueda parcial y detalle desplegable (RF-025-06).
 - [x] T-025-08 · Actualizar la vista previa de etiquetas al cambiar sus datos y verificar la impresión (RF-025-07).
+- [x] T-025-09 · Capturar códigos en el registro de inventario y verificar la selección del medicamento para un lote (RF-025-08).
+- [ ] Probar el registro con un lector físico configurado en modo teclado (RF-025-08).
 - [ ] Ejecutar el laboratorio PostgreSQL y anotar los resultados de las 500 transacciones.
 - [ ] Ejecutar el notebook con la versión de Roboflow del equipo y registrar sus métricas.
 - [ ] Probar una etiqueta impresa con la pistola de escaneo del laboratorio.

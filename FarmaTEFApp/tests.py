@@ -32,6 +32,16 @@ class SelectorMedicamentosTests(TestCase):
             self.assertIn('Principio ficticio', html)
             self.assertNotIn('Medicamento ajeno', html)
 
+    def test_registro_lote_solo_incluye_codigos_de_productos_visibles(self):
+        Medicamento.objects.filter(pk=self.med.pk).update(codigo_barras="0012345678905")
+        Medicamento.objects.filter(pk=self.otro.pk).update(codigo_barras="0076543210982")
+        self.client.force_login(self.docente)
+        registro = reverse("farmatef:registro_inventario")
+        vista = self.client.get(registro)
+        self.assertContains(vista, 'data-medicine-accepts-barcode')
+        self.assertContains(vista, 'data-medicine-barcode="0012345678905"')
+        self.assertNotContains(vista, "0076543210982")
+
     def test_texto_libre_y_opcion_ajena_no_son_selecciones_validas(self):
         for value in ('Texto sin seleccionar', str(self.otro.pk)):
             form = RecetaLineaForm({'medicamento':value, 'unidades':1}, actor=self.docente)
@@ -54,6 +64,91 @@ class SelectorMedicamentosTests(TestCase):
         self.assertContains(response, reverse('farmatef:practica_recetas'))
         self.assertContains(response, 'area-launch-grid')
         self.assertNotContains(response, 'Aprender cuidando.')
+
+
+class NumeroLoteTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.docente = usuario("lotes-docente", "MANAGER")
+        cls.admin = usuario("lotes-admin", "ADMIN")
+        cls.superusuario = usuario("lotes-super", None, is_staff=True, is_superuser=True)
+        cls.medicamento = Medicamento.objects.create(
+            nombre="Amoxicilina de práctica", creado_por=cls.docente,
+        )
+
+    def datos_lote(self, numero):
+        return {
+            "medicamento": self.medicamento.pk, "numero_lote": numero,
+            "vence_el": "2099-01-01", "unidades": 4,
+        }
+
+    def post_inventario(self, numero, ruta="registro_inventario"):
+        return self.client.post(
+            reverse(f"farmatef:{ruta}"),
+            {"crear_lote": "", **{f"lote-{campo}": valor for campo, valor in self.datos_lote(numero).items()}},
+        )
+
+    def test_inventario_normaliza_y_rechaza_duplicados_para_cargos_autorizados(self):
+        for indice, actor in enumerate((self.docente, self.admin, self.superusuario), start=1):
+            with self.subTest(actor=actor):
+                self.client.force_login(actor)
+                self.assertRedirects(
+                    self.post_inventario(f" AMOx-{indice:03d} "),
+                    reverse("farmatef:inventario"),
+                )
+                lote = self.medicamento.lotes.get(registrado_por=actor)
+                self.assertEqual(lote.numero_lote, f"AMOX-{indice:03d}")
+                repetido = self.post_inventario(f"amox-{indice:03d}", ruta="inventario")
+                self.assertFormError(
+                    repetido.context["form_lote"], "numero_lote", "Ese lote ya existe para el medicamento.",
+                )
+        self.assertEqual(self.medicamento.lotes.count(), 3)
+        self.assertEqual(self.medicamento.stock_total, 12)
+
+    def test_rechaza_duplicado_de_lote_historico_con_minusculas(self):
+        LoteInventario.objects.create(
+            medicamento=self.medicamento, registrado_por=self.docente,
+            numero_lote="AMOx-002", vence_el="2099-01-01", unidades=4,
+        )
+        self.client.force_login(self.docente)
+        repetido = self.post_inventario("AMOX-002")
+        self.assertEqual(repetido.status_code, 200)
+        self.assertFormError(
+            repetido.context["form_lote"], "numero_lote", "Ese lote ya existe para el medicamento.",
+        )
+        self.assertEqual(self.medicamento.lotes.get().numero_lote, "AMOx-002")
+        self.assertEqual(self.medicamento.stock_total, 4)
+
+    def test_django_admin_normaliza_y_rechaza_duplicados(self):
+        self.client.force_login(self.superusuario)
+        ruta = reverse("admin:FarmaTEFApp_loteinventario_add")
+        self.assertEqual(self.client.post(ruta, self.datos_lote("AMOx-001")).status_code, 302)
+        lote = self.medicamento.lotes.get()
+        self.assertEqual(lote.numero_lote, "AMOX-001")
+        repetido = self.client.post(ruta, self.datos_lote("amox-001"))
+        self.assertFormError(
+            repetido.context["adminform"].form, "numero_lote", "Ese lote ya existe para el medicamento.",
+        )
+        self.assertEqual(self.medicamento.lotes.count(), 1)
+
+    def test_django_admin_puede_editar_lote_historico_sin_cambiar_su_numero(self):
+        for numero in ("AMOX-002", "AMOx-002"):
+            lote = LoteInventario.objects.create(
+                medicamento=self.medicamento, registrado_por=self.docente,
+                numero_lote=numero, vence_el="2099-01-01", unidades=4,
+            )
+        self.client.force_login(self.superusuario)
+        ruta = reverse("admin:FarmaTEFApp_loteinventario_change", args=[lote.pk])
+        datos = {**self.datos_lote("AMOx-002"), "unidades": 5}
+        self.assertEqual(self.client.post(ruta, datos).status_code, 302)
+        lote.refresh_from_db()
+        self.assertEqual(lote.numero_lote, "AMOx-002")
+        self.assertEqual(lote.unidades, 5)
+
+    def test_estudiante_no_puede_registrar_lote_por_url_directa(self):
+        self.client.force_login(usuario("lotes-estudiante"))
+        self.assertEqual(self.post_inventario("AMOx-001").status_code, 403)
+        self.assertFalse(self.medicamento.lotes.exists())
 
 
 class InventarioAlertasTests(TestCase):
