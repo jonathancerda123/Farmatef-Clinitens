@@ -1,9 +1,5 @@
 # Estado y punto de reanudación — CliniTENS
 
-## Paleta visual — 026 / 2026-11-16
-
-Revisión del 2026-11-18 por nueva paleta de la usuaria. CliniTENS y FarmaTEF usan navegación gris oscuro, superficies blancas y acciones turquesa con variantes oscuras para asegurar contraste. El rojo sigue señalando riesgos y errores. Próximo paso: revisar la nueva distribución de color con la usuaria en el recorrido habitual. [Validación](../specs/026-paleta-clinitens/validation.md).
-
 La pantalla estudiantil «Mis casos de práctica» muestra un aviso único cuando no hay casos publicados. Cada caso disponible tiene una tarjeta con su curso, resumen y accesos. Se verificaron ambas vistas con datos ficticios a 1440, 950 y 390 px.
 
 ## Retroalimentación de FarmaTEF — 025 / 2026-11-15

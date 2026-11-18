@@ -14,7 +14,7 @@ function createToast(type, icon, title, text) {
         </div>
 
         <button type="button" class="close" aria-label="Cerrar notificación" onclick="(this.parentElement).remove()">
-          <svg class="h-6 w-6"
+          <svg class="h-6 w-6 text-gray-400 hover:text-red-500 transition"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor">
@@ -40,7 +40,7 @@ function success(msj) {
   let type = "success";
 
   let icon = `
-    <svg class="h-8 w-8"
+    <svg class="h-8 w-8 text-green-500"
          width="24"
          height="24"
          viewBox="0 0 24 24"
@@ -62,7 +62,7 @@ function error(msj) {
   let type = "error";
 
   let icon = `
-    <svg class="h-8 w-8"
+    <svg class="h-8 w-8 text-red-500"
          viewBox="0 0 24 24"
          fill="none"
          stroke="currentColor"
@@ -83,7 +83,7 @@ function warning(msj) {
   let type = "warning";
 
   let icon = `
-    <svg class="h-8 w-8"
+    <svg class="h-8 w-8 text-yellow-500"
          viewBox="0 0 24 24"
          fill="none"
          stroke="currentColor"
@@ -104,7 +104,7 @@ function info(msj) {
   let type = "info";
 
   let icon = `
-    <svg class="h-8 w-8"
+    <svg class="h-8 w-8 text-blue-500"
          viewBox="0 0 24 24"
          fill="none"
          stroke="currentColor"

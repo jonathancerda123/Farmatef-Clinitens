@@ -113,7 +113,7 @@ form > strong {
 .email-reenvio input[type="radio"] {
   width: 18px;
   height: 18px;
-  accent-color: rgb(var(--color-primary));
+  accent-color: #2563eb;
   cursor: pointer;
 }
 
@@ -135,18 +135,18 @@ form div:has(input[type="file"]) label {
 form input[type="file"] {
   width: 100%;
   cursor: pointer;
-  border: 2px dashed rgb(var(--color-control-border));
+  border: 2px dashed #cbd5e1;
   border-radius: 0.9rem;
-  background-color: rgb(var(--color-canvas));
+  background-color: #f8fafc;
   padding: 1rem;
-  color: rgb(var(--color-muted));
+  color: #475569;
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 
 /* Hover del área de carga */
 form input[type="file"]:hover {
-  border-color: rgb(var(--color-primary));
-  background-color: rgb(var(--color-primary-soft));
+  border-color: #2563eb;
+  background-color: #eff6ff;
 }
 
 /* Botón interno */
@@ -155,7 +155,7 @@ form input[type="file"]::file-selector-button {
   cursor: pointer;
   border: none;
   border-radius: 0.6rem;
-  background-color: rgb(var(--color-primary));
+  background-color: #2563eb;
   padding: 0.55rem 1rem;
   color: white;
   font-weight: 600;
@@ -164,16 +164,16 @@ form input[type="file"]::file-selector-button {
 
 /* Hover del botón interno */
 form input[type="file"]::file-selector-button:hover {
-  background-color: rgb(var(--color-primary-hover));
+  background-color: #1d4ed8;
 }
 
 .app-design :where(a,button,summary,input,select,textarea,[tabindex]):focus-visible { outline: 3px solid rgb(var(--color-focus)); outline-offset: 3px; }
-.app-design :is(.app-sidebar,.auth-story) :where(a,summary):focus-visible { outline-color: rgb(var(--color-accent)); }
+.app-sidebar :where(a,summary):focus-visible { outline-color: #b0ead6; }
 /* Tailwind 4 elimina el margen del dialog: definir centrado y scroll explícitos. */
 .account-dialog,.patient-dialog { margin: auto; max-width: calc(100vw - 2rem); max-height: calc(100dvh - 2rem); overflow-y: auto; overscroll-behavior: contain; color: rgb(var(--color-ink)); background: rgb(var(--color-surface)); }
 .account-dialog { width: min(30rem,calc(100vw - 2rem)); padding: 1.75rem; border: 1px solid rgb(var(--color-border)); border-radius: var(--radius-panel); }
 .patient-dialog { width: min(48rem,calc(100vw - 2rem)); padding: 0; border: 1px solid rgb(var(--color-border)); border-radius: var(--radius-panel); }
-.account-dialog::backdrop,.patient-dialog::backdrop { background: rgb(var(--color-ink) / .5); }
+.account-dialog::backdrop,.patient-dialog::backdrop { background: rgb(25 54 60/.5); }
 html:has(.account-dialog[open],.patient-dialog[open]) { overflow: hidden; }
 .error-page { min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; padding: 2rem; }
 .error-code { color: rgb(var(--color-primary)); font-family: var(--font-heading); font-size: 4rem; font-weight: 700; margin-bottom: .75rem; }
