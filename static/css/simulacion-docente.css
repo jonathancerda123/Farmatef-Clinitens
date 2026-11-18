@@ -39,7 +39,7 @@
 .sim-field > label { color: rgb(var(--color-ink)); font-size: .9rem; font-weight: 600; }
 .sim-field input, .sim-field select, .sim-field textarea { display: block; width: 100%; min-height: 2.8rem; border: 1px solid #b8cbd0; border-radius: var(--radius-control); background: #fff; padding: .65rem .8rem; color: rgb(var(--color-ink)); font: inherit; }
 .sim-field textarea { min-height: 7.5rem; resize: vertical; line-height: 1.5; }
-.sim-field input:focus, .sim-field select:focus, .sim-field textarea:focus { border-color: rgb(var(--color-primary)); outline: 3px solid rgb(var(--color-focus) / 25%); outline-offset: 1px; }
+.sim-field input:focus, .sim-field select:focus, .sim-field textarea:focus { border-color: rgb(var(--color-primary)); outline: 3px solid rgb(var(--color-focus)); outline-offset: 1px; }
 .sim-help, .sim-section-heading p { margin: .05rem 0 0; color: rgb(var(--color-muted)); font-size: .8rem; line-height: 1.45; }
 .sim-error { margin: 0; color: #b42318; font-size: .82rem; }
 .sim-section-heading { align-items: flex-start; margin-bottom: 1rem; }
@@ -66,10 +66,10 @@
 .sim-module-intro { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem; padding: 1rem 1.15rem; border: 1px solid rgb(var(--color-border)); border-radius: var(--radius-control); background: white; }
 .sim-module-intro p { margin: 0; color: rgb(var(--color-muted)); }
 .sim-module-intro span { flex: none; color: rgb(var(--color-primary-hover)); font-size: .76rem; font-weight: 700; letter-spacing: .035em; }
-.sim-module-dau .sim-step { background: #e8f1fc; color: #246bb5; }
-.sim-module-laboratorio .sim-step { background: #f2eefe; color: #6941a5; }
-.sim-module-kardex .sim-step { background: #fff1e7; color: #a84d0b; }
-.sim-module-diagnostico .sim-step { background: #fff1e7; color: #a84d0b; }
+.sim-module-dau .sim-step { background: rgb(var(--color-primary-soft)); color: rgb(var(--color-primary)); }
+.sim-module-laboratorio .sim-step { background: rgb(var(--color-primary-soft)); color: rgb(var(--color-primary-hover)); }
+.sim-module-kardex .sim-step { background: rgb(var(--color-primary-soft)); color: rgb(var(--color-primary-hover)); }
+.sim-module-diagnostico .sim-step { background: rgb(var(--color-primary-soft)); color: rgb(var(--color-primary-hover)); }
 .sim-module-actions { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.6rem; }
 .sim-module-actions > a:last-child { color: rgb(var(--color-primary-hover)); font-weight: 600; text-underline-offset: .2rem; }
 .sim-module-cases { margin-top: .5rem; }
@@ -98,7 +98,7 @@
 .sim-tube-card, .sim-diagnostic-card { padding: 1rem; border: 1px solid rgb(var(--color-border)); border-radius: var(--radius-control); background: #fff; }
 .sim-tube-card h4, .sim-diagnostic-group h4 { margin: 0 0 .6rem; font-weight: 700; }
 .sim-tube-card p { margin: .35rem 0; color: rgb(var(--color-muted)); }
-.sim-review-status { padding: .55rem .75rem; border-radius: .5rem; background: #e7f5f1; color: #006f66; font-weight: 600; }
+.sim-review-status { padding: .55rem .75rem; border-radius: .5rem; background: rgb(var(--color-primary-soft)); color: rgb(var(--color-primary-hover)); font-weight: 600; }
 .sim-diagnostic-group { display: grid; gap: .75rem; margin: 1.25rem 0; }
 .sim-diagnostic-group h4 { padding-bottom: .5rem; border-bottom: 1px solid rgb(var(--color-border)); }
 .sim-diagnostic-card h5 { margin: 0 0 .5rem; font-size: 1rem; font-weight: 700; }

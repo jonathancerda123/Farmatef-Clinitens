@@ -4,22 +4,32 @@
 
 ## Identidad y fuentes
 
-Un espacio de aprendizaje clínico: navegación petróleo, superficie clara, acciones verde clínico, marca de ficha y contenido alineado a izquierda. La portada presenta observar, registrar y evaluar; el catálogo y la ficha usan la misma estructura. Las métricas provienen del servidor y las funciones futuras se identifican como pendientes.
+La [identidad 027](../specs/027-identidad-por-area/spec.md) usa azul profundo como base compartida, verde jade en FarmaTEF y azul intenso en CliniTENS. La navegación y el acceso usan la base compartida. Las tarjetas de inicio, acciones, iconos y selecciones identifican cada área. Los fondos son claros y el texto principal oscuro.
 
 La fuente de identidad es [tokens.css](../static/css/tokens.css): valores RGB separados por espacios, consumidos como `rgb(var(--color-primary))`. Los títulos usan Trebuchet MS y el cuerpo Segoe UI, con alternativas locales. No hay fuentes o fotografías remotas.
 
 | Token | Valor | Uso |
 |---|---|---|
-| color-canvas | #F2F6F6 | Fondo de trabajo |
+| color-canvas | #F5F7FB | Fondo de trabajo |
 | color-surface | #FFFFFF | Formularios y datos |
-| color-ink | #19363C | Texto principal |
-| color-muted | #566B71 | Instrucciones y texto secundario |
-| color-navigation | #17474E | Barra lateral y acceso |
-| color-primary | #00796F | Acción principal y selección |
-| color-primary-hover | #006058 | Acción al pasar el puntero |
-| color-primary-soft | #E6F4F0 | Fondo de apoyo |
+| color-ink | #212E42 | Texto principal |
+| color-muted | #536379 | Instrucciones y texto secundario |
+| color-navigation | #243B64 | Barra lateral y acceso, compartido |
+| color-primary | #243B64 | Acción principal fuera de las áreas |
+| color-primary-hover | #192B4B | Acción al pasar el puntero |
+| color-primary-soft | #EBF1FA | Fondo de apoyo compartido |
+| color-navigation-focus | #A9CBFF | Foco sobre navegación oscura |
 
-Conservar colores semánticos de error, advertencia y éxito acompañados de texto; no recolorear una escala de riesgo solo por estética. Las tonalidades auxiliares `brand-100` a `brand-950` están en [tailwind.config.js](../theme/static_src/tailwind.config.js); revisar esa escala al cambiar la identidad. Radio, fuentes y ancho de barra lateral se definen en tokens.
+El body recibe `data-area="farmatef"` o `data-area="clinitens"` según la ruta resuelta en la plantilla base. Los mismos atributos se usan en las dos tarjetas del inicio. Los tokens de cada ámbito cambian la escala `brand` completa y el foco, mientras `color-navigation` conserva la base compartida.
+
+| Área | Acción principal | Hover | Fondo suave |
+|---|---|---|---|
+| FarmaTEF | #008568 | #006952 | #F5FFFA |
+| CliniTENS | #2563C5 | #1B4FA0 | #EDF4FF |
+
+La ficha, el panel docente y los simuladores pertenecen a CliniTENS. Inicio, cuentas y acceso usan los tokens base. El texto blanco se usa en fondos oscuros y botones con contraste comprobado.
+
+Conservar rojo para errores, advertencias importantes, emergencias y acciones destructivas, acompañado de texto. Los avisos preventivos pueden usar ámbar y las confirmaciones mantienen verde. Las tonalidades `brand-50` a `brand-950` de [tailwind.config.js](../theme/static_src/tailwind.config.js) consumen los tokens centrales por área. Radio, fuentes y ancho de barra lateral se definen en tokens.
 
 ## Archivos y componentes
 
@@ -41,7 +51,9 @@ Las páginas generales mantienen `content_main`; formularios `content_pages`; do
 
 Usar `btn-primary`, `btn-secondary`, `btn-danger`, `form-sheet`, `ui-field`, `error-summary`, `field-errors`, `metric-strip`, `evaluation-summary` y `section-navigation` cuando correspondan. Un formulario puede incluir `components/design/field.html` con un BoundField y `form_errors.html` para errores generales. No agregar un contenedor decorativo por cada dato.
 
-Usar `btn-primary` en los controles «Volver a…» y «Volver al…» para mantener el mismo verde en FarmaTEF y CliniTENS.
+Usar `btn-primary` en los controles «Volver a…» y «Volver al…» para que hereden el acento del área actual.
+
+La portada de FarmaTEF usa presentación acotada, alertas en filas y accesos `farmatef-tool` con toda la superficie enlazada. Su altura responde al contenido. Mantener la tipografía, tokens, radios y foco compartidos, con dos columnas de herramientas en escritorio (cuadrícula 2×2 para las cuatro herramientas docentes) y una en móvil. Los títulos, descripciones e iconos tienen mayor tamaño y las tarjetas una altura mínima de 9rem. [Especificación 028](../specs/028-portada-farmatef/spec.md).
 
 ## Contratos de interacción
 

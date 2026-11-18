@@ -1,5 +1,13 @@
 # Estado y punto de reanudación — CliniTENS
 
+## Portada de FarmaTEF — 028
+
+La portada comparte identidad con CliniTENS y usa contenido de farmacia con acento jade. Las alertas sustituyen la guía en la columna derecha de la presentación. Tras revisar el exceso de espacio vacío, se compactaron título, alertas y herramientas. Los bloques de herramientas completos son enlaces. Por la preferencia más reciente de la usuaria, se muestran en 2×2 en escritorio, con iconos y textos ampliados, y una columna en móvil. Build y cinco pruebas pertinentes correctos, perfiles y conteos comprobados con datos ficticios. La usuaria aprobó guardar y subir la versión con herramientas en 2×2. Próximo paso de validación: recorrido de formularios en vivo. [Evidencia](../specs/028-portada-farmatef/validation.md).
+
+## Identidad por área — 027
+
+Se aplica la propuesta autorizada de azul profundo compartido, jade para FarmaTEF y azul intenso para CliniTENS. El inicio presenta las dos identidades y las rutas directas conservan su acento, incluso al mostrar errores de formulario. Se comprobaron build, contraste, rutas y pantallas ficticias de escritorio/móvil. La usuaria aprobó guardar y subir la combinación junto con la portada de 028. [Evidencia y límites](../specs/027-identidad-por-area/validation.md).
+
 La pantalla estudiantil «Mis casos de práctica» muestra un aviso único cuando no hay casos publicados. Cada caso disponible tiene una tarjeta con su curso, resumen y accesos. Se verificaron ambas vistas con datos ficticios a 1440, 950 y 390 px.
 
 ## Retroalimentación de FarmaTEF — 025 / 2026-11-15

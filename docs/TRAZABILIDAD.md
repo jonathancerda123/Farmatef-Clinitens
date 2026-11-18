@@ -1,5 +1,15 @@
 # Trazabilidad de requisitos, tareas y pruebas
 
+## Portada de FarmaTEF — 028
+
+RF-028-01/02 → plantilla de portada y componentes visuales compartidos. RF-028-03 → bloque único de alertas en la presentación, conservando filtros y conteos de 025. RF-028-04 → renderizado según perfil y enlaces estudiantiles existentes. [Validación](../specs/028-portada-farmatef/validation.md).
+
+La revisión de densidad compacta presentación, alertas y herramientas, añade iconos semánticos al componente compartido y convierte cada acceso en un enlace completo. Se revisó visualmente en Edge con datos ficticios a varios anchos.
+
+## Identidad por área — 027
+
+RF-027-01 → tokens compartidos, navegación y marca. RF-027-02 → atributo de área en plantilla base y tarjetas del inicio, escala Tailwind y estilos clínicos. RF-027-03 → estilos semánticos de alertas. RNF-027-01 → contraste calculado, rutas y revisión visual de pantallas ficticias. [Validación](../specs/027-identidad-por-area/validation.md).
+
 La trazabilidad relaciona cada requisito del producto con las tareas, el diseño o código que lo implementa y la evidencia disponible. «Implementado» indica que existe código; «verificado» indica que hay evidencia de comprobación; «aceptado» requiere revisión de las personas responsables del producto. No se debe inferir aceptación a partir de la existencia del código.
 
 ## Matriz

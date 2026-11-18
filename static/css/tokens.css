@@ -1,21 +1,61 @@
-/* Fuente de identidad de CliniTENS. Valores RGB permiten opacidad en Tailwind 3. */
+/* Identidad compartida y acentos por área. Canales RGB con opacidad. */
 :root {
-  --color-canvas: 242 246 246;
+  --color-canvas: 245 247 251;
   --color-surface: 255 255 255;
-  --color-ink: 25 54 60;
-  --color-muted: 86 107 113;
-  --color-border: 210 224 225;
-  --color-navigation: 23 71 78;
-  --color-primary: 0 121 111;
-  --color-primary-hover: 0 96 88;
-  --color-primary-soft: 230 244 240;
+  --color-ink: 33 46 66;
+  --color-muted: 83 99 121;
+  --color-border: 215 224 236;
+  --color-control-border: 125 141 163;
+  --color-navigation: 36 59 100;
+  --color-navigation-focus: 169 203 255;
+  --color-primary: 36 59 100;
+  --color-primary-hover: 25 43 75;
+  --color-primary-soft: 235 241 250;
+  --color-brand-100: 219 231 249;
+  --color-brand-200: 192 212 241;
+  --color-brand-300: 145 177 222;
+  --color-brand-400: 102 136 188;
+  --color-brand-500: 54 90 145;
+  --color-brand-800: 29 48 81;
+  --color-brand-900: 23 38 65;
+  --color-brand-950: 16 27 46;
   --color-success: 30 107 68;
   --color-warning: 133 78 12;
   --color-danger: 180 35 24;
-  --color-focus: 0 121 111;
+  --color-focus: 36 59 100;
   --font-body: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --font-heading: "Trebuchet MS", "Segoe UI", sans-serif;
   --radius-control: .4rem;
   --radius-panel: .8rem;
   --sidebar-width: 15rem;
+}
+
+[data-area="farmatef"] {
+  --color-primary: 0 133 104;
+  --color-primary-hover: 0 105 82;
+  --color-primary-soft: 245 255 250;
+  --color-brand-100: 207 240 226;
+  --color-brand-200: 163 224 200;
+  --color-brand-300: 104 200 174;
+  --color-brand-400: 22 168 134;
+  --color-brand-500: 0 133 104;
+  --color-brand-800: 0 80 63;
+  --color-brand-900: 0 60 48;
+  --color-brand-950: 0 39 32;
+  --color-focus: 0 133 104;
+}
+
+[data-area="clinitens"] {
+  --color-primary: 37 99 197;
+  --color-primary-hover: 27 79 160;
+  --color-primary-soft: 237 244 255;
+  --color-brand-100: 219 233 255;
+  --color-brand-200: 187 212 253;
+  --color-brand-300: 144 184 248;
+  --color-brand-400: 88 141 226;
+  --color-brand-500: 50 111 210;
+  --color-brand-800: 22 61 123;
+  --color-brand-900: 17 45 91;
+  --color-brand-950: 12 31 62;
+  --color-focus: 37 99 197;
 }

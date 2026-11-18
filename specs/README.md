@@ -45,3 +45,9 @@ Flujo: documento → revisión → autorización explícita de tareas de código
 024 — [Comprobante, escaneo y reintento de FarmaTEF](024-cierre-dispensacion-farmatef/spec.md): comprobante PDF, datos ficticios en etiqueta, búsqueda por código de barras y dos intentos. Validado con datos ficticios. Actualización de la base habitual y prueba de usuario pendientes.
 
 025 — [Alertas, registro y etiquetas de FarmaTEF](025-retroalimentacion-farmatef/spec.md). Implementación local en `jonathan`. Cambios de plataforma verificados con datos ficticios. Laboratorio PostgreSQL y notebook preparados para ejecución con los insumos correspondientes.
+
+026 — Paleta única anterior, revertida por solicitud de la usuaria. Su documentación y reversión permanecen en la historia de Git.
+
+027 — [Identidad por área](027-identidad-por-area/spec.md). Base azul profundo, FarmaTEF jade y CliniTENS azul intenso. Implementación en `valentina`, versión visual aprobada por la usuaria para commit y push.
+
+028 — [Portada de FarmaTEF](028-portada-farmatef/spec.md). Presentación compacta, alertas en la columna superior derecha y accesos completos a herramientas. Pruebas, build y revisión visual en Edge con datos ficticios correctos. Versión visual aprobada por la usuaria para commit y push.

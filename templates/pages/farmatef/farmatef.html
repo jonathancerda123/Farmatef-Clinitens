@@ -2,48 +2,79 @@
 {% block head_title %}FarmaTEF | CliniTENS{% endblock head_title %}
 {% block page_title %}FarmaTEF{% endblock page_title %}
 {% block content_main %}
-{% if puede_gestionar %}
-  <div class="farmatef-home">
+{% if puede_gestionar or es_estudiante %}
+  <section class="home-intro farmatef-intro{% if not puede_gestionar %} farmatef-student-intro{% endif %}" aria-labelledby="presentacion-farmatef">
+    <div>
+      <h2 id="presentacion-farmatef">Una receta. Todo el proceso.</h2>
+      <p class="section-description">Prepara el inventario, trabaja con recetas y practica la dispensación con datos ficticios.</p>
+      <div class="intro-actions">
+        {% if puede_gestionar %}
+          <a class="btn-primary" href="{% url 'farmatef:recetas' %}">Gestionar recetas de práctica {% include 'components/design/icon.html' with icon='arrow' %}</a>
+        {% else %}
+          <a class="btn-primary" href="{% url 'farmatef:practica_recetas' %}">Mis recetas de práctica {% include 'components/design/icon.html' with icon='arrow' %}</a>
+        {% endif %}
+      </div>
+    </div>
+    {% if puede_gestionar %}
     <section class="farmatef-alerts" aria-labelledby="alertas-inventario">
-      <h2 id="alertas-inventario" class="mb-4 text-xl font-semibold">Alertas de inventario</h2>
-      <div class="grid gap-3">
+      <h3 id="alertas-inventario">Alertas de inventario</h3>
+      <div class="farmatef-alert-list">
         {% for alerta in alertas %}
-          <a class="block rounded-xl border p-4 {% if alerta.tipo == 'stock-bajo' %}border-amber-300 bg-amber-50 text-amber-900{% else %}border-rose-300 bg-rose-50 text-rose-900{% endif %}"
+          <a class="farmatef-alert {% if alerta.tipo == 'stock-bajo' %}border-amber-300 bg-amber-50 text-amber-900{% else %}border-rose-300 bg-rose-50 text-rose-900{% endif %}"
              href="{% url 'farmatef:inventario' %}?alerta={{ alerta.tipo }}">
-            <span class="block text-sm font-semibold">{{ alerta.titulo }}</span>
-            <span class="block text-sm"><strong class="text-xl">{{ alerta.total }}</strong> medicamento{{ alerta.total|pluralize }}</span>
-            <span class="mt-2 block text-sm font-semibold underline">Ver en inventario</span>
+            <strong class="farmatef-alert-count">{{ alerta.total }}</strong>
+            <span class="farmatef-alert-copy"><span>{{ alerta.titulo }}</span><small>medicamento{{ alerta.total|pluralize }}</small></span>
+            {% include 'components/design/icon.html' with icon='arrow' %}
+            <span class="sr-only">Ver en inventario</span>
           </a>
         {% endfor %}
       </div>
     </section>
-    <section class="farmatef-tools" aria-labelledby="herramientas-farmacia">
-      <h2 id="herramientas-farmacia" class="mb-4 text-xl font-semibold">Herramientas de farmacia</h2>
-      <div class="module-list">
-        <article class="module-entry">
-          <span class="module-symbol">{% include 'components/design/icon.html' with icon='clipboard' %}</span>
-          <div><h3>Inventario</h3><p>Consulta medicamentos, lotes y existencias.</p><a href="{% url 'farmatef:inventario' %}">Abrir inventario</a></div>
-        </article>
-        <article class="module-entry">
-          <span class="module-symbol">{% include 'components/design/icon.html' with icon='clipboard' %}</span>
-          <div><h3>Registro de inventario</h3><p>Agrega un medicamento o registra la llegada de un lote ficticio.</p><a href="{% url 'farmatef:registro_inventario' %}">Abrir registro</a></div>
-        </article>
-        <article class="module-entry">
-          <span class="module-symbol">{% include 'components/design/icon.html' with icon='result' %}</span>
-          <div><h3>Recetas</h3><p>Registra una receta ficticia, búscala por su número único y gestiona su entrega simulada.</p><a href="{% url 'farmatef:recetas' %}">Abrir recetas</a></div>
-        </article>
-        <article class="module-entry">
-          <span class="module-symbol">{% include 'components/design/icon.html' with icon='clipboard' %}</span>
-          <div><h3>Etiquetado</h3><p>Prepara etiquetas de lotes con dimensiones configurables en milímetros.</p><a href="{% url 'farmatef:etiquetado' %}">Diseñar etiquetas</a></div>
-        </article>
-      </div>
-    </section>
-  </div>
+    {% endif %}
+  </section>
+{% endif %}
+{% if puede_gestionar %}
+  <section class="farmatef-tools" aria-labelledby="herramientas-farmacia">
+    <div class="section-heading"><h2 id="herramientas-farmacia">Herramientas de farmacia</h2></div>
+    <div class="farmatef-tool-grid">
+      <a class="module-entry farmatef-tool" href="{% url 'farmatef:inventario' %}">
+        <span class="module-symbol">{% include 'components/design/icon.html' with icon='inventory' %}</span>
+        <div><h3>Inventario</h3><p>Consulta medicamentos, lotes y existencias.</p></div>
+        {% include 'components/design/icon.html' with icon='arrow' icon_class='farmatef-tool-arrow' %}
+      </a>
+      <a class="module-entry farmatef-tool" href="{% url 'farmatef:registro_inventario' %}">
+        <span class="module-symbol">{% include 'components/design/icon.html' with icon='inventory-add' %}</span>
+        <div><h3>Registro de inventario</h3><p>Agrega medicamentos y registra la llegada de lotes.</p></div>
+        {% include 'components/design/icon.html' with icon='arrow' icon_class='farmatef-tool-arrow' %}
+      </a>
+      <a class="module-entry farmatef-tool" href="{% url 'farmatef:recetas' %}">
+        <span class="module-symbol">{% include 'components/design/icon.html' with icon='prescription' %}</span>
+        <div><h3>Recetas</h3><p>Prepara recetas y revisa las prácticas de tus cursos.</p></div>
+        {% include 'components/design/icon.html' with icon='arrow' icon_class='farmatef-tool-arrow' %}
+      </a>
+      <a class="module-entry farmatef-tool" href="{% url 'farmatef:etiquetado' %}">
+        <span class="module-symbol">{% include 'components/design/icon.html' with icon='label' %}</span>
+        <div><h3>Etiquetado</h3><p>Diseña e imprime etiquetas para los lotes.</p></div>
+        {% include 'components/design/icon.html' with icon='arrow' icon_class='farmatef-tool-arrow' %}
+      </a>
+    </div>
+  </section>
 {% elif es_estudiante %}
-  <nav class="flex flex-wrap gap-3" aria-label="Práctica de farmacia">
-    <a class="btn-primary" href="{% url 'farmatef:practica_recetas' %}">Mis recetas de práctica</a>
-    <a class="btn-secondary" href="{% url 'farmatef:mis_etiquetas' %}">Mis etiquetas</a>
-  </nav>
+  <section aria-labelledby="practica-farmacia">
+    <div class="section-heading"><h2 id="practica-farmacia">Tu práctica de farmacia</h2></div>
+    <div class="farmatef-tool-grid">
+      <a class="module-entry farmatef-tool" href="{% url 'farmatef:practica_recetas' %}">
+        <span class="module-symbol">{% include 'components/design/icon.html' with icon='prescription' %}</span>
+        <div><h3>Mis recetas de práctica</h3><p>Revisa las indicaciones, elige un lote y registra tu decisión.</p></div>
+        {% include 'components/design/icon.html' with icon='arrow' icon_class='farmatef-tool-arrow' %}
+      </a>
+      <a class="module-entry farmatef-tool" href="{% url 'farmatef:mis_etiquetas' %}">
+        <span class="module-symbol">{% include 'components/design/icon.html' with icon='label' %}</span>
+        <div><h3>Mis etiquetas</h3><p>Consulta e imprime las etiquetas de tus dispensaciones.</p></div>
+        {% include 'components/design/icon.html' with icon='arrow' icon_class='farmatef-tool-arrow' %}
+      </a>
+    </div>
+  </section>
 {% else %}
   <section class="pending-modules">
     <h2 class="text-lg font-semibold">Acceso a FarmaTEF</h2>

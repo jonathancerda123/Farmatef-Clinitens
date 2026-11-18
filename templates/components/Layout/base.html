@@ -20,7 +20,7 @@
     <script defer src="{% static 'js/medicamento-select.js' %}"></script>
     {% block javascript %} {% endblock javascript %}
   </head>
-  <body class="app-design">
+  <body class="app-design"{% if request.resolver_match.namespace == 'farmatef' or request.resolver_match.url_name == 'farmatef' %} data-area="farmatef"{% elif request.resolver_match.namespace == 'clinitensdocente' or request.resolver_match.namespace == 'clinitensficha' or request.resolver_match.namespace == 'clinitens_simulacion' or request.resolver_match.url_name == 'clinitens' %} data-area="clinitens"{% endif %}>
 
     {% block content %} {% endblock content %}
 
