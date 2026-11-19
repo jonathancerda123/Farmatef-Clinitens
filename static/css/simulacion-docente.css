@@ -70,8 +70,7 @@
 .sim-module-laboratorio .sim-step { background: rgb(var(--color-primary-soft)); color: rgb(var(--color-primary-hover)); }
 .sim-module-kardex .sim-step { background: rgb(var(--color-primary-soft)); color: rgb(var(--color-primary-hover)); }
 .sim-module-diagnostico .sim-step { background: rgb(var(--color-primary-soft)); color: rgb(var(--color-primary-hover)); }
-.sim-module-actions { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.6rem; }
-.sim-module-actions > a:last-child { color: rgb(var(--color-primary-hover)); font-weight: 600; text-underline-offset: .2rem; }
+.sim-module-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: 1.5rem; }
 .sim-module-cases { margin-top: .5rem; }
 .sim-module-cases > .sim-cases-heading { align-items: flex-end; }
 .sim-module-cases > .sim-cases-heading p { max-width: 34rem; margin: 0; color: rgb(var(--color-muted)); font-size: .85rem; }
@@ -111,11 +110,11 @@
 .sim-tube-label > strong { font-size: 6pt; letter-spacing: .08em; }
 .sim-tube-label h2 { margin: 2mm 0; font-size: 12pt; }
 .sim-tube-label p { margin: 1mm 0; }
-.sim-module-footnote { margin-top: 1.5rem; color: rgb(var(--color-muted)); font-size: .85rem; }
 .sim-cases-empty h3 { margin: 0; font-weight: 700; }
 .sim-cases-empty p { margin: .5rem 0 1rem; }
 @media (max-width: 760px) {
   .sim-card-heading, .sim-cases-heading { align-items: flex-start; flex-direction: column; }
+  .sim-module-cases > .sim-cases-heading { align-items: flex-start; }
   .sim-cases-list { grid-template-columns: 1fr; }
   .sim-module-intro { align-items: flex-start; flex-direction: column; }
 }

@@ -30,6 +30,7 @@ class MedicamentoForm(forms.ModelForm):
             "stock_minimo",
             "dias_alerta_vencimiento",
         ]
+        labels = {"codigo_barras": "Código de barras"}
         widgets = {
             "nombre": forms.TextInput(attrs={"maxlength": 160}),
             "principio_activo": forms.TextInput(attrs={"maxlength": 160}),
@@ -37,7 +38,10 @@ class MedicamentoForm(forms.ModelForm):
             "forma_farmaceutica": forms.TextInput(attrs={"maxlength": 100}),
             "clasificacion": forms.TextInput(attrs={"maxlength": 120}),
             "observaciones": forms.TextInput(attrs={"maxlength": 300}),
-            "codigo_barras": forms.TextInput(attrs={"maxlength": 64}),
+            "codigo_barras": forms.TextInput(attrs={
+                "maxlength": 64, "autocomplete": "off", "spellcheck": "false",
+                "aria-describedby": "codigo-registro-ayuda codigo-registro-estado",
+            }),
             "stock_minimo": forms.NumberInput(attrs={"min": 0, "placeholder": "0"}),
             "dias_alerta_vencimiento": forms.NumberInput(
                 attrs={"min": 1, "max": 365}
@@ -67,12 +71,33 @@ class MedicamentoForm(forms.ModelForm):
         return cleaned
 
 
-class LoteInventarioForm(forms.ModelForm):
+class LoteInventarioBaseForm(forms.ModelForm):
+    def clean(self):
+        cleaned = super().clean()
+        if self.instance.pk and {"medicamento", "numero_lote"}.isdisjoint(self.changed_data):
+            return cleaned
+
+        numero_lote = cleaned.get("numero_lote")
+        if not numero_lote:
+            return cleaned
+
+        numero_lote = numero_lote.upper()
+        cleaned["numero_lote"] = numero_lote
+        medicamento = cleaned.get("medicamento")
+        if medicamento:
+            lotes = medicamento.lotes.exclude(pk=self.instance.pk)
+            numeros = lotes.order_by().values_list("numero_lote", flat=True).iterator()
+            if any(numero.strip().upper() == numero_lote for numero in numeros):
+                self.add_error("numero_lote", "Ese lote ya existe para el medicamento.")
+        return cleaned
+
+
+class LoteInventarioForm(LoteInventarioBaseForm):
     class Meta:
         model = LoteInventario
         fields = ["medicamento", "numero_lote", "vence_el", "unidades"]
         widgets = {
-            "numero_lote": forms.TextInput(attrs={"maxlength": 80}),
+            "numero_lote": forms.TextInput(attrs={"maxlength": 80, "data-numero-lote": ""}),
             "vence_el": forms.DateInput(attrs={"type": "date"}),
             "unidades": forms.NumberInput(attrs={"min": 1, "placeholder": "0"}),
         }
@@ -86,19 +111,10 @@ class LoteInventarioForm(forms.ModelForm):
         )
         for field in self.fields.values():
             field.widget.attrs["class"] = INPUT
-        self.fields["medicamento"].widget = MedicamentoEtiquetaSelect(attrs={"class": INPUT}, choices=self.fields["medicamento"].choices)
-
-    def clean(self):
-        cleaned = super().clean()
-        medicamento = cleaned.get("medicamento")
-        numero_lote = cleaned.get("numero_lote")
-        if medicamento and numero_lote and LoteInventario.objects.filter(
-            medicamento=medicamento, numero_lote=numero_lote
-        ).exists():
-            self.add_error(
-                "numero_lote", ValidationError("Ese lote ya existe para el medicamento.")
-            )
-        return cleaned
+        self.fields["medicamento"].widget = MedicamentoEtiquetaSelect(
+            attrs={"class": INPUT, "data-medicine-accepts-barcode": ""},
+            choices=self.fields["medicamento"].choices,
+        )
 
 
 class MedicamentoEtiquetaSelect(forms.Select):
@@ -119,6 +135,9 @@ class MedicamentoEtiquetaSelect(forms.Select):
                     "data-forma": medicamento.forma_farmaceutica,
                 }
             )
+            if "data-medicine-accepts-barcode" in self.attrs:
+                option["attrs"]["data-medicine-barcode"] = medicamento.codigo_barras
+                option["attrs"]["data-medicine-label-code"] = codigo_para_etiqueta(medicamento)
         return option
 
 

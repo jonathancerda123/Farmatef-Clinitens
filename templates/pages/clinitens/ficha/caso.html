@@ -9,6 +9,15 @@
 
 {% block ficha_content %}
 <div class="space-y-5">
+  <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4">
+    {% if ficha.bloqueada %}
+      <p class="text-sm text-slate-600">Tu ficha ya fue enviada.</p>
+      <a class="btn-primary" href="{% url 'clinitensficha:resultado' ficha.pk %}">Ver estado de mi ficha</a>
+    {% else %}
+      <p class="text-sm text-slate-600">Lee el caso y abre tu ficha para registrar la identificación del paciente.</p>
+      <a class="btn-primary" href="{% url 'clinitensficha:editor' ficha.pk 'identidad' %}">Abrir mi ficha clínica</a>
+    {% endif %}
+  </div>
 
   <section class="rounded-xl border-2 border-brand-500/20 bg-brand-50/50 p-6 shadow-none">
     <h2 class="flex items-center gap-2 border-b border-brand-200 pb-4 text-xl font-bold text-brand-700">

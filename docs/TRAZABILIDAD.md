@@ -16,6 +16,12 @@ La trazabilidad relaciona cada requisito del producto con las tareas, el diseño
 
 | Requisito | Tarea(s) | Diseño o código real | Prueba automatizada | Otra evidencia | Estado | Limitaciones |
 |---|---|---|---|---|---|---|
+| RF-031-01 a RF-031-03 — entrada DAU equivalente a Enfermería | T-031-01 a T-031-03 | Plantilla DAU y componentes compartidos de CliniTENS | Comparación Chrome a 1440, 768 y 390 px y recorrido funcional | [Validación 031](../specs/031-dau-entrada-enfermeria/validation.md) | Verificado en la demo 8025 | Casos ficticios |
+| RF-030-01 a RF-030-03 — diseño compartido del DAU | T-030-01 a T-030-03 | Plantillas DAU, controles compartidos y CSS acotado | `DAUPresentationTests` y recorrido en Chrome | [Validación 030](../specs/030-dau-diseno-compartido/validation.md) | Implementado y verificado localmente | Aceptación de usuario pendiente |
+| RF-029-01 a RF-029-03 — tres avances de ficha simulada | T-029-01 a T-029-03 | Validación FCE, revisión docente y Seguimiento en vivo existentes | 59 solicitudes por entorno, integridad SQLite y repetición sin escrituras | [Validación 029](../specs/029-fichas-simuladas-progreso/validation.md) | Cargado y verificado en la demo 8025 | Tres fichas de la misma cuenta ficticia |
+| RF-028-01 a RF-028-03 — stock, recetas y escenarios APS | T-028-01 a T-028-03 | Inventario y lotes FarmaTEF, recetas, ficha y simulaciones existentes | Ensayo de 73 solicitudes, 54 en copia de la demo e integridad SQLite | [Validación 028](../specs/028-demo-aps-operativa/validation.md) | Cargado y verificado en la demo 8025 | Datos y saldos ficticios |
+| RF-027-01 a RF-027-03 — arsenal APS y conciliación en la demo | T-027-01 a T-027-03 | Modelos, catálogo APS y vista de inventario existentes | Cotejo PDF/JSON, ensayo y comprobación transaccional; URL directa y Chrome | [Validación 027](../specs/027-arsenal-inventario-demo/validation.md) | Cargado y verificado en la demo 8025 | Stock y lotes nuevos pendientes de registro |
+| RF-026-01 y RF-026-02 — mayúsculas y duplicados de lotes | T-026-01 y T-026-02 | `FarmaTEFApp/forms.py` y `FarmaTEFApp/admin.py` | `NumeroLoteTests` | [Validación 026](../specs/026-lotes-mayusculas/validation.md) | Verificado en SQLite aislado | Lotes históricos conservados |
 | RF-002-01 — excluir base y medios del índice | T-002-07 | `.gitignore` y migraciones de las apps | Verificación de índice/esquema ficticio registrada en validación 002 | Archivos locales conservados; historia previa no purgada | Verificado en 002 | No implica limpieza de la historia Git |
 | RF-002-02 — pruebas aisladas de datos reales | T-002-01, T-002-08 | `core/test_settings.py`, helpers y pruebas de cuatro apps | 47 pruebas Django registradas en la línea base | Configuración separada de `.env` y base real | Verificado en línea base | No equivale a cobertura total |
 | RF-002-03 — permisos por rol y propiedad | T-002-02 | Permisos centrales, mixins, vistas, formularios y admin | Regresiones de permisos registradas en validación 002 | Revisión de accesos y URLs directas | Verificado en 002 | Sin certificación de operación productiva |
@@ -152,6 +158,8 @@ RF-025-06 → vista docente de Recetas, filtros por número y panel de detalle. 
 
 RF-025-07 → POST de etiquetado y vista previa parcial. Comprobados en Django los errores y permisos, y en Chrome la selección automática y la impresión de copias.
 
+RF-025-08 → formulario de medicamento, selector de lotes y captura de código por teclado. Verificados en Django los códigos visibles por docente y en Chrome los recorridos con código nuevo y existente. [Validación](../specs/025-retroalimentacion-farmatef/validation.md).
+
 RF-023-05 → formulario y selector de práctica. Se compara la indicación junto al campo con los datos del lote. [Validación](../specs/023-practica-farmacia/validation.md).
 
 RF-023-06 → formulario, campo de explicación en el intento e historial docente. [Validación y recuperación](../specs/023-practica-farmacia/validation.md).
@@ -159,3 +167,7 @@ RF-023-06 → formulario, campo de explicación en el intento e historial docent
 RF-019-08 → enlace principal de Área clínica a los casos según cargo. [Validación](../specs/019-apartados-area-clinica/validation.md).
 
 RF-019-09 → plantilla estudiantil de casos y variantes por módulo. Verificados los estados vacío y con casos publicados en escritorio y móvil.
+
+RF-020-08 → navegación y acciones de los cuatro módulos docentes y del ingreso a Ficha Clínica. [Verificación](../specs/020-preparacion-clinica-guiada/validation.md).
+
+RF-032-01/02 → ancho de la plantilla compartida de DAU, Enfermería, Laboratorio y Centro de Apoyo Diagnóstico. [Medición en Chrome y permisos](../specs/032-ancho-modulos-clinicos-docentes/validation.md).

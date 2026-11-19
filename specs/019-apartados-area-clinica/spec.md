@@ -20,7 +20,7 @@ No se crean accesos paralelos ni dependencias. Se añade un modelo RAE independi
 
 | Apartado | Estudiante activo RESTRICTED | MANAGER | ADMIN/superusuario activo |
 |---|---|---|---|
-| Ficha | Ingreso existente con código/matrícula cuando corresponde | Ingreso existente para demostración | Ingreso existente para demostración |
+| Ficha | Ingreso existente con código/matrícula cuando corresponde | Fichas enviadas con acceso a seguimiento en vivo | Fichas enviadas con acceso a seguimiento en vivo |
 | DAU, laboratorio, CAD | Práctica existente con matrícula/publicación | Preparación docente existente | Preparación docente existente |
 | RAE | Registro e historial propios de casos publicados de cursos matriculados | Preparación del paciente de cursos visibles | Preparación del paciente de cursos visibles |
 | Perfil Docente | Informativo, sin acceso | Panel existente | Panel existente |
@@ -34,6 +34,7 @@ Anónimo redirigido al login en portada; usuario sin cargo no recibe enlaces a p
 - RF-019-04: RAE busca pacientes SIM publicados en cursos del estudiante; abre o continúa un borrador propio. Cuidados (hasta 5000 caracteres) y observaciones (hasta 2000) se guardan como texto; finalizar exige cuidados, registra hora/autor de sesión y bloquea cambios. Historial paginado propio; otro ejercicio tras finalizar crea atención nueva. Versión obligatoria y UPDATE condicional evitan sobrescribir guardados obsoletos. Un borrador abierto como máximo por estudiante/caso.
 - RF-019-05: cambios locales permanecen en `jonathan`, sin commit/push, sin tocar base habitual.
 - RF-019-06: una guía explica cómo preparar pacientes/casos con los accesos docentes existentes. RAE comparte el paciente SIM y la publicación del caso; no crea un catálogo duplicado. La preparación de paciente en RAE conserva los demás bloques del caso y no permite editar casos publicados.
+- RF-019-07: la tarjeta de Ficha Clínica lleva a la revisión para el docente y el administrador, y al ingreso de actividad para el alumno. El docente que use directamente el ingreso de demostración puede usar sus códigos abiertos o aquellos en que esté matriculado.
 - RF-019-08: el botón principal del área clínica abre los casos publicados del estudiante o el listado de gestión del docente y el administrador.
 - RF-019-09: la página estudiantil de casos y sus variantes por módulo presentan un encabezado contextual, regreso al área clínica y una lista ordenada. Sin casos publicados, se muestra un único aviso con el próximo paso.
 

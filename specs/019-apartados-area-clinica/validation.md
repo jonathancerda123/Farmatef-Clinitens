@@ -49,7 +49,9 @@ Revisadas visualmente [portada escritorio](../../docs/evidencias/019-apartados/p
 
 RAE es una primera versión educativa acordada, no una copia comprobada de las pantallas interiores de la referencia. No se añadieron protocolos, diagnósticos, tratamientos ni interpretación automática. No se modificaron PDF/Excel. Las pruebas de navegación no equivalen a validar flujos clínicos completos. Aceptación visual/pedagógica pendiente; próximo paso: revisión con el usuario y preparación de migración en su instalación. Sin despliegue, commit ni push.
 
-## Acceso a los casos de práctica
+## Acceso a revisión de fichas
+
+RF-019-07. La suite de homeApp, CliniTensFichaApp, CliniTensDocenteApp y FarmaTEFApp pasó 47 pruebas con `core.test_settings`. Verificó los destinos por cargo y el rechazo del código de curso sin matrícula en el formulario de demostración. Chrome mostró el acceso a seguimiento en vivo en una página renderizada con datos ficticios. Queda probar el recorrido con la actividad del usuario.
 
 RF-019-08. Pasaron las tres pruebas de `homeApp` con `core.test_settings`. Se verificaron los destinos permitidos y denegados según cargo. Chrome comprobó el acceso estudiantil a 390 px y el docente a 1440 px, con ambos enlaces operables y los siete apartados presentes.
 

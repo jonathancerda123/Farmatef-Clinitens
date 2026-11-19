@@ -1,0 +1,9 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% load static %}
+{% block workspace_name %}Área clínica · Urgencia{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dau.css' %}?v=031">{% endblock %}
+{% block content_main %}
+<div class="dau-page">
+  {% block dau_content %}{% endblock %}
+</div>
+{% endblock %}

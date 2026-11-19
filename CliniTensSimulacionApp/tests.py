@@ -8,6 +8,42 @@ from core.test_helpers import usuario
 from .models import AtencionDAU, AtencionEnfermeria, CasoSimulacion
 
 
+class DAUPresentationTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        docente = usuario("dau-visual-docente", "MANAGER")
+        cls.alumno = usuario("dau-visual-alumno")
+        curso = Curso.objects.create(nombre="Curso de urgencia", creado_por=docente)
+        curso.estudiantes.add(cls.alumno)
+        caso = CasoSimulacion.objects.create(
+            curso=curso, creado_por=docente, titulo="Atención de práctica",
+            paciente_codigo="SIM-DAU-040", paciente_nombre="Paciente de práctica", publicado=True,
+        )
+        cls.registro = AtencionDAU.objects.create(caso=caso, estudiante=cls.alumno)
+
+    def test_errores_conservan_los_campos_y_el_estilo_de_cada_formulario(self):
+        self.client.force_login(self.alumno)
+        url = reverse("clinitens_simulacion:dau_registro", args=[self.registro.pk])
+        casos = (
+            ("guardar_signos", "signos_form", "pa_sistolica", "-1", "pa_sistolica"),
+            ("agregar_procedimiento", "procedimiento_form", "observaciones", "Dato conservado", "procedimiento"),
+            ("finalizar", "cierre_form", "motivo_consulta", "Motivo conservado", "evaluacion_realizada"),
+        )
+        for accion, form_key, campo, valor, campo_error in casos:
+            with self.subTest(accion=accion):
+                response = self.client.post(url, {"action": accion, campo: valor})
+                self.assertEqual(response.status_code, 200)
+                form = response.context[form_key]
+                self.assertEqual(form[campo].value(), valor)
+                self.assertIn(campo_error, form.errors)
+                self.assertEqual(form.fields[campo].widget.attrs["class"], "input")
+                self.assertContains(response, f'id="id_{campo_error}_error"')
+        self.registro.refresh_from_db()
+        self.assertFalse(self.registro.finalizada)
+        self.assertEqual(self.registro.signos_vitales, {})
+        self.assertFalse(self.registro.procedimientos.exists())
+
+
 class PreparacionGuiadaTests(TestCase):
     def setUp(self):
         self.docente = usuario("guia-docente", "MANAGER")

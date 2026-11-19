@@ -46,10 +46,14 @@ class CliniTENSView(LoginRequiredMixin, TemplateView):
         modules = [
             {
                 "titulo": "Ficha Clínica Electrónica", "icono": "clipboard",
-                "publico": "Estudiante",
-                "descripcion": "Revisa el caso asignado, completa tu ficha y consulta la evaluación de tu actividad.",
-                "url": reverse("clinitensficha:ingreso") if estudiante or docente else None,
-                "accion": "Abrir ficha clínica", "restriccion": "Acceso con cuenta de estudiante",
+                "publico": "Revisión docente" if docente else "Estudiante",
+                "descripcion": (
+                    "Revisa las fichas enviadas y evalúalas con la rúbrica."
+                    if docente else "Revisa el caso asignado, completa tu ficha y consulta la evaluación de tu actividad."
+                ),
+                "url": reverse("clinitensdocente:estudiantes") if docente else reverse("clinitensficha:ingreso") if estudiante else None,
+                "accion": "Revisar fichas de estudiantes" if docente else "Abrir ficha clínica",
+                "restriccion": "Acceso con perfil de estudiante o docente",
             },
             {
                 "titulo": "Registro de Atención de Urgencia", "icono": "urgencia",

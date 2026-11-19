@@ -46,8 +46,24 @@ Flujo: documento → revisión → autorización explícita de tareas de código
 
 025 — [Alertas, registro y etiquetas de FarmaTEF](025-retroalimentacion-farmatef/spec.md). Implementación local en `jonathan`. Cambios de plataforma verificados con datos ficticios. Laboratorio PostgreSQL y notebook preparados para ejecución con los insumos correspondientes.
 
+Los paquetes 026–028 se numeraron independientemente en las dos ramas. Se conservan las rutas e identificadores originales de cada alcance.
+
 026 — Paleta única anterior, revertida por solicitud de la usuaria. Su documentación y reversión permanecen en la historia de Git.
 
 027 — [Identidad por área](027-identidad-por-area/spec.md). Base azul profundo, FarmaTEF jade y CliniTENS azul intenso. Implementación en `valentina`, versión visual aprobada por la usuaria para commit y push.
 
 028 — [Portada de FarmaTEF](028-portada-farmatef/spec.md). Presentación compacta, alertas en la columna superior derecha y accesos completos a herramientas. Pruebas, build y revisión visual en Edge con datos ficticios correctos. Versión visual aprobada por la usuaria para commit y push.
+
+026 — [Número de lote en mayúsculas](026-lotes-mayusculas/spec.md). Validación del alta y del duplicado por medicamento en FarmaTEF y Django admin. Verificado en memoria.
+
+027 — [Arsenal APS en la demo FarmaTEF](027-arsenal-inventario-demo/spec.md). Carga local verificada con respaldo, conciliación y revisión del inventario.
+
+028 — [Inventario y prácticas APS en la demo 8025](028-demo-aps-operativa/spec.md). Stock simulado, cinco recetas y cinco escenarios clínicos cargados y verificados con respaldo.
+
+029 — [Tres avances de ficha simulada en la demo 8025](029-fichas-simuladas-progreso/spec.md). Fichas con 13/13, 6/13 y 3/13 secciones, verificadas en revisión y seguimiento con respaldo.
+
+030 — [Diseño compartido para Registro de Atención de Urgencia](030-dau-diseno-compartido/spec.md). Entrada, registro e historial adaptados a la interfaz CliniTENS y verificados en Chrome.
+
+031 — [Entrada de Urgencia con el patrón de Enfermería](031-dau-entrada-enfermeria/spec.md). Buscador centrado y tarjetas verificados en la demo 8025.
+
+032 — [Ancho de los módulos clínicos docentes](032-ancho-modulos-clinicos-docentes/spec.md). DAU, Enfermería, Laboratorio y Apoyo Diagnóstico alineados con Estudiantes en la demo 8025.

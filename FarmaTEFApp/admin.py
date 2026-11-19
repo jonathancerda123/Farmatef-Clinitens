@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from .forms import LoteInventarioBaseForm
 from .models import Dispensacion, LoteInventario, Medicamento, Receta, RecetaLinea, RespuestaReceta
 
 
@@ -18,6 +19,7 @@ class MedicamentoAdmin(admin.ModelAdmin):
 
 @admin.register(LoteInventario)
 class LoteInventarioAdmin(admin.ModelAdmin):
+    form = LoteInventarioBaseForm
     list_display = ("medicamento", "numero_lote", "vence_el", "unidades", "es_simulado", "registrado_por")
     search_fields = ("medicamento__nombre", "numero_lote")
     list_filter = ("vence_el",)

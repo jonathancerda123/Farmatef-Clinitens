@@ -1,13 +1,40 @@
-{% extends 'components/Layout/base.html' %}
-{% load static %}
-{% block head_title %}Historial DAU simulado | CliniTENS{% endblock %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dau.css' %}">{% endblock %}
-{% block content %}
-<header class="dau-topbar"><a class="dau-topbar-brand" href="{% url 'clinitens_simulacion:dau_inicio' %}"><span class="dau-small-icon" aria-hidden="true">◷</span><span><strong>Historial de DAU</strong><small>Solo tus registros educativos</small></span></a><nav><a class="dau-button dau-button-secondary" href="{% url 'clinitens_simulacion:dau_inicio' %}">Nuevo paciente</a><a class="dau-topbar-exit" href="{% url 'clinitens' %}">← Salir</a></nav></header>
-<main class="dau-workspace"><p class="dau-banner">SIMULACIÓN EDUCATIVA · Todos los registros corresponden a casos ficticios.</p>
-  <section class="dau-panel"><h1>Historial de DAU</h1><div class="dau-history-list">
-    {% for item in atenciones %}<article class="dau-history-row"><div><strong>{{ item.caso.paciente_nombre }}</strong><span>{{ item.caso.paciente_codigo }} · {{ item.caso.curso }}</span><small>Creado {{ item.creada_en|date:"d-m-Y H:i" }}{% if item.finalizada %} · Finalizado {{ item.finalizada_en|date:"d-m-Y H:i" }}{% else %} · Borrador{% endif %}</small></div><div><a class="dau-button dau-button-secondary" href="{% url 'clinitens_simulacion:dau_registro' item.pk %}">Abrir registro</a>{% if item.finalizada %}<a class="dau-button dau-button-secondary" href="{% url 'clinitens_simulacion:dau_pdf' item.pk %}">Descargar PDF</a>{% endif %}</div></article>{% empty %}<p class="dau-empty">Aún no hay atenciones DAU en tu historial.</p>{% endfor %}
-  </div></section>
-  <p class="dau-footer-disclaimer">Este historial es personal; no muestra registros de otros estudiantes.</p>
-</main>
+{% extends 'pages/clinitens/simulacion/dau_base.html' %}
+{% block head_title %}Historial de urgencia | CliniTENS{% endblock %}
+{% block page_title %}Historial de urgencia{% endblock %}
+{% block dau_content %}
+<div class="dau-toolbar">
+  <a class="btn-primary" href="{% url 'clinitens_simulacion:dau_inicio' %}">← Volver a urgencia</a>
+</div>
+
+<section class="panel dau-directory" aria-labelledby="dau-history-title">
+  <h2 id="dau-history-title" class="dau-heading">Mis atenciones simuladas</h2>
+  {% if atenciones %}
+    <ul class="dau-list">
+      {% for item in atenciones %}
+        <li class="dau-row dau-history-row">
+          <div>
+            <h3 class="dau-row-title" id="dau-history-{{ item.pk }}">{{ item.caso.paciente_nombre }}</h3>
+            <p class="dau-case-name">{{ item.caso.titulo }}</p>
+            <p class="dau-row-meta"><span class="dau-code">{{ item.caso.paciente_codigo }}</span><span>{{ item.caso.curso }}</span></p>
+          </div>
+          <div class="dau-history-meta">
+            {% if item.finalizada %}
+              <span class="dau-status dau-status-closed">Finalizado</span>
+              <time class="muted" datetime="{{ item.finalizada_en|date:'c' }}">{{ item.finalizada_en|date:'d/m/Y H:i' }}</time>
+            {% else %}
+              <span class="dau-status">Borrador</span>
+              <time class="muted" datetime="{{ item.actualizada_en|date:'c' }}">{{ item.actualizada_en|date:'d/m/Y H:i' }}</time>
+            {% endif %}
+          </div>
+          <div class="dau-toolbar">
+            <a class="btn-secondary" href="{% url 'clinitens_simulacion:dau_registro' item.pk %}" aria-describedby="dau-history-{{ item.pk }}">{% if item.finalizada %}Ver registro{% else %}Continuar registro{% endif %}</a>
+            {% if item.finalizada %}<a class="btn-secondary" href="{% url 'clinitens_simulacion:dau_pdf' item.pk %}" aria-describedby="dau-history-{{ item.pk }}">Descargar PDF</a>{% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="section-description">Aún no tienes atenciones guardadas. Abre un paciente de práctica para iniciar un registro.</p>
+  {% endif %}
+</section>
 {% endblock %}
