@@ -242,6 +242,7 @@ class CursoColaboradorForm(forms.Form):
             User.objects.filter(
                 is_active=True,
                 profile__position_FK__permission_code="MANAGER",
+                profile__area_docente__in=["FARMACIA", "AMBOS"],
             )
             .exclude(pk=curso.creado_por_id)
             .exclude(pk__in=ya_asignados)

@@ -8,6 +8,7 @@
   {% else %}
     <a class="btn-primary" href="{% url 'Home' %}">← Volver al inicio</a>
     <a class="btn-secondary" href="{% url 'farmatef:mis_etiquetas' %}">Mis etiquetas</a>
+    <a class="btn-secondary" href="{% url 'farmatef:sala' %}">Sala de farmacia</a>
   {% endif %}
   {% if not receta %}<p class="section-description mt-2">Abre una receta de práctica de tu curso para decidir si corresponde dispensarla.</p>{% endif %}
 </div>
@@ -34,6 +35,7 @@
           </details>
         {% endif %}
         {% if respuesta.dispensacion %}
+          <a class="btn-primary mt-3" href="{% url 'farmatef:localizar_dispensacion' respuesta.dispensacion.pk %}">Localizar medicamentos dispensados</a>
           <a class="btn-secondary mt-3" href="{% url 'farmatef:comprobante_dispensacion' respuesta.dispensacion.pk %}">Descargar comprobante PDF</a>
           <ul class="mt-4 space-y-3">
             {% for uso in respuesta.dispensacion.lotes_usados.all %}

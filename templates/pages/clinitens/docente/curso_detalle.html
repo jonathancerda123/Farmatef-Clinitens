@@ -15,7 +15,7 @@
       <h2 class="mt-2 text-xl font-bold text-slate-900">{{ curso.nombre }}</h2>
 
       <p class="mt-1 text-sm text-slate-500">
-        Gestiona estudiantes inscritos y docentes colaboradores de FarmaTEF.
+        Gestiona estudiantes inscritos{% if acceso_farmacia %} y docentes colaboradores de FarmaTEF{% endif %}.
       </p>
     </div>
 
@@ -123,6 +123,7 @@
     </section>
   </div>
 
+  {% if acceso_farmacia %}
   <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-none">
     <div class="border-b border-slate-200 pb-4">
       <h3 class="font-bold text-brand-700">Docentes colaboradores de FarmaTEF</h3>
@@ -159,6 +160,7 @@
     </ul>
   </section>
 
+  {% endif %}
   <section class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-none">
     <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
       <h3 class="font-bold text-brand-700">Estudiantes inscritos</h3>

@@ -6,9 +6,12 @@
 <section aria-labelledby="plataformas-titulo">
   <div class="section-heading"><div><h2 id="plataformas-titulo">¿Dónde quieres trabajar?</h2><p class="section-description">Elige un área para comenzar tu práctica.</p></div></div>
   <div class="area-launch-grid">
-    <a class="area-launch" data-area="farmatef" href="{% if request.user.profile.position_FK.permission_code == 'RESTRICTED' and not request.user.is_superuser %}{% url 'farmatef:practica_recetas' %}{% else %}{% url 'farmatef' %}{% endif %}"><span class="module-symbol">{% include 'components/design/icon.html' with icon='result' %}</span><h3>FarmaTEF</h3><p>Práctica de farmacia: medicamentos, recetas y dispensación simulada.</p><span class="area-launch-action">Abrir área de farmacia {% include 'components/design/icon.html' with icon='arrow' %}</span></a>
-    <a class="area-launch" data-area="clinitens" href="{% url 'clinitens' %}"><span class="module-symbol">{% include 'components/design/icon.html' with icon='clipboard' %}</span><h3>CliniTENS</h3><p>Práctica clínica: pacientes, atención de enfermería y apoyo diagnóstico.</p><span class="area-launch-action">Abrir área clínica {% include 'components/design/icon.html' with icon='arrow' %}</span></a>
+    {% if acceso_farmacia %}<a class="area-launch" data-area="farmatef" href="{% if request.user.profile.position_FK.permission_code == 'RESTRICTED' and not request.user.is_superuser %}{% url 'farmatef:practica_recetas' %}{% else %}{% url 'farmatef' %}{% endif %}"><span class="module-symbol">{% include 'components/design/icon.html' with icon='result' %}</span><h3>FarmaTEF</h3><p>Práctica de farmacia: medicamentos, recetas y dispensación simulada.</p><span class="area-launch-action">Abrir área de farmacia {% include 'components/design/icon.html' with icon='arrow' %}</span></a>
+    {% endif %}
+    {% if acceso_enfermeria %}<a class="area-launch" data-area="clinitens" href="{% url 'clinitens' %}"><span class="module-symbol">{% include 'components/design/icon.html' with icon='clipboard' %}</span><h3>CliniTENS</h3><p>Práctica clínica: pacientes, atención de enfermería y apoyo diagnóstico.</p><span class="area-launch-action">Abrir área clínica {% include 'components/design/icon.html' with icon='arrow' %}</span></a>
+    {% endif %}
   </div>
+  {% if not acceso_farmacia and not acceso_enfermeria %}<p class="section-description">Solicita a un administrador que asigne tu área docente para acceder a los módulos.</p>{% endif %}
 </section>
 <section class="panel mt-8" aria-labelledby="usuarios-recientes">
   <div class="section-heading"><div><h2 id="usuarios-recientes">Actividad reciente</h2><p class="section-description">Últimas conexiones visibles para tu cuenta.</p></div></div>

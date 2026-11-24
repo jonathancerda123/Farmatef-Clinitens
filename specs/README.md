@@ -67,3 +67,9 @@ Los paquetes 026–028 se numeraron independientemente en las dos ramas. Se cons
 031 — [Entrada de Urgencia con el patrón de Enfermería](031-dau-entrada-enfermeria/spec.md). Buscador centrado y tarjetas verificados en la demo 8025.
 
 032 — [Ancho de los módulos clínicos docentes](032-ancho-modulos-clinicos-docentes/spec.md). DAU, Enfermería, Laboratorio y Apoyo Diagnóstico alineados con Estudiantes en la demo 8025.
+
+033 — [Vitrina estudiantil de farmacia](033-vitrina-farmacia/spec.md). Consulta opcional del inventario autorizado, cuatro muebles en parejas, stock vigente y acceso tras dispensar. Implementación local autorizada el 2026-11-19; pruebas y revisión de navegador con datos ficticios correctas, aceptación final pendiente.
+
+034 — [Áreas docentes](034-areas-docentes/spec.md). Farmacia, Enfermería y Ambos; edición administrativa, navegación y autorización en servidor. 17 regresiones nuevas correctas y revisión visual con datos ficticios. Migración de docentes anteriores a Ambos ensayada en memoria y aplicada a la base local con respaldo y autorización explícita; aceptación final pendiente.
+
+036 — [Sala de farmacia y localización después de dispensar](036-sala-farmacia/spec.md). Reemplaza 033 con configuración docente y localizador estudiantil conectado al inventario. 128 Django (una omitida), nueve JS, build y navegador ficticio verificados. Migración 0011 aplicada a la base local con respaldo/autorización; configuración de sala y aceptación docente pendientes. 035-demo-render-gratuita conserva su identificador.

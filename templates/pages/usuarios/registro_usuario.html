@@ -22,6 +22,9 @@
       </label>
       {{ profile_form.position_FK }}
       {% if profile_form.position_FK.errors %}<div id="{{ profile_form.position_FK.auto_id }}_error" class="field-errors">{{ profile_form.position_FK.errors }}</div>{% endif %}
+      <div data-area-docente>
+        {% include 'components/design/field.html' with field=profile_form.area_docente %}
+      </div>
       {{ user_form|crispy }}
 
       {% include "components/btn/button.html" with button_text="Guardar cambios" %}
@@ -35,5 +38,6 @@
 {% block javascript %}
 
   <script defer src="{% static "js/script.js" %}"></script>
+  <script defer src="{% static 'js/area-docente.js' %}"></script>
 
 {% endblock javascript %}

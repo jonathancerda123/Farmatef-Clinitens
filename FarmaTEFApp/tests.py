@@ -330,7 +330,8 @@ class PracticaConInventarioTests(TestCase):
             numero_lote="LOTE-ANTERIOR", vence_el="2098-01-01", unidades=12,
         )
         data = {"decision": "DISPENSAR", self.campo: self.lote.pk}
-        self.assertRedirects(self.client.post(self.responder, data), self.detalle)
+        response = self.client.post(self.responder, data)
+        self.assertRedirects(response, reverse("farmatef:localizar_dispensacion", args=[Dispensacion.objects.get().pk]))
         self.lote.refresh_from_db()
         otro_lote.refresh_from_db()
         self.assertEqual(self.lote.unidades, 3)
@@ -417,7 +418,8 @@ class PracticaConInventarioTests(TestCase):
         self.assertEqual(self.lote.unidades, 8)
 
         segundo = {"decision": "DISPENSAR", self.campo: self.lote.pk, "intento": 2}
-        self.assertRedirects(self.client.post(self.responder, segundo), self.detalle)
+        response = self.client.post(self.responder, segundo)
+        self.assertRedirects(response, reverse("farmatef:localizar_dispensacion", args=[Dispensacion.objects.get().pk]))
         self.assertContains(self.client.get(self.detalle), "Descargar comprobante PDF")
         self.client.post(self.responder, segundo)
         self.assertEqual(list(RespuestaReceta.objects.order_by("intento").values_list("correcta", flat=True)), [False, True])

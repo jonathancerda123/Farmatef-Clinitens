@@ -2,6 +2,7 @@ from CliniTensFichaApp.validation import seccion_completa
 from core.permissions import (
     es_administrador,
     es_docente,
+    es_docente_de_area,
     objetos_del_docente,
 )
 from core.mixins import PropietarioMixin, FormularioDocenteMixin
@@ -60,7 +61,7 @@ from CliniTensFichaApp.ficha_config import (
 )
 
 from .rubrica import RUBRICA, niveles_por_puntaje
-from UsuarioApp.models import Profile
+from UsuarioApp.models import Profile, AreaDocente
 import secrets
 import string
 import unicodedata
@@ -112,6 +113,8 @@ ETIQUETAS_FICHA = {
 def fichas_visibles_para(usuario):
     fichas = FichaClinica.objects.select_related(
         "estudiante", "docente", "codigo_actividad__caso_clinico")
+    if not es_docente_de_area(usuario, AreaDocente.ENFERMERIA):
+        return fichas.none()
     return objetos_del_docente(fichas, usuario, campo="docente")
 
 
@@ -315,7 +318,7 @@ class CursoDetalleView(PermitsPositionMixin, DetailView):
             {
                 "form_importacion": ImportarEstudiantesExcelForm(),
                 "form_colaborador": kwargs.get(
-                    "form_colaborador", CursoColaboradorForm(curso=self.object)
+                    "form_colaborador", CursoColaboradorForm(curso=self.object) if es_docente_de_area(self.request.user, AreaDocente.FARMACIA) else None
                 ),
                 "docentes_colaboradores": self.object.docentes_colaboradores.select_related(
                     "profile", "profile__position_FK"

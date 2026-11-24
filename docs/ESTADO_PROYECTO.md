@@ -1,5 +1,40 @@
 # Estado y punto de reanudación — CliniTENS
 
+## Sala de farmacia — 036 / 2026-11-24
+
+SAL-09: por solicitud de reproducir la imagen, la sala del inventario local quedó configurada a **11 × 9 m y 13 elementos**: cuatro estantes arriba, mesón debajo, pizarra izquierda, seis mesas en dos columnas/tres filas y Entrada inferior derecha. Sala inicialmente inexistente; se creó con versión 1, sin asignaciones de medicamentos previas. Respaldo consistente/verificado en `.test-artifacts/sala036-distribucion/`, ensayo en copia antes del guardado real, geometría cotejada exactamente, integridad y check correctos. No se trasladó ningún contenido de la fixture ni se modificó stock/recetas ni otras salas. Próximo paso: recargar Sala de farmacia y revisar la distribución con la usuaria/docente; los medicamentos se asignan desde la configuración existente.
+
+Ampliación SAL-08: docente puede añadir una **Zona de entrada** desde «Añadir mobiliario o entrada», ajustar nombre/tamaño/posición/orientación y guardarla con el plano; el alumno la ve como referencia. Reutiliza tablas actuales, sin asignaciones de medicamentos ni frontal de mueble. 59 regresiones Django (una omitida), seis JS, check/cotejo/build e IAB docente/alumno correctos; guardado y lectura demostrados sobre fixture con esquema 0011. Se preparó 0012 de choices, SQL no-op, pendiente de aplicar en una futura operación autorizada; no bloquea el uso de la entrada. La base habitual no se tocó en esta ampliación. Evidencia y límites en validación 036.
+
+Se reemplazó la vitrina de envases 033 por Sala de farmacia, un apartado de FarmaTEF con acceso docente desde portada, navegación e Inventario. Una sala por propietario del inventario; medidas, varios muebles de seis tipos, posición/orientación y compartimentos configurables. El docente asigna medicamentos registrados por ID y el alumno solo consulta. Stock derivado de lotes vigentes, cero conserva ubicación y ausencia de asignación se informa explícitamente. No hay reparto ficticio por alfabeto.
+
+Después de dispensar correctamente, la práctica redirige automáticamente al localizador de esa dispensación propia: selector de productos realmente entregados, mueble en el plano y compartimento en vista frontal, con fondo descubierto. El localizador no descuenta stock. Conserva resultado/comprobante/etiquetas. La URL vieja de vitrina redirige a la nueva consulta; gráficos y recursos antiguos retirados. Permisos en servidor por área, propietario y matrícula; configuración y asignación usan versiones CAS y transacciones.
+
+Verificación `.venv` Python 3.11.1/Django 5.2.18, Node 20.15.0 y `core.test_settings`: **128 Django (127 correctas, una omitida por PostgreSQL), 9 JS, check/cotejo/build correctos**. IAB: guardado de medidas, asignación y receta de dos productos con redirección automática; escritorio, 768 y 390 px sin desbordamiento. SVG Anatomy local, sin Three.js/WebGL ni paquetes nuevos. [Evidencia y límites](../specs/036-sala-farmacia/validation.md).
+
+**FarmaTEF.0011_sala_farmacia aplicada a la base local tras «autorizo» de la usuaria.** Respaldo consistente/verificado de 819200 bytes en `.test-artifacts/sala036/db.sqlite3.before-sala036-20261124T162854540714Z`; SHA-256 y resultado en `respaldo.json`. El plan contenía exclusivamente 0011; aplicación correcta, tablas nuevas verificadas, `quick_check=ok` posterior y check Django sin incidencias mediante `core.local_runtime`, que omite `.env`. No se inspeccionaron filas ni credenciales ni medios. No se precarga una distribución: el docente configurará una sala vacía desde FarmaTEF → Sala de farmacia. Revisión ficticia separada en 127.0.0.1:8036, captura `.test-artifacts/sala035/alumno-dispensacion.png`. Sin commit/push/despliegue. Próximo paso: configurar sala y revisar con el docente; cambios locales 034 y trabajo paralelo 035-demo-render-gratuita preservados.
+
+## Áreas docentes — 034 / 2026-11-19
+
+Implementadas Farmacia, Enfermería y Ambos en el perfil MANAGER. ADMIN/superusuario eligen el área al crear cuentas y la cambian desde Usuarios → Cambiar área; el perfil personal la muestra sin permitir su edición. Inicio y navegación muestran solo los módulos habilitados. Middleware central deniega rutas directas GET/POST y PDF; medios clínicos, consultas de fichas y recetas también comprueban el área. Los estudiantes y permisos de propiedad/matrícula mantienen su comportamiento.
+
+Cursos e importación siguen compartidos para preparar prácticas de farmacia y enfermería. La colaboración de recetas admite Farmacia/Ambos; cambiar el área retira el acceso en la siguiente petición y conserva relaciones y registros históricos.
+
+Verificación con `.venv` Python 3.11.1/Django 5.2.18/allauth 65.19.7 y `core.test_settings`: 119 pruebas Django, 118 correctas y una omitida por PostgreSQL; 17 regresiones nuevas, seis JS, check, cotejo de migraciones y build correctos. Portadas por especialidad y formularios revisados en Edge con HTML renderizado a partir de datos ficticios. HTTP 8034 no conectó en los navegadores; no se afirma envío de formularios por navegador ni revisión móvil. [Evidencia y límites](../specs/034-areas-docentes/validation.md).
+
+La usuaria autorizó respaldo y migración local después de las pruebas. Respaldo consistente `.test-artifacts/areas034/db.sqlite3.before-areas034-20261119T052603Z`, 811008 bytes, integridad correcta. `UsuarioApp.0004` aplicada únicamente a la base local mediante `core.local_runtime`, que omite `.env`; los docentes anteriores reciben Ambos. Sin inspección de filas, credenciales ni medios reales, sin despliegue ni commit/push. Rama `valentina` y trabajo local anterior preservados. Próximo paso: revisar el resultado con la usuaria/docente y clasificar quienes deban usar una sola área.
+
+
+## Vitrina de farmacia para estudiantes — 033 / 2026-11-19
+
+Se integró la maqueta aprobada en `/farmatef/practica/vitrina/`, con layout y fondo compartidos y acento jade. El alumno accede desde la navegación, su portada FarmaTEF, Mis recetas y el resultado de una dispensación registrada. Es una consulta opcional: no reserva ni descuenta stock. Curso matriculado e inventario del creador de recetas se validan en servidor; inventarios de distintos docentes se consultan por separado.
+
+La vitrina usa medicamentos activos registrados y suma existencias de lotes vigentes. Cuatro muebles de 35 espacios, dos por vista, orden alfabético, módulos deslizables por arrastre/clic/teclado, agotados oscuros con X y cantidades al seleccionar. Lista de consulta alternativa y paginación interna de espacios con más de tres productos. Se indica la hora de consulta; Actualizar recarga las existencias.
+
+Verificación con `.venv` Python 3.11.1/Django 5.2.18 y `core.test_settings`: 102 pruebas Django (101 correctas, una omitida por PostgreSQL), seis JS, check, cotejo de migraciones y build correctos. Navegador integrado a 1280/768/390: sin desbordamiento horizontal, selección de agotado, movimiento por clic y teclado, cambio de pareja y enlace contextual desde receta dispensada. [Evidencia y límites](../specs/033-vitrina-farmacia/validation.md).
+
+Sin migraciones nuevas, commit/push ni lectura/modificación de base habitual o `.env`. Servidor QA 8033 con base nueva exclusivamente ficticia `.test-artifacts/vitrina033-qa.sqlite3`; no cambia la demo 8025. Próximo paso: revisión de la usuaria/docente en la instalación de trabajo. Arrastre real, movimiento reducido emulado y pruebas en otros motores pendientes.
+
 ## Integración de ramas — 2026-11-19
 
 La usuaria autorizó integrar `jonathan` (`302a72a`) en `main`, publicar y actualizar su rama `valentina`. Se combinaron los documentos de ambas ramas. DAU incorpora la estructura nueva basada en tokens compartidos; los pasos docentes conservan los colores por área de `main` y las acciones adaptables de `jonathan`. El CSS distribuido se regeneró desde las fuentes combinadas.

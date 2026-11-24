@@ -7,6 +7,9 @@ from datetime import timedelta
 
 from django.utils import timezone
 
+# Modelos del apartado de sala, registrados dentro de la misma app FarmaTEF.
+from .models_sala import MuebleFarmacia, SalaFarmacia, UbicacionMedicamento  # noqa: F401
+
 
 class Medicamento(models.Model):
     nombre = models.CharField(max_length=160)

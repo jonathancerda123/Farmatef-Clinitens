@@ -112,3 +112,20 @@ URL: http://127.0.0.1:8020/accounts/login/ . Este acceso usa los datos originale
 `core.local_runtime` omite .env, usa hashers normales y un secreto nuevo en `.test-artifacts/original-021/local-secret.key`. Su configuración es solo local, con debug/HTTP en localhost y cookies separadas del demo. No usarla en producción. En otro equipo debe prepararse explícitamente su propia copia respaldada y secreto privado; importar esta configuración sin esos archivos falla con un mensaje claro. No transferir entornos virtuales ni subir datos/secretos al repositorio.
 
 Los medios no están contenidos en SQLite y no se copiaron: el acceso a adjuntos originales requiere preparar su almacenamiento privado por separado. No reasignar datos de docentes ni matricular cuentas de prueba en cursos originales sin revisión. Para probar se pueden crear cursos propios y agregar el estudiante de prueba desde la gestión existente.
+
+
+## Migración de áreas docentes — 034 / 2026-11-19
+
+Tras ensayo con SQLite en memoria y autorización explícita de la usuaria, se creó un respaldo consistente mediante SQLite backup API, sin inspeccionar filas, de la base local `db.sqlite3`. Respaldo privado: `.test-artifacts/areas034/db.sqlite3.before-areas034-20261119T052603Z`, 811008 bytes, `quick_check=ok`; SHA-256 registrado en `respaldo.json` dentro de esa carpeta ignorada.
+
+El plan de `migrate UsuarioApp 0004 --plan --settings=core.local_runtime` contenía exclusivamente `UsuarioApp.0004_profile_area_docente_and_more`. Se aplicó el mismo destino sin `--plan`; `showmigrations UsuarioApp` confirma 0001–0004 y `check` no informa incidencias. La configuración local omite `.env`; el secreto se carga internamente sin imprimirlo ni inspeccionarlo. No se migraron las fixtures/demo independientes ni producción.
+
+La migración agrega `area_docente`, asigna Ambos a MANAGER anteriores y agrega una restricción de valores. Para recuperación, detener escrituras y el servidor, guardar un respaldo adicional del estado posterior y restaurar código/base de manera coordinada. Revertir UsuarioApp a 0003 elimina la clasificación; restaurar el respaldo previo también pierde las escrituras posteriores a ese respaldo. La reversión se ensayó solo con datos ficticios; cualquier recuperación sobre la base habitual requiere autorización y revisión de los cambios posteriores.
+
+## Activación local de Sala de farmacia — 036 / 2026-11-24
+
+La usuaria autorizó expresamente respaldar la base local y aplicar únicamente FarmaTEF.0011_sala_farmacia. `work/sala036_migracion_local.py` limita el destino a `db.sqlite3` de este proyecto, hace respaldo consistente con SQLite backup API y origen de solo lectura, verifica integridad y SHA-256 y rechaza cualquier plan diferente de 0011. La ejecución usa `core.local_runtime`, sin cargar .env ni imprimir el secreto local.
+
+Respaldo privado/ignorado: `.test-artifacts/sala036/db.sqlite3.before-sala036-20261124T162854540714Z`, 819200 bytes, `quick_check=ok`. SHA-256: `096cce224d4d60195f721cf5bb8c4a462391fb79cb615fffe86c0d035b5c402b`; metadatos en `.test-artifacts/sala036/respaldo.json`. Plan exclusivamente 0011; aplicación correcta, tres tablas nuevas verificadas, integridad posterior correcta y check Django sin incidencias. No se inspeccionaron filas originales, credenciales ni medios.
+
+La sala queda habilitada y comienza sin distribución/asignaciones hasta que el docente las configure. No se copiaron datos de prueba, ni se modificaron lotes o vínculos históricos. Sin despliegue, commit/push ni cambios en la demo independiente. Para recuperar, detener escrituras, preservar cambios posteriores y restaurar conjuntamente copia/código compatibles; no revertir tablas ni sobrescribir datos nuevos sin revisión. Evidencia en `specs/036-sala-farmacia/validation.md`.

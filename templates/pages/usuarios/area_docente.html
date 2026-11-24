@@ -1,0 +1,16 @@
+{% extends 'components/Layout/base_pages.html' %}
+{% block head_title %}Área docente | CliniTENS{% endblock %}
+{% block page_title %}Área docente{% endblock %}
+{% block content_pages %}
+<h2 class="text-xl font-semibold">{{ docente.get_full_name|default:docente.username }}</h2>
+<p class="section-description">Selecciona los módulos a los que podrá acceder esta cuenta docente.</p>
+<form method="post" class="mt-6">
+  {% csrf_token %}
+  {% include 'components/design/form_errors.html' with form=form %}
+  {% include 'components/design/field.html' with field=form.area_docente %}
+  <div class="intro-actions">
+    <button class="btn-primary" type="submit">Guardar área docente</button>
+    <a class="btn-secondary" href="{% url 'User' %}">Volver a usuarios</a>
+  </div>
+</form>
+{% endblock %}

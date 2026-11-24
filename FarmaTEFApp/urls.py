@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from . import views, views_sala
 
 app_name = "farmatef"
 
@@ -13,6 +13,10 @@ urlpatterns = [
     path("recetas/<int:receta_id>/entregar/", views.EntregarRecetaView.as_view(), name="entregar_receta"),
     path("recetas/<int:receta_id>/eliminar/", views.EliminarRecetaView.as_view(), name="eliminar_receta"),
     path("practica/recetas/", views.PracticaRecetasView.as_view(), name="practica_recetas"),
+    path("sala/configurar/", views_sala.ConfigurarSalaView.as_view(), name="configurar_sala"),
+    path("practica/sala/", views_sala.SalaEstudianteView.as_view(), name="sala"),
+    path("practica/dispensaciones/<int:dispensacion_id>/ubicaciones/", views_sala.SalaEstudianteView.as_view(), name="localizar_dispensacion"),
+    path("practica/vitrina/", views_sala.VitrinaAnteriorView.as_view(), name="vitrina"),
     path("practica/recetas/<int:receta_id>/", views.PracticaRecetasView.as_view(), name="practica_receta"),
     path("practica/recetas/<int:receta_id>/responder/", views.PracticaRecetasView.as_view(), name="responder_receta"),
     path("practica/etiquetas/", views.MisEtiquetasView.as_view(), name="mis_etiquetas"),

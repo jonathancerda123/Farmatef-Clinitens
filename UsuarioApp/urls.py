@@ -3,6 +3,7 @@ from UsuarioApp import views
 
 urlpatterns = [
     path("usuarios/", views.UserListView.as_view(), name="User"),
+    path("usuarios/<int:pk>/area-docente/", views.UserTeacherAreaUpdateView.as_view(), name="UserTeacherArea"),
     path(
         "usuarios/<int:pk>/desactivar/",
         views.UserDeactivateView.as_view(),

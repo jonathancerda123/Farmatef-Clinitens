@@ -1,4 +1,5 @@
 from django.db import models, transaction
+from django.core.exceptions import ValidationError
 from .choices import PERMISOS
 
 # Create your models here.
@@ -30,7 +31,17 @@ class Position(models.Model):
         return f"{self.user_position}"
 
 
+class AreaDocente(models.TextChoices):
+    FARMACIA = "FARMACIA", "Farmacia"
+    ENFERMERIA = "ENFERMERIA", "Enfermería"
+    AMBOS = "AMBOS", "Ambos"
+
+
 class Profile(models.Model):
+    area_docente = models.CharField(
+        "Área docente", max_length=10, choices=AreaDocente.choices,
+        blank=True, default="",
+    )
     last_activity = models.DateTimeField(null=True, blank=True)
     requiere_cambio_password = models.BooleanField(default=False)
     password_temporal_expira = models.DateTimeField(null=True, blank=True)
@@ -41,6 +52,11 @@ class Profile(models.Model):
     position_FK = models.ForeignKey(
         Position, on_delete=models.SET_NULL, null=True, blank=True
     )
+
+    def clean(self):
+        super().clean()
+        if self.position_FK_id and self.position_FK.permission_code == "MANAGER" and not self.area_docente:
+            raise ValidationError("Selecciona el área del docente.")
 
     def save(self, *args, **kwargs):
         update_last_activity = kwargs.pop("update_last_activity", False)
@@ -66,6 +82,12 @@ class Profile(models.Model):
         type(self).objects.filter(pk=self.pk).update(last_activity=self.last_activity)
 
     class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(area_docente__in=["", *AreaDocente.values]),
+                name="profile_area_docente_valida",
+            ),
+        ]
         verbose_name = "Perfil"
         verbose_name_plural = "Perfiles"
         ordering = ["-id"]
