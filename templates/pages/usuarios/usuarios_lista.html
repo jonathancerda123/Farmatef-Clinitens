@@ -46,6 +46,12 @@
             </div>
             <img class="h-10 w-10 shrink-0 rounded-full bg-gray-300" src="{{ user.profile.image.url }}" alt="perfil">
           </div>
+          {% if user.profile.position_FK.permission_code == 'MANAGER' %}
+          <div class="px-6 py-3 text-sm">
+            <p>Área docente · {{ user.profile.get_area_docente_display|default:'Sin asignar' }}</p>
+            {% if not user.is_superuser %}<a class="mt-2 inline-block font-semibold text-brand-700 underline" href="{% url 'UserTeacherArea' user.pk %}">Cambiar área</a>{% endif %}
+          </div>
+          {% endif %}
           <div>
             <div class="-mt-px flex divide-x divide-gray-200">
 

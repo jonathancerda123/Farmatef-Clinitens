@@ -121,3 +121,9 @@ El lock incluido por el proveedor identifica 176 paquetes runtime y las 39 depen
 - [Comandos, códigos de salida y tiempos finales](evidencias/004-dependencias/auditorias-final-metadatos.json). pip check verifica consistencia; no busca vulnerabilidades. Cero avisos del auditor no certifica ausencia de vulnerabilidades ni parcheo del runtime.
 
 Se auditaron conjuntos exactos, sin --fix y con herramienta separada. Se mantiene resolución/hash en evidencia y pins/lock existentes; requirements no usa --require-hashes. No se atribuye explotación a ninguno de los avisos.
+
+## Recurso visual local — 036 / 2026-11-24
+
+Anatomy `iso-kit.mjs`, de la skill entregada por el docente, se distribuye sin alterar su contenido como `static/vendor/anatomy/iso-kit.js` junto con `LICENSE` (MIT, Ryan, 2026). SHA-256 cotejado de origen y copia: `6D3ECC725D30C3B0346DA309CF61DFA5A65017C23620BBD4093009D4FB104018`. La extensión pública `.js` permite el tipo MIME JavaScript en Windows. No se añaden dependencias npm/Python ni WebGL/Three.js; no se declara una auditoría nueva de vulnerabilidades del kit.
+
+La verificación 036 usó los runtimes disponibles Python 3.11.1/Django 5.2.18 y Node 20.15.0, sin actualizar el sistema. Sus pruebas ESM con extensión pública `.js` usan `node --experimental-default-type=module --test`; los archivos `.cjs` mantienen su formato. Estos datos describen esta sesión y no sustituyen los resultados históricos ni la preparación de runtime de producción.

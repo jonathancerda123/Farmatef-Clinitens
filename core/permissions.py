@@ -1,5 +1,6 @@
 """Permisos compartidos; nunca dependen del ID de un cargo."""
 from django.db.models import Q
+from UsuarioApp.models import AreaDocente
 
 
 def cargo(usuario):
@@ -16,6 +17,14 @@ def es_administrador(usuario):
 
 def es_docente(usuario):
     return es_administrador(usuario) or cargo(usuario) == "MANAGER"
+
+
+def es_docente_de_area(usuario, area):
+    if es_administrador(usuario):
+        return True
+    if cargo(usuario) != "MANAGER":
+        return False
+    return usuario.profile.area_docente in (area, AreaDocente.AMBOS)
 
 
 def objetos_del_docente(queryset, usuario, campo="creado_por"):
@@ -41,7 +50,7 @@ def recetas_visibles_para_docente(queryset, usuario):
     """Recetas propias sin curso y recetas vinculadas a cursos propios/compartidos."""
     if es_administrador(usuario):
         return queryset
-    if cargo(usuario) == "MANAGER":
+    if es_docente_de_area(usuario, AreaDocente.FARMACIA):
         return queryset.filter(
             Q(curso__isnull=True, creado_por=usuario)
             | Q(curso__creado_por=usuario)

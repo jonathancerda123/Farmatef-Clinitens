@@ -453,7 +453,7 @@ class PracticaRecetasView(EstudianteFarmaMixin, View):
         if not form.is_valid():
             return self.render_page(request, receta_id=receta_id, form=form)
         try:
-            responder_receta(
+            respuesta = responder_receta(
                 receta_id,
                 request.user,
                 form.cleaned_data["decision"],
@@ -468,4 +468,8 @@ class PracticaRecetasView(EstudianteFarmaMixin, View):
             )
         except ValidationError as exc:
             messages.error(request, " ".join(exc.messages))
+        else:
+            dispensacion = Dispensacion.objects.filter(respuesta=respuesta, es_simulada=True).first()
+            if dispensacion:
+                return redirect("farmatef:localizar_dispensacion", dispensacion_id=dispensacion.pk)
         return redirect("farmatef:practica_receta", receta_id=receta_id)

@@ -57,6 +57,12 @@ La portada de FarmaTEF usa presentación acotada, alertas en filas y accesos `fa
 
 ## Contratos de interacción
 
+La zona Entrada (SAL-08 de 036) usa el acento del área con borde discontinuo y rótulo legible en el plano; el texto se mantiene dentro del borde visible incluso al girarla junto a una pared. Se configura desde «Añadir mobiliario o entrada». Su selección ofrece propiedades espaciales al docente y referencia al alumno; no presenta altura/filas/columnas ni frontal 3D.
+
+La sala de farmacia (036) reemplaza los gráficos de envases de 033. `static/css/sala-farmacia.css`, `static/js/sala-farmacia.js` y `sala-modelo.js` se cargan solo en esa vista. El fondo, texto, superficies, jade y foco proceden de tokens compartidos; los tonos estructurales del mueble distinguen fondo y módulos frontales. Anatomy se distribuye localmente en `static/vendor/anatomy/` con su licencia. Los módulos usan extensión `.js`: Windows servía `.mjs` como texto plano e impedía su carga. Sin Three.js, WebGL ni red externa.
+
+Conservar plano 2D con frente marcado, configuración docente plegable, vista frontal de un único mueble activo y selección directa del compartimento; medicamentos como lista, sin envases. Cero muestra «Sin stock» manteniendo ubicación; ausencia de asignación muestra «Ubicación pendiente». Los tiradores admiten clic/arrastre/flechas, movimiento reducido y animación finita; el fondo oculto retira enlaces además de `inert`/`aria-hidden`. La tabla inferior ofrece consulta sin JS. No añadir botones numerados bajo el mueble, ni reserva/descuento de existencias en el localizador.
+
 Conservar URLs, `name`, `method`, CSRF, archivos multipart, campos ocultos, versiones, filtros y paginación. No cambiar consultas ni validaciones para resolver una diferencia visual. Usar `request.user` al comprobar navegación dentro de listas de usuarios. La autorización real permanece en servidor.
 
 Asociar labels con controles en el HTML. El script común completa asociaciones de campos clínicos dinámicos y errores identificados; no reemplaza validación. En tablas usar `th scope="col"` y un contenedor desplazable con nombre y `tabindex="0"`. Añadir texto accesible a botones de icono y estados seleccionados.

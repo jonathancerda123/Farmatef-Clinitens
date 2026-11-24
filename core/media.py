@@ -8,10 +8,10 @@ from django.http import HttpResponseForbidden
 from django.core.files.storage import default_storage
 from django.views.decorators.http import require_GET
 
-from core.permissions import es_administrador, es_docente, objetos_del_docente
+from core.permissions import es_administrador, es_docente, es_docente_de_area, cargo, objetos_del_docente
 from CliniTensDocenteApp.models import CasoMultimedia, PacienteMultimedia, ResultadoDiagnostico
 from CliniTensFichaApp.models import FichaClinica
-from UsuarioApp.models import Profile
+from UsuarioApp.models import Profile, AreaDocente
 
 
 def resultados_visibles(queryset):
@@ -39,6 +39,8 @@ def archivo_privado(request, nombre):
     caso = CasoMultimedia.objects.filter(archivo=nombre).select_related("caso").first()
     paciente = PacienteMultimedia.objects.filter(archivo=nombre).select_related("paciente").first()
     resultado = ResultadoDiagnostico.objects.filter(archivo=nombre).first()
+    if (caso or paciente or resultado) and cargo(user) == "MANAGER" and not es_docente_de_area(user, AreaDocente.ENFERMERIA):
+        raise Http404
     if caso:
         authorized = objetos_del_docente(CasoMultimedia.objects.filter(pk=caso.pk), user, "caso__creado_por").exists()
         authorized |= fichas_propias(user).filter(codigo_actividad__caso_clinico=caso.caso).exists()
@@ -52,7 +54,9 @@ def archivo_privado(request, nombre):
         if profile:
             authorized = es_administrador(user) or profile.user_FK_id == user.pk
             if es_docente(user):
-                authorized |= profile.user_FK.cursos_clinitens.filter(creado_por=user).exists() or FichaClinica.objects.filter(docente=user, estudiante_id=profile.user_FK_id).exists()
+                authorized |= profile.user_FK.cursos_clinitens.filter(creado_por=user).exists()
+            if es_docente_de_area(user, AreaDocente.ENFERMERIA):
+                authorized |= FichaClinica.objects.filter(docente=user, estudiante_id=profile.user_FK_id).exists()
             authorized |= fichas_propias(user).filter(docente_id=profile.user_FK_id).exists()
     types = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp",
              ".pdf": "application/pdf", ".mp4": "video/mp4", ".mov": "video/quicktime", ".webm": "video/webm"}

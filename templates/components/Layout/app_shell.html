@@ -10,17 +10,22 @@
       <div class="navigation-content">
         <nav aria-label="Plataforma" class="nav-group">
           {% url 'Home' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Inicio' icon='home' exact=True %}
-          {% url 'clinitens' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Área clínica' icon='case' exact=True %}
+          {% if acceso_enfermeria %}{% url 'clinitens' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Área clínica' icon='case' exact=True %}{% endif %}
+          {% if acceso_farmacia %}
           {% if request.user.is_superuser or request.user.profile.position_FK.permission_code == 'ADMIN' or request.user.profile.position_FK.permission_code == 'MANAGER' %}
             {% url 'farmatef' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Área farmacia' icon='course' exact=True %}
+            {% url 'farmatef:configurar_sala' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Sala de farmacia' icon='inventory' %}
           {% elif request.user.profile.position_FK.permission_code == 'RESTRICTED' %}
             {% url 'farmatef:practica_recetas' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Área Farmacia' icon='course' %}
+            {% url 'farmatef:sala' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Sala de farmacia' icon='inventory' %}
+          {% endif %}
           {% endif %}
         </nav>
         {% block workspace_navigation %}
-          {% if request.user.is_superuser or request.user.profile.position_FK.permission_code == 'ADMIN' or request.user.profile.position_FK.permission_code == 'MANAGER' %}
+          {% if gestion_docente %}
           <nav aria-label="Docencia" class="nav-group">
-            {% url 'clinitensdocente:dashboard' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Panel docente' icon='course' exact=True %}
+            {% if acceso_enfermeria %}{% url 'clinitensdocente:dashboard' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Panel docente' icon='course' exact=True %}{% endif %}
+            {% url 'clinitensdocente:cursos' as nav_href %}{% include 'components/design/nav_link.html' with href=nav_href label='Cursos' icon='course' %}
           </nav>
           {% endif %}
         {% endblock workspace_navigation %}

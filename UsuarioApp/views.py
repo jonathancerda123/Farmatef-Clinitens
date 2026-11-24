@@ -1,4 +1,4 @@
-from .forms import UserCreateForm, ProfileCreateForm, UserUpdateForm, ProfileUpdateForm
+from .forms import UserCreateForm, ProfileCreateForm, UserUpdateForm, ProfileUpdateForm, AreaDocenteForm
 from django.views.generic import ListView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -142,3 +142,35 @@ class ProfileUpdateView(LoginRequiredMixin, View):
         context = {"user_form": user_form, "profile_form": profile_form}
 
         return render(request, self.template_name, context)
+
+
+class UserTeacherAreaUpdateView(AdministradorMixin, View):
+    template_name = "pages/usuarios/area_docente.html"
+
+    def get_docente(self, request, pk):
+        docente = get_object_or_404(
+            User.objects.select_related("profile__position_FK"),
+            pk=pk, profile__position_FK__permission_code="MANAGER",
+        )
+        if docente.is_superuser and docente.pk != request.user.pk:
+            raise PermissionDenied("Esta cuenta está protegida.")
+        return docente
+
+    def get(self, request, pk):
+        docente = self.get_docente(request, pk)
+        form = AreaDocenteForm(instance=docente.profile)
+        return render(request, self.template_name, {"docente": docente, "form": form})
+
+    def post(self, request, pk):
+        docente = self.get_docente(request, pk)
+        form = AreaDocenteForm(request.POST, instance=docente.profile)
+        if form.is_valid():
+            updated = Profile.objects.filter(
+                Q(user_FK__is_superuser=False) | Q(user_FK=request.user),
+                pk=docente.profile.pk, position_FK__permission_code="MANAGER",
+            ).update(area_docente=form.cleaned_data["area_docente"])
+            if not updated:
+                raise PermissionDenied("La cuenta ya no admite esta modificación.")
+            messages.success(request, "Área docente actualizada.")
+            return redirect("User")
+        return render(request, self.template_name, {"docente": docente, "form": form})

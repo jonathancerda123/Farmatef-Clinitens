@@ -34,6 +34,8 @@ No hay una API REST pública, una SPA, workers asíncronos ni WebSockets. La act
 
 ## Persistencia y modelos existentes
 
+Spec 033 (2026-11-19): `/farmatef/practica/vitrina/` es una consulta GET de estudiante activo sin modelos nuevos. `VitrinaView` restringe cursos por matrícula y el creador de inventario a quienes tienen recetas asignadas en ese curso, conforme al ámbito de `lotes_de_practica`. `vitrina.py` agrega unidades de lotes vigentes y ordena el catálogo activo. La plantilla entrega JSON escapado con campos permitidos; JavaScript local dibuja cuatro muebles en parejas. Solo inspecciona: no reserva, no descuenta ni revela claves docentes. Incluye tabla de consulta sin JavaScript. Las ubicaciones son derivadas, no persistentes; la consulta no reconstruye stock histórico. [Validación 033](../specs/033-vitrina-farmacia/validation.md).
+
 Spec 019 (2026-11-09): `AtencionEnfermeria` enlaza caso/estudiante con FK protegidas, cuidados y observaciones de texto, estado/fechas y versión. Una restricción condicional permite solo un borrador por alumno/caso; guardado/finalización usan UPDATE por propietario, matrícula, publicación, estado y versión esperados. No se reutilizan atenciones DAU ni eventos Kardex. Entrada `/clinitens/simulaciones/enfermeria/`, registro/historial propios y preparación docente en `/clinitens/simulaciones/docente/enfermeria/`. Se reutilizan identidad SIM y publicación de casos existentes; preparar paciente RAE no publica por sí solo el caso. Migración 0007 probada solo sobre bases ficticias, sin aplicación a instalación habitual.
 
 La aplicación utiliza modelos Django y SQLite en el entorno local documentado. Entre las estructuras existentes se encuentran cuentas/perfiles, actividades, cursos, fichas, rúbricas, resultados y archivos asociados.
@@ -109,3 +111,22 @@ Ver [ENTORNO_Y_VERIFICACION.md](ENTORNO_Y_VERIFICACION.md), [VALIDACION_PREPRODU
 - La migración inicial de FarmaTEF requiere cotejo automático y verificación sobre base ficticia aislada.
 - No se han medido indicadores de rendimiento o disponibilidad para una instalación operativa.
 - No se debe considerar el sistema listo para producción hasta completar pruebas, configurar y verificar servicios operativos, revisar seguridad y obtener aceptación de los responsables del producto.
+
+
+## Áreas docentes — 034
+
+`Profile.area_docente` almacena FARMACIA, ENFERMERIA o AMBOS para MANAGER. La migración aditiva `UsuarioApp.0004` clasifica docentes existentes como Ambos y restringe valores válidos. No cambia el cargo, propiedad ni vínculos históricos. ADMIN/superusuario activos conservan alcance global.
+
+`core.permissions.es_docente_de_area` centraliza la decisión. `core.areas.area_de_ruta` clasifica namespaces completos y enumera explícitamente las rutas compartidas de cursos; `AreaDocenteMiddleware` verifica cada petición antes de ejecutar la vista, incluidas funciones PDF. Nuevas rutas de módulos dentro de esos namespaces heredan la restricción. Rutas nuevas fuera de ellos deben clasificarse expresamente. `core.context_processors.areas_docentes` expone acceso_farmacia/acceso_enfermeria/gestion_docente a inicio y navegación; ocultar enlaces no sustituye al servidor.
+
+El permiso de área complementa los mixins de cargo/propiedad y la matrícula estudiantil. `core.media` comprueba el área antes de servir archivos clínicos a MANAGER. Las consultas de recetas y fichas también aplican la especialidad. Cursos, matrícula e importación son compartidos con propiedad existente; la colaboración FarmaTEF se limita a docentes activos Farmacia/Ambos. La edición administrativa actualiza solo el área del perfil y protege a otros superusuarios.
+
+## Sala de farmacia — 036
+
+SAL-08: `entrance` se persiste como elemento de MuebleFarmacia con las mismas coordenadas, medidas y orientación. Unicidad de zona y límites se validan transaccionalmente; sin compartimentos. El plano rotula la entrada y la consulta no crea un mueble 3D. Migración 0012 de choices sin SQL de cambio de esquema, declarada para el historial y pendiente de aplicar a la base habitual; la función es compatible con las tablas activadas por 0011.
+
+El apartado pertenece a FarmaTEFApp; no es una app ni un inventario separado. `models_sala.py` registra SalaFarmacia (propietario único, medidas y versión), MuebleFarmacia (geometría/posición/filas/columnas) y UbicacionMedicamento (producto único, mueble, clave de compartimento). Migración 0011 aditiva, sin datos iniciales ni cambios de lotes. `geometria_sala.py` valida huellas y compartimentos; `sala.py` autoriza escritura, usa CAS transaccional, protege asignaciones y prepara catálogo/stock vigente por propietario.
+
+`views_sala.py`: configuración docente/global administrativa, consulta estudiantil por matrícula/creador de recetas y localizador de dispensación propia. La colaboración de recetas no concede inventario/sala ajenos. `PracticaRecetasView.post` usa la respuesta devuelta por el servicio existente y redirige solo si tiene una dispensación simulada registrada; GET nunca consume unidades. La URL de vitrina 033 conserva solo una redirección GET de compatibilidad.
+
+Presentación con plantilla común, plano SVG 2D y un mueble frontal a la vez. Kit local MIT Anatomy en static/vendor; módulos JS locales, sin Three.js, WebGL ni dependencias remotas. Formularios CSRF con versiones; error AJAX conserva cambios en pantalla. Tabla de consulta sin JS. 0011 aplicada a la base local el 2026-11-24 tras respaldo verificado y autorización explícita; comienza sin salas ni asignaciones precargadas. Pruebas en memoria/fixtures, navegador y límites en la spec 036.

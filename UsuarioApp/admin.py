@@ -22,7 +22,8 @@ class UsuarioProtegidoAdmin(UserAdmin):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("user_FK",)
+    list_display = ("user_FK", "area_docente")
+    list_filter = ("area_docente",)
 
     def has_change_permission(self, request, obj=None):
         return request.user.is_superuser and (obj is None or not obj.user_FK.is_superuser or obj.user_FK_id == request.user.pk)

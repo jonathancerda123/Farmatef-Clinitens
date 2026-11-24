@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile, Position
+from .models import Profile, Position, AreaDocente
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from core.permissions import es_administrador
@@ -65,11 +65,19 @@ class ProfileUpdateForm(forms.ModelForm):
         return image
 
 
+class CargoSelect(forms.Select):
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        option = super().create_option(name, value, label, selected, index, subindex, attrs)
+        instance = getattr(value, "instance", None)
+        option["attrs"]["data-docente"] = "true" if instance and instance.permission_code == "MANAGER" else "false"
+        return option
+
+
 class ProfileCreateForm(ProfileUpdateForm):
     position_FK = forms.ModelChoiceField(
         label="Cargo",
         queryset=Position.objects.none(),
-        widget=forms.Select(
+        widget=CargoSelect(
             attrs={
                 "class": "bg-white focus:outline-hidden border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal text-gray-700 mb-3"
             }
@@ -77,7 +85,9 @@ class ProfileCreateForm(ProfileUpdateForm):
     )
 
     class Meta(ProfileUpdateForm.Meta):
-        fields = ProfileUpdateForm.Meta.fields + ["position_FK"]
+        fields = ProfileUpdateForm.Meta.fields + ["position_FK", "area_docente"]
+        widgets = {"area_docente": forms.Select(attrs={"class": "input"})}
+        help_texts = {"area_docente": "Obligatoria para las cuentas docentes. Ambos habilita las dos áreas."}
 
     def __init__(self, *args, actor=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -86,3 +96,24 @@ class ProfileCreateForm(ProfileUpdateForm):
             if actor.is_superuser:
                 cargos.append("ADMIN")
             self.fields["position_FK"].queryset = Position.objects.filter(permission_code__in=cargos)
+
+    def clean(self):
+        cleaned = super().clean()
+        posicion = cleaned.get("position_FK")
+        if posicion and posicion.permission_code == "MANAGER" and not cleaned.get("area_docente"):
+            self.add_error("area_docente", "Selecciona el área del docente.")
+        elif posicion and posicion.permission_code != "MANAGER":
+            cleaned["area_docente"] = ""
+        return cleaned
+
+
+class AreaDocenteForm(forms.ModelForm):
+    area_docente = forms.ChoiceField(
+        label="Área docente", choices=AreaDocente.choices,
+        widget=forms.Select(attrs={"class": "input"}),
+        help_text="Farmacia habilita FarmaTEF. Enfermería habilita CliniTENS. Ambos habilita las dos áreas.",
+    )
+
+    class Meta:
+        model = Profile
+        fields = ["area_docente"]

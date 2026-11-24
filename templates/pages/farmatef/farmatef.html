@@ -57,12 +57,22 @@
         <div><h3>Etiquetado</h3><p>Diseña e imprime etiquetas para los lotes.</p></div>
         {% include 'components/design/icon.html' with icon='arrow' icon_class='farmatef-tool-arrow' %}
       </a>
+      <a class="module-entry farmatef-tool" href="{% url 'farmatef:configurar_sala' %}">
+        <span class="module-symbol">{% include 'components/design/icon.html' with icon='inventory' %}</span>
+        <div><h3>Sala de farmacia</h3><p>Distribuye los muebles y configura dónde se encuentra cada medicamento.</p></div>
+        {% include 'components/design/icon.html' with icon='arrow' icon_class='farmatef-tool-arrow' %}
+      </a>
     </div>
   </section>
 {% elif es_estudiante %}
   <section aria-labelledby="practica-farmacia">
     <div class="section-heading"><h2 id="practica-farmacia">Tu práctica de farmacia</h2></div>
     <div class="farmatef-tool-grid">
+      <a class="module-entry farmatef-tool" href="{% url 'farmatef:sala' %}">
+        <span class="module-symbol">{% include 'components/design/icon.html' with icon='inventory' %}</span>
+        <div><h3>Sala de farmacia</h3><p>Consulta en qué mueble y compartimento se encuentra cada medicamento.</p></div>
+        {% include 'components/design/icon.html' with icon='arrow' icon_class='farmatef-tool-arrow' %}
+      </a>
       <a class="module-entry farmatef-tool" href="{% url 'farmatef:practica_recetas' %}">
         <span class="module-symbol">{% include 'components/design/icon.html' with icon='prescription' %}</span>
         <div><h3>Mis recetas de práctica</h3><p>Revisa las indicaciones, elige un lote y registra tu decisión.</p></div>

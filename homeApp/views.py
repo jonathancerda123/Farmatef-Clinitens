@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.utils import timezone
 from django.urls import reverse
-from UsuarioApp.models import Profile
-from core.permissions import cargo, es_administrador, es_docente
+from UsuarioApp.models import Profile, AreaDocente
+from core.permissions import cargo, es_administrador, es_docente, es_docente_de_area
 from FarmaTEFApp.inventario import resumen_alertas
 
 
@@ -18,7 +18,9 @@ class HomeView(LoginRequiredMixin, ListView):
         if not es_administrador(self.request.user):
             scope = Q(pk=self.request.user.pk)
             if es_docente(self.request.user):
-                scope |= Q(cursos_clinitens__creado_por=self.request.user) | Q(fichas_clinicas__docente=self.request.user)
+                scope |= Q(cursos_clinitens__creado_por=self.request.user)
+            if es_docente_de_area(self.request.user, AreaDocente.ENFERMERIA):
+                scope |= Q(fichas_clinicas__docente=self.request.user)
             users = users.filter(scope).distinct()
         return users.order_by("-last_login")[:5]
 
