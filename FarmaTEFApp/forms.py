@@ -17,10 +17,12 @@ INPUT = (
 
 
 class MedicamentoForm(forms.ModelForm):
+    precio = forms.IntegerField(label="Precio unitario (CLP)", min_value=0, max_value=999999999)
     class Meta:
         model = Medicamento
         fields = [
             "nombre",
+            "precio",
             "principio_activo",
             "concentracion",
             "forma_farmaceutica",

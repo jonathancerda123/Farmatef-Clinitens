@@ -1,10 +1,12 @@
 from django.urls import path
 
-from . import views, views_sala
+from . import views, views_sala, views_movimientos
 
 app_name = "farmatef"
 
 urlpatterns = [
+    path("inventario/movimientos/", views_movimientos.MovimientosView.as_view(), name="movimientos"),
+    path("inventario/<int:medicamento_id>/precio/", views_movimientos.PrecioView.as_view(), name="precio"),
     path("etiquetado/", views.EtiquetadoView.as_view(), name="etiquetado"),
     path("inventario/", views.InventarioView.as_view(), name="inventario"),
     path("inventario/registro/", views.RegistroInventarioView.as_view(), name="registro_inventario"),

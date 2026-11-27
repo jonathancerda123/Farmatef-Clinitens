@@ -94,7 +94,7 @@ class InventarioView(PermitsPositionMixin, TemplateView):
         clasificacion = self.request.GET.get("clasificacion", "")[:120]
         alerta = self.request.GET.get("alerta", "")
         if clasificacion:
-            medicamentos = medicamentos.filter(clasificacion=clasificacion)
+            medicamentos = medicamentos.filter(clasificacion="" if clasificacion == "__sin_clasificar__" else clasificacion)
         context.update(
             medicamentos=list(filtrar_inventario(medicamentos.prefetch_related("lotes"), busqueda, alerta)),
             busqueda=busqueda,
@@ -146,7 +146,8 @@ class RegistroInventarioView(PermitsPositionMixin, TemplateView):
             if form.is_valid():
                 lote = form.save(commit=False)
                 lote.registrado_por = request.user
-                lote.save()
+                from .movimientos import registrar_alta
+                registrar_alta(lote, request.user)
                 messages.success(request, "Lote de inventario registrado.")
                 return redirect("farmatef:inventario")
             return self.render_to_response(self.get_context_data(form_lote=form))

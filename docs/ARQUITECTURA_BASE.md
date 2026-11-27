@@ -130,3 +130,12 @@ El apartado pertenece a FarmaTEFApp; no es una app ni un inventario separado. `m
 `views_sala.py`: configuración docente/global administrativa, consulta estudiantil por matrícula/creador de recetas y localizador de dispensación propia. La colaboración de recetas no concede inventario/sala ajenos. `PracticaRecetasView.post` usa la respuesta devuelta por el servicio existente y redirige solo si tiene una dispensación simulada registrada; GET nunca consume unidades. La URL de vitrina 033 conserva solo una redirección GET de compatibilidad.
 
 Presentación con plantilla común, plano SVG 2D y un mueble frontal a la vez. Kit local MIT Anatomy en static/vendor; módulos JS locales, sin Three.js, WebGL ni dependencias remotas. Formularios CSRF con versiones; error AJAX conserva cambios en pantalla. Tabla de consulta sin JS. 0011 aplicada a la base local el 2026-11-24 tras respaldo verificado y autorización explícita; comienza sin salas ni asignaciones precargadas. Pruebas en memoria/fixtures, navegador y límites en la spec 036.
+
+
+## Control de inventario — 037
+
+SalaFarmacia.plano_bloqueado comparte CAS con la geometría; guardar_sala exige estado desbloqueado en UPDATE condicional. Alternar candado usa POST y versión con autorización por área/propietario. Asignar productos y consultar no cambia geometría.
+
+Medicamento.precio nullable almacena CLP enteros; UI exige precio en nuevas altas y edición acotada. Filtro Tipo usa clasificacion del arsenal importado. MovimientoInventario conserva lote/actor/fecha/sentido/cantidad/saldos/motivo/observación/UUID y vínculo opcional único a DispensacionLote. Alta y ajustes manuales usan movimientos.py; consumo de recetas crea salida en su transacción existente. Token firmado identifica ajustes reenviados; admin protege unidades e historia. El historial general es solo docente por inventario; colaboración de recetas no amplía su consulta. No es contabilidad financiera ni reconstrucción histórica.
+
+Migración FarmaTEF 0013 aditiva ensayada solo con datos ficticios; 0012/0013 pendientes en base habitual. Antes de usar ese código con la base habitual se requiere activación respaldada/autorizada. [Validación y límites](../specs/037-control-plano-precios-movimientos/validation.md).

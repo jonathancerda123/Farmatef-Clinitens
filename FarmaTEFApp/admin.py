@@ -6,7 +6,7 @@ from .models import Dispensacion, LoteInventario, Medicamento, Receta, RecetaLin
 
 @admin.register(Medicamento)
 class MedicamentoAdmin(admin.ModelAdmin):
-    list_display = ("nombre", "principio_activo", "clasificacion", "stock_minimo", "activo", "creado_por")
+    list_display = ("precio", "nombre", "principio_activo", "clasificacion", "stock_minimo", "activo", "creado_por")
     search_fields = ("nombre", "principio_activo", "codigo_barras", "clasificacion", "observaciones")
     list_filter = ("activo",)
     readonly_fields = ("creado_por", "creado_en", "actualizado_en")
@@ -23,7 +23,13 @@ class LoteInventarioAdmin(admin.ModelAdmin):
     list_display = ("medicamento", "numero_lote", "vence_el", "unidades", "es_simulado", "registrado_por")
     search_fields = ("medicamento__nombre", "numero_lote")
     list_filter = ("vence_el",)
-    readonly_fields = ("registrado_por", "creado_en")
+    readonly_fields = ("registrado_por", "creado_en", "unidades", "medicamento", "numero_lote")
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
     def save_model(self, request, obj, form, change):
         if not change:
@@ -61,3 +67,19 @@ class RespuestaRecetaAdmin(admin.ModelAdmin):
     list_display = ("receta", "estudiante", "decision", "motivo_rechazo", "correcta", "respondida_en")
     list_filter = ("correcta", "decision", "motivo_rechazo")
     readonly_fields = ("receta", "estudiante", "decision", "motivo_rechazo", "correcta", "explicacion", "respondida_en")
+
+
+from .models import MovimientoInventario
+
+@admin.register(MovimientoInventario)
+class MovimientoInventarioAdmin(admin.ModelAdmin):
+    list_display = ("creado_en", "lote", "sentido", "cantidad", "motivo", "saldo_anterior", "saldo_posterior", "actor")
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False

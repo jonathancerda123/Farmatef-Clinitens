@@ -1,5 +1,7 @@
 # Especificaciones SDD — CliniTENS
 
+037 — [Candado del plano, precios y movimientos](037-control-plano-precios-movimientos/spec.md). Implementación local autorizada el 2026-11-26; pruebas automáticas correctas, revisión visual pendiente por conexión local. Migración 0013 ensayada solo con datos ficticios; 0012/0013 pendientes en base habitual.
+
 ## Índice real
 
 | Número | Alcance | Ruta | Estado | Código autorizado |

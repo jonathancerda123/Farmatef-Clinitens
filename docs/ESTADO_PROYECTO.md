@@ -1,5 +1,11 @@
 # Estado y punto de reanudación — CliniTENS
 
+## Candado, precio y movimientos — 037 / 2026-11-26
+
+Implementado tras «autorizo»: candado persistente del plano con CAS/servidor; precio CLP en registro, columna y edición acotada; filtro por CLASIFICACIÓN del arsenal y Sin clasificar; historial paginado de movimientos, ingresos/ajustes/salidas con motivo, saldos, actor y vínculo a dispensación. Alta y consumo guardan historial en la misma transacción; reenvío de ajuste no duplica. Admin impide cambios directos de unidades y edición/borrado del historial. Comando de carga de arsenal usa alta auditada.
+
+Migración FarmaTEF 0013 aditiva ensayada solo en memoria y `.test-artifacts/control037-qa.sqlite3`; 0012/0013 pendientes en base habitual, que no se abrió. Precio anterior queda sin informar; no se reconstruye historia pasada. Checks/cotejo/build y pruebas con core.test_settings correctos; navegador integrado agotó conexión a localhost y servidor QA se detuvo. Revisión visual y aceptación docente pendientes. Próximo: revisar UI y activar migraciones con autorización específica/respaldo verificado. [Evidencia 037](../specs/037-control-plano-precios-movimientos/validation.md). Sin commit/push/despliegue.
+
 ## Sala de farmacia — 036 / 2026-11-24
 
 SAL-09: por solicitud de reproducir la imagen, la sala del inventario local quedó configurada a **11 × 9 m y 13 elementos**: cuatro estantes arriba, mesón debajo, pizarra izquierda, seis mesas en dos columnas/tres filas y Entrada inferior derecha. Sala inicialmente inexistente; se creó con versión 1, sin asignaciones de medicamentos previas. Respaldo consistente/verificado en `.test-artifacts/sala036-distribucion/`, ensayo en copia antes del guardado real, geometría cotejada exactamente, integridad y check correctos. No se trasladó ningún contenido de la fixture ni se modificó stock/recetas ni otras salas. Próximo paso: recargar Sala de farmacia y revisar la distribución con la usuaria/docente; los medicamentos se asignan desde la configuración existente.

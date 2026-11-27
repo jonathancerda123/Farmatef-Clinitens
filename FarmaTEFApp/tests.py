@@ -119,17 +119,11 @@ class NumeroLoteTests(TestCase):
         self.assertEqual(self.medicamento.lotes.get().numero_lote, "AMOx-002")
         self.assertEqual(self.medicamento.stock_total, 4)
 
-    def test_django_admin_normaliza_y_rechaza_duplicados(self):
+    def test_django_admin_no_permite_alta_sin_movimiento(self):
         self.client.force_login(self.superusuario)
         ruta = reverse("admin:FarmaTEFApp_loteinventario_add")
-        self.assertEqual(self.client.post(ruta, self.datos_lote("AMOx-001")).status_code, 302)
-        lote = self.medicamento.lotes.get()
-        self.assertEqual(lote.numero_lote, "AMOX-001")
-        repetido = self.client.post(ruta, self.datos_lote("amox-001"))
-        self.assertFormError(
-            repetido.context["adminform"].form, "numero_lote", "Ese lote ya existe para el medicamento.",
-        )
-        self.assertEqual(self.medicamento.lotes.count(), 1)
+        self.assertEqual(self.client.post(ruta, self.datos_lote("AMOx-001")).status_code, 403)
+        self.assertFalse(self.medicamento.lotes.exists())
 
     def test_django_admin_puede_editar_lote_historico_sin_cambiar_su_numero(self):
         for numero in ("AMOX-002", "AMOx-002"):
@@ -143,7 +137,7 @@ class NumeroLoteTests(TestCase):
         self.assertEqual(self.client.post(ruta, datos).status_code, 302)
         lote.refresh_from_db()
         self.assertEqual(lote.numero_lote, "AMOx-002")
-        self.assertEqual(lote.unidades, 5)
+        self.assertEqual(lote.unidades, 4)
 
     def test_estudiante_no_puede_registrar_lote_por_url_directa(self):
         self.client.force_login(usuario("lotes-estudiante"))
@@ -211,7 +205,7 @@ class InventarioAlertasTests(TestCase):
         self.assertNotContains(response, 'name="crear_medicamento"')
         self.assertContains(self.client.get(registro), 'name="crear_medicamento"')
         data = {
-            "crear_medicamento": "", "medicamento-nombre": "Producto nuevo",
+            "crear_medicamento": "", "medicamento-nombre": "Producto nuevo", "medicamento-precio": 1500,
             "medicamento-stock_minimo": 4, "medicamento-dias_alerta_vencimiento": 10,
         }
         self.assertRedirects(self.client.post(registro, data), inventario)

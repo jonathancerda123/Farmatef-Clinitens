@@ -87,5 +87,7 @@ class Command(BaseCommand):
                     registrado_por=owner,
                     es_simulado=True,
                 ))
-            LoteInventario.objects.bulk_create(lots)
+            from FarmaTEFApp.movimientos import registrar_alta
+            for lote in lots:
+                registrar_alta(lote, owner)
         self.stdout.write(self.style.SUCCESS("Reemplazo aplicado: 109 registros antiguos archivados y 363 presentaciones/lotes simulados cargados."))

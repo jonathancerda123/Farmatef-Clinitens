@@ -32,9 +32,12 @@ def version_entera(valor):
         raise ValidationError("La versión de la sala no es válida. Recarga la página.")
 
 
-def actualizar_version(sala, version):
-    if not SalaFarmacia.objects.filter(pk=sala.pk, version=version_entera(version)).update(version=F("version") + 1, actualizado_en=timezone.now()):
-        raise ValidationError("La sala cambió en otra pestaña. Recarga antes de guardar.")
+def actualizar_version(sala, version, *, geometria=False):
+    consulta = SalaFarmacia.objects.filter(pk=sala.pk, version=version_entera(version))
+    if geometria:
+        consulta = consulta.filter(plano_bloqueado=False)
+    if not consulta.update(version=F("version") + 1, actualizado_en=timezone.now()):
+        raise ValidationError("El plano está bloqueado o la sala cambió en otra pestaña. Recarga antes de guardar.")
 
 
 @transaction.atomic
@@ -52,7 +55,7 @@ def guardar_sala(actor, propietario, texto, version):
         if type(datos.get(campo)) is not int or not 200 <= datos[campo] <= 3000:
             raise ValidationError("Las medidas de la sala deben estar entre 2 y 30 metros.")
     sala, _ = SalaFarmacia.objects.get_or_create(propietario=propietario)
-    actualizar_version(sala, version)
+    actualizar_version(sala, version, geometria=True)
     sala.ancho_cm, sala.largo_cm = datos["ancho_cm"], datos["largo_cm"]
     anteriores = {m.pk: m for m in sala.muebles.all()}
     ubicaciones = list(UbicacionMedicamento.objects.filter(mueble__sala=sala))
@@ -130,8 +133,18 @@ def datos_sala(propietario, *, docente=False, productos_ids=None):
                               "mueble_id": u.mueble_id if correcta else None,
                               "compartimento": u.compartimento if correcta else "",
                               "ubicacion": f"{u.mueble.nombre} · {nombre_compartimento(u.compartimento)}" if correcta else "Ubicación pendiente"})
-    return {"version": sala.version if sala else 0, "ancho_cm": sala.ancho_cm if sala else 1000,
+    return {"plano_bloqueado": sala.plano_bloqueado if sala else False, "version": sala.version if sala else 0, "ancho_cm": sala.ancho_cm if sala else 1000,
             "largo_cm": sala.largo_cm if sala else 900, "configurada": sala is not None,
             "muebles": [{"id": m.pk, **{k: getattr(m, k) for k in CAMPOS_MUEBLE},
                          "compartimentos": [{"clave": c, "nombre": nombre_compartimento(c)} for c in compartimentos(m)]} for m in muebles],
             "productos": productos, "docente": docente}
+
+
+@transaction.atomic
+def alternar_candado(actor, propietario, version):
+    autorizar_gestion(actor, propietario)
+    sala, _ = SalaFarmacia.objects.get_or_create(propietario=propietario)
+    actualizar_version(sala, version)
+    sala.refresh_from_db()
+    sala.plano_bloqueado = not sala.plano_bloqueado
+    sala.save(update_fields=["plano_bloqueado"])

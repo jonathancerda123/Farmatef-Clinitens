@@ -12,7 +12,7 @@ from CliniTensDocenteApp.models import Curso
 from core.mixins import PermitsPositionMixin
 from core.permissions import es_administrador
 from .models import Dispensacion, Medicamento, Receta
-from .sala import asignar_ubicacion, autorizar_gestion, datos_sala, guardar_sala
+from .sala import alternar_candado, asignar_ubicacion, autorizar_gestion, datos_sala, guardar_sala
 from .views import EstudianteFarmaMixin
 
 
@@ -56,6 +56,8 @@ class ConfigurarSalaView(PermitsPositionMixin, View):
         try:
             if request.POST.get("accion") == "guardar_sala":
                 guardar_sala(request.user, propietario, request.POST.get("configuracion"), request.POST.get("version"))
+            elif request.POST.get("accion") == "candado":
+                alternar_candado(request.user, propietario, request.POST.get("version"))
             elif request.POST.get("accion") == "asignar":
                 try:
                     medicamento_id = int(request.POST.get("medicamento", ""))
@@ -76,7 +78,7 @@ class ConfigurarSalaView(PermitsPositionMixin, View):
             contexto = self.contexto(request, propietario)
             contexto["error_sala"] = " ".join(exc.messages)
             return pagina(request, contexto, estado=400)
-        messages.success(request, "Configuración de sala guardada." if request.POST["accion"] == "guardar_sala" else "Ubicación del medicamento guardada.")
+        messages.success(request, "Configuración de sala guardada." if request.POST["accion"] == "guardar_sala" else "Estado de sala guardado.")
         destino = f"{reverse('farmatef:configurar_sala')}?{urlencode({'docente': propietario.pk})}"
         if request.headers.get("X-Requested-With") == "XMLHttpRequest":
             return JsonResponse({"url": destino})

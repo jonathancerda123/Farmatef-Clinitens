@@ -8,6 +8,7 @@ from .models import (
     Dispensacion,
     DispensacionLote,
     LoteInventario,
+    MovimientoInventario,
     Receta,
     RespuestaReceta,
 )
@@ -63,12 +64,15 @@ def _registrar_consumo_stock(receta, actor, cantidades, *, respuesta=None, lotes
             ).update(unidades=F("unidades") - tomar)
             if not actualizado:
                 raise ValidationError("El inventario cambió durante la entrega; vuelve a intentar.")
-            DispensacionLote.objects.create(
+            uso = DispensacionLote.objects.create(
                 dispensacion=dispensacion,
                 linea=linea,
                 lote=lote,
                 unidades=tomar,
             )
+            MovimientoInventario.objects.create(lote=lote, actor=actor, sentido="salida",
+                cantidad=tomar, saldo_anterior=lote.unidades, saldo_posterior=lote.unidades-tomar,
+                motivo="dispensacion", uso=uso)
             restante -= tomar
             if not restante:
                 break

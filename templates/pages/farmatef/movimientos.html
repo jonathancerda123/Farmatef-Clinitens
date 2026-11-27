@@ -1,0 +1,16 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block head_title %}Movimientos | FarmaTEF{% endblock %}
+{% block page_title %}Movimientos e ingresos{% endblock %}
+{% block content_main %}
+<a class="btn-primary" href="{% url 'farmatef:inventario' %}">Volver al inventario</a>
+<p class="section-description">Inventario simulado. El historial registra operaciones desde la activación de esta función; no reconstruye movimientos anteriores. Los registros se conservan: corrige errores con un movimiento compensatorio.</p>
+<details class="form-sheet"{% if form.errors %} open{% endif %}><summary>Registrar entrada o salida</summary><form method="post">{% csrf_token %}{{ form.as_p }}<button class="btn-primary" type="submit">Registrar movimiento</button></form></details>
+{% if form.errors %}<p role="alert">Revisa los errores del formulario «Registrar entrada o salida».</p>{% endif %}
+<section><h2>Historial de movimientos</h2>
+<form method="get" class="form-sheet">{{ filtro.as_p }}<button class="btn-primary" type="submit">Filtrar</button> <a class="btn-secondary" href="{% url 'farmatef:movimientos' %}">Quitar filtros</a></form>
+<div class="overflow-x-auto" role="region" aria-label="Historial de inventario" tabindex="0"><table class="w-full text-left text-sm"><thead><tr><th scope="col">Fecha</th><th scope="col">Medicamento / lote</th><th scope="col">Movimiento</th><th scope="col">Cantidad</th><th scope="col">Saldo anterior → posterior</th><th scope="col">Motivo / observación</th><th scope="col">Responsable</th></tr></thead><tbody>
+{% for m in pagina %}<tr><td class="p-3">{{ m.creado_en|date:'d/m/Y H:i:s' }}</td><td class="p-3">{{ m.lote.medicamento.nombre }}<br>{{ m.lote.numero_lote }}</td><td class="p-3">{{ m.get_sentido_display }}</td><td class="p-3">{{ m.cantidad }}</td><td class="p-3">{{ m.saldo_anterior }} → {{ m.saldo_posterior }}</td><td class="p-3">{{ m.get_motivo_display }}<br>{{ m.observacion }}{% if m.uso %}<br>Dispensación #{{ m.uso.dispensacion_id }}{% endif %}</td><td class="p-3">{{ m.actor.get_full_name|default:m.actor.username }}</td></tr>{% empty %}<tr><td colspan="7">No hay movimientos para mostrar.</td></tr>{% endfor %}
+</tbody></table></div>
+<nav aria-label="Páginas del historial">{% if pagina.has_previous %}<a href="?{{ parametros }}&amp;page={{ pagina.previous_page_number }}">Anterior</a>{% endif %} Página {{ pagina.number }} de {{ pagina.paginator.num_pages }} {% if pagina.has_next %}<a href="?{{ parametros }}&amp;page={{ pagina.next_page_number }}">Siguiente</a>{% endif %}</nav>
+</section>
+{% endblock %}

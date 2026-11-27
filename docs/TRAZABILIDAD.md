@@ -1,5 +1,9 @@
 # Trazabilidad de requisitos, tareas y pruebas
 
+## Propuesta FarmaTEF — 037
+
+RF-037-01/02 → candado persistente y CAS de sala; RF-037-03/04 → precio y filtro por clasificación; RF-037-05/06/07 → movimientos, altas, ajustes, consumos y protección admin. Implementados en models/models_sala/sala/views_sala, forms/inventario/views_movimientos, movimientos/services/admin y templates; regresiones en tests_control_inventario. [Plan de archivos/pruebas](../specs/037-control-plano-precios-movimientos/plan.md), [validación pendiente](../specs/037-control-plano-precios-movimientos/validation.md). Código autorizado el 2026-11-26. Pruebas automáticas correctas; navegador y aceptación pendientes. Migración 0013 solo en fixtures.
+
 ## Portada de FarmaTEF — 028
 
 RF-028-01/02 → plantilla de portada y componentes visuales compartidos. RF-028-03 → bloque único de alertas en la presentación, conservando filtros y conteos de 025. RF-028-04 → renderizado según perfil y enlaces estudiantiles existentes. [Validación](../specs/028-portada-farmatef/validation.md).

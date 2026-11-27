@@ -8,6 +8,7 @@
   <a class="btn-secondary" href="{% url 'farmatef:configurar_sala' %}">Configurar sala y ubicaciones</a>
 </div>
 
+<p class="mb-4"><a class="btn-secondary" href="{% url 'farmatef:movimientos' %}">Movimientos e ingresos</a></p>
 <section aria-labelledby="inventario-existencias">
   <h2 id="inventario-existencias" class="text-lg font-semibold text-slate-900">Existencias registradas</h2>
   <p class="section-description mt-1">Inventario de simulación. El stock disponible suma las unidades de lotes vigentes.</p>
@@ -22,9 +23,10 @@
              placeholder="Nombre, principio activo o lote" maxlength="160" aria-controls="tabla-existencias">
     </div>
     <div>
-      <label class="text-sm font-medium text-slate-700" for="clasificacion-existencias">Clasificación</label>
+      <label class="text-sm font-medium text-slate-700" for="clasificacion-existencias">Tipo de medicamento</label>
       <select class="input mt-1" id="clasificacion-existencias" name="clasificacion">
-        <option value="">Todas las clasificaciones</option>
+        <option value="">Todos los tipos</option>
+        <option value="__sin_clasificar__"{% if clasificacion == "__sin_clasificar__" %} selected{% endif %}>Sin clasificar</option>
         {% for opcion in clasificaciones %}
           <option value="{{ opcion }}"{% if opcion == clasificacion %} selected{% endif %}>{{ opcion }}</option>
         {% endfor %}
@@ -36,13 +38,14 @@
   <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white" role="region" aria-label="Inventario desplazable" tabindex="0">
     <table id="tabla-existencias" class="w-full min-w-[760px] text-left text-sm">
       <thead class="border-b border-slate-200 bg-brand-50 text-brand-800">
-        <tr><th scope="col" class="p-3">Medicamento</th><th scope="col" class="p-3">Clasificación</th><th scope="col" class="p-3">Stock</th><th scope="col" class="p-3">Mínimo</th><th scope="col" class="p-3">Lotes</th><th scope="col" class="p-3">Estado</th></tr>
+        <tr><th scope="col" class="p-3">Medicamento</th><th scope="col" class="p-3">Tipo de medicamento</th><th scope="col" class="p-3">Precio unitario</th><th scope="col" class="p-3">Stock</th><th scope="col" class="p-3">Mínimo</th><th scope="col" class="p-3">Lotes</th><th scope="col" class="p-3">Estado</th></tr>
       </thead>
       <tbody class="divide-y divide-slate-200">
         {% for medicamento in medicamentos %}
           <tr>
             <td class="p-3 font-medium text-slate-900">{{ medicamento.nombre }}<span class="block text-xs font-normal text-slate-500">{{ medicamento.concentracion }} {{ medicamento.forma_farmaceutica }}</span>{% if medicamento.observaciones %}<span class="block text-xs font-normal text-slate-500">{{ medicamento.observaciones }}</span>{% endif %}</td>
             <td class="p-3">{{ medicamento.clasificacion|default:"—" }}</td>
+            <td class="p-3">{% if medicamento.precio is not None %}$ {{ medicamento.precio }} CLP{% else %}Sin precio{% endif %}<br><a href="{% url 'farmatef:precio' medicamento.pk %}">Editar precio</a></td>
             <td class="p-3">{{ medicamento.stock_disponible }} disponibles<span class="block text-xs text-slate-600">{{ medicamento.stock_total }} registradas</span></td>
             <td class="p-3">{{ medicamento.stock_minimo }}</td>
             <td class="p-3">
@@ -62,7 +65,7 @@
             </td>
           </tr>
         {% empty %}
-          <tr><td class="p-8 text-center text-slate-600" colspan="6">{% if busqueda or clasificacion or alerta %}No hay medicamentos que coincidan con los filtros.{% else %}Aún no hay medicamentos en este inventario.{% endif %}</td></tr>
+          <tr><td class="p-8 text-center text-slate-600" colspan="7">{% if busqueda or clasificacion or alerta %}No hay medicamentos que coincidan con los filtros.{% else %}Aún no hay medicamentos en este inventario.{% endif %}</td></tr>
         {% endfor %}
       </tbody>
     </table>

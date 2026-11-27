@@ -1,0 +1,8 @@
+{% extends 'components/Layout/base_extendido.html' %}
+{% block head_title %}Precio | FarmaTEF{% endblock %}
+{% block page_title %}Precio del medicamento{% endblock %}
+{% block content_main %}
+<a class="btn-primary" href="{% url 'farmatef:inventario' %}">Volver al inventario</a>
+<section class="form-sheet"><h2>{{ medicamento.nombre }}</h2><p>Precio unitario de referencia para simulación, en pesos chilenos.</p>
+<form method="post">{% csrf_token %}{{ form.as_p }}<button class="btn-primary" type="submit">Guardar precio</button></form></section>
+{% endblock %}

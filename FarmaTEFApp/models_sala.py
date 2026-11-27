@@ -10,6 +10,7 @@ class SalaFarmacia(models.Model):
     propietario = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="sala_farmacia")
     ancho_cm = models.PositiveSmallIntegerField(default=1000, validators=[MinValueValidator(200), MaxValueValidator(3000)])
     largo_cm = models.PositiveSmallIntegerField(default=900, validators=[MinValueValidator(200), MaxValueValidator(3000)])
+    plano_bloqueado = models.BooleanField(default=False)
     version = models.PositiveIntegerField(default=0)
     actualizado_en = models.DateTimeField(auto_now=True)
 

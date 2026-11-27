@@ -4,6 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q
 from datetime import timedelta
+from uuid import uuid4
 
 from django.utils import timezone
 
@@ -13,6 +14,7 @@ from .models_sala import MuebleFarmacia, SalaFarmacia, UbicacionMedicamento  # n
 
 class Medicamento(models.Model):
     nombre = models.CharField(max_length=160)
+    precio = models.PositiveIntegerField(null=True, blank=True, validators=[MaxValueValidator(999999999)])
     principio_activo = models.CharField(max_length=160, blank=True)
     concentracion = models.CharField(max_length=80, blank=True)
     forma_farmaceutica = models.CharField(max_length=100, blank=True)
@@ -37,6 +39,7 @@ class Medicamento(models.Model):
     class Meta:
         ordering = ["nombre"]
         constraints = [
+            models.CheckConstraint(condition=Q(precio__isnull=True) | Q(precio__lte=999999999), name="ft_precio_limite"),
             models.UniqueConstraint(
                 fields=["creado_por", "nombre"],
                 name="ft_med_autor_nombre_uq",
@@ -259,3 +262,27 @@ class DispensacionLote(models.Model):
     linea = models.ForeignKey(RecetaLinea, on_delete=models.PROTECT, related_name="lotes_dispensados")
     lote = models.ForeignKey(LoteInventario, on_delete=models.PROTECT, related_name="dispensaciones")
     unidades = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+
+
+class MovimientoInventario(models.Model):
+    MOTIVOS = [("ingreso", "Ingreso de inventario"), ("ajuste", "Ajuste de inventario"),
+               ("venta", "Venta simulada"), ("dispensacion", "Dispensación simulada"),
+               ("vencimiento", "Vencimiento"), ("otro", "Otro")]
+    lote = models.ForeignKey(LoteInventario, on_delete=models.PROTECT, related_name="movimientos")
+    actor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    creado_en = models.DateTimeField(auto_now_add=True)
+    sentido = models.CharField(max_length=7, choices=[("entrada", "Entrada"), ("salida", "Salida")])
+    motivo = models.CharField(max_length=15, choices=MOTIVOS)
+    cantidad = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    saldo_anterior = models.PositiveIntegerField()
+    saldo_posterior = models.PositiveIntegerField()
+    observacion = models.CharField(max_length=300, blank=True)
+    operacion = models.UUIDField(default=uuid4, unique=True, editable=False)
+    uso = models.OneToOneField(DispensacionLote, null=True, blank=True, on_delete=models.PROTECT)
+
+    class Meta:
+        ordering = ["-creado_en", "-pk"]
+        constraints = [
+            models.CheckConstraint(condition=Q(cantidad__gt=0), name="ft_mov_cantidad_positiva"),
+            models.CheckConstraint(condition=(Q(sentido="entrada", saldo_posterior=models.F("saldo_anterior") + models.F("cantidad")) | Q(sentido="salida", saldo_posterior=models.F("saldo_anterior") - models.F("cantidad"))), name="ft_mov_saldo_consistente"),
+        ]
